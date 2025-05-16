@@ -1,0 +1,59 @@
+{
+	"name": "@bhsd/stylelint-browserify",
+	"version": "16.19.1",
+	"description": "Stylelint in browser",
+	"keywords": [
+		"stylelint",
+		"lint",
+		"linter",
+		"browser"
+	],
+	"homepage": "https://github.com/bhsd-harry/stylelint-browserify#readme",
+	"bugs": {
+		"url": "https://github.com/bhsd-harry/stylelint-browserify/issues"
+	},
+	"license": "MIT",
+	"author": "Bhsd",
+	"files": [
+		"bundle/stylelint.min.js",
+		"bundle/stylelint.min.js.map",
+		"bundle/stylelint.js.LEGAL.txt"
+	],
+	"browser": "bundle/stylelint.min.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bhsd-harry/stylelint-browserify.git"
+	},
+	"scripts": {
+		"lint": "eslint .",
+		"build": "npm run bundle && npm run minify",
+		"bundle": "node build.js",
+		"minify": "esbuild index.mjs --charset=utf8 --bundle --minify --sourcemap --target=es2019 --outfile=bundle/stylelint.min.js"
+	},
+	"devDependencies": {
+		"@bhsd/common": "^0.10.0",
+		"@stylistic/eslint-plugin": "^3.1.0",
+		"@stylistic/stylelint-plugin": "^3.1.2",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "^22.13.1",
+		"@typescript-eslint/eslint-plugin": "^8.29.0",
+		"@typescript-eslint/parser": "^8.29.0",
+		"esbuild": "^0.25.2",
+		"esbuild-plugin-replace": "^1.4.0",
+		"eslint": "^8.57.1",
+		"eslint-plugin-es-x": "^8.4.1",
+		"eslint-plugin-eslint-comments": "^3.2.0",
+		"eslint-plugin-jsdoc": "^50.6.3",
+		"eslint-plugin-json-es": "^1.6.0",
+		"eslint-plugin-markdown": "4.0.1",
+		"eslint-plugin-n": "^17.15.1",
+		"eslint-plugin-promise": "^7.2.1",
+		"eslint-plugin-regexp": "^2.7.0",
+		"eslint-plugin-unicorn": "^56.0.1",
+		"http-server": "^14.1.1",
+		"mocha": "^11.1.0",
+		"stylelint": "^16.19.1",
+		"typescript": "^5.8.2",
+		"wikiparser-node": "^1.20.3"
+	}
+}
