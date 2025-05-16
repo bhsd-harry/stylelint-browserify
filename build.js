@@ -19,6 +19,7 @@ const shim = [
 		'isPathIgnored',
 		'isPathNotFoundError',
 		'noFilesFoundError',
+		'no-work-result',
 		'previous-map',
 		'sourceMap',
 		'timing',
