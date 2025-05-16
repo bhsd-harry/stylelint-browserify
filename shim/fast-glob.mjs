@@ -1,5 +1,1 @@
-export default {
-	escapePath() {
-		return '';
-	},
-};
+export default {};

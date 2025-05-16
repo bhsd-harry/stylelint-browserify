@@ -1,1 +1,1 @@
-export default (_, filePaths) => filePaths;
+export default () => true;

@@ -31,7 +31,7 @@
 		"minify": "esbuild index.mjs --charset=utf8 --bundle --minify --sourcemap --target=es2019 --outfile=bundle/stylelint.min.js"
 	},
 	"devDependencies": {
-		"@bhsd/common": "^0.10.0",
+		"@bhsd/common": "^0.10.2",
 		"@stylistic/eslint-plugin": "^3.1.0",
 		"@stylistic/stylelint-plugin": "^3.1.2",
 		"@types/mocha": "^10.0.10",

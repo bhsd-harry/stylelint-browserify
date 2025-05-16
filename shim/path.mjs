@@ -2,6 +2,6 @@ export const isAbsolute = () => true;
 
 export const join = () => '';
 
-export const normalize = s => s;
+export const normalize = () => {};
 
 export const relative = () => '';

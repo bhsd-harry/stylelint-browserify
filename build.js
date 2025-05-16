@@ -6,7 +6,6 @@ const path = require('path'),
 
 const shim = [
 		'FileCache',
-		'allFilesIgnoredError',
 		'augmentConfig',
 		'dynamicImport',
 		'emitDeprecationWarning',
@@ -18,7 +17,6 @@ const shim = [
 		'getModulePath',
 		'isPathIgnored',
 		'isPathNotFoundError',
-		'noFilesFoundError',
 		'no-work-result',
 		'previous-map',
 		'sourceMap',
@@ -55,7 +53,7 @@ const plugin = {
 				filter: new RegExp(
 					String.raw`/(?:(?:${
 						[...at, ...replaceAll].join('|')
-					})/index|getStrippedSelectorSource)\.mjs$`,
+					})/index|getStrippedSelectorSource|standalone)\.mjs$`,
 				),
 			},
 			({path: p}) => {
@@ -64,6 +62,11 @@ const plugin = {
 					contents = contents.replace(
 						/ = (\S+)\.findLastIndex\(/gu,
 						' = $1.length - 1 - $1.reverse().findIndex(',
+					);
+				} else if (p.endsWith('/standalone.mjs')) {
+					contents = contents.replace(
+						/let fileList = .+?return result;\n\}/su,
+						'}',
 					);
 				} else {
 					const base = path.basename(p.slice(0, -'/index.mjs'.length));

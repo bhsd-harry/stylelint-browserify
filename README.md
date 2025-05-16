@@ -2,6 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/@bhsd%2Fstylelint-browserify.svg)](https://www.npmjs.com/package/@bhsd/stylelint-browserify)
 [![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/144196256274430b871abc36e9aa7d86)](https://app.codacy.com/gh/bhsd-harry/stylelint-browserify/dashboard)
 
 # API
 
