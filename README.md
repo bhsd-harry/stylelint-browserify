@@ -1,3 +1,8 @@
+# Stylelint-browserify
+
+[![npm version](https://badge.fury.io/js/@bhsd%2Fstylelint-browserify.svg)](https://www.npmjs.com/package/@bhsd/stylelint-browserify)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
+
 # API
 
 The `stylelint` global variable has a `lint()` method.
