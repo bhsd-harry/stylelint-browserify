@@ -26,4 +26,23 @@ module.exports = {
 		'es-x/no-array-prototype-at': 0,
 		'es-x/no-string-prototype-at': 0,
 	},
+	overrides: [
+		{
+			files: ['stylelint-es7*.js'],
+			extends: [
+				'plugin:es-x/no-new-in-es2017',
+				'plugin:es-x/no-new-in-es2018',
+				'plugin:es-x/no-new-in-es2019',
+				'plugin:es-x/no-new-in-es2020',
+			],
+			rules: {
+				'es-x/no-global-this': 0,
+				'es-x/no-object-entries': 0,
+				'es-x/no-object-getownpropertydescriptors': 0,
+				'es-x/no-object-values': 0,
+				'es-x/no-string-prototype-padstart-padend': 0,
+				'es-x/no-symbol-prototype-description': 0,
+			},
+		},
+	],
 };
