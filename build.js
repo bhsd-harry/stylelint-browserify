@@ -7,6 +7,7 @@ const path = require('path'),
 const shim = [
 		'FileCache',
 		'augmentConfig',
+		'descriptionlessDisables',
 		'dynamicImport',
 		'emitDeprecationWarning',
 		'filterFilePaths',
@@ -15,12 +16,15 @@ const shim = [
 		'getFileIgnorer',
 		'getFormatter',
 		'getModulePath',
+		'invalidScopeDisables',
 		'isPathIgnored',
 		'isPathNotFoundError',
+		'needlessDisables',
 		'no-work-result',
 		'previous-map',
 		'sourceMap',
 		'timing',
+		'unscopedDisables',
 	],
 	at = [
 		'function-calc-no-unspaced-operator',
@@ -47,11 +51,21 @@ const shim = [
 let csstools = false;
 
 const reduce = '.reduce((acc, cur) => acc.concat(cur), [])',
-	replaceFlat = /** @param {string} s */ s => s.replace(
+
+	/**
+	 * Polyfill for Array.prototype.flat
+	 * @param {string} s source code
+	 */
+	replaceFlat = s => s.replace(
 		/\[([\w.]+)\]\.flat\(\)/gu,
 		'(Array.isArray($1) ? $1 : [$1])',
 	),
-	replaceFlat2 = /** @param {string} s */ s => s.replaceAll('.flat()', reduce);
+
+	/**
+	 * Polyfill for Array.prototype.flat
+	 * @param {string} s source code
+	 */
+	replaceFlat2 = s => s.replaceAll('.flat()', reduce);
 
 const plugin = {
 	name: 'alias',
@@ -83,14 +97,25 @@ const plugin = {
 							...match,
 							...matchAll,
 						].join('|')
-					})/index|standalone|${
-						[...findLastIndex, ...dotAll, ...flat, ...flat2, ...flatMap].join('|')
-					})\.mjs$|/@csstools/`,
+					})/index|${
+						[
+							'standalone',
+							'getPostcssResult',
+							'lintSource',
+							'reportUnknownRuleNames',
+							'normalizeFixMode',
+							...findLastIndex,
+							...dotAll,
+							...flat,
+							...flat2,
+							...flatMap,
+						].join('|')
+					})\.mjs$|/map-generator\.js$|/@csstools/`,
 				),
 			},
 			({path: p}) => {
 				let contents = fs.readFileSync(p, 'utf8'),
-					base = path.basename(p.slice(0, -'.mjs'.length));
+					base = path.basename(p.slice(0, -path.extname(p).length));
 				if (csstools && p.includes('/@csstools/')) {
 					contents = contents.replace(
 						/\.flatMap\((\(\w+=>\w+\.tokens\(\)\))\)/gu,
@@ -141,11 +166,44 @@ const plugin = {
 						);
 					}
 				} else {
-					if (base === 'standalone') {
-						contents = contents.replace(
-							/let fileList = .+?return result;\n\}/su,
-							'}',
-						);
+					switch (base) {
+						case 'standalone':
+							contents = contents.replace(
+								/let fileList = .+?return result;\n\}/su,
+								'}',
+							);
+							break;
+						case 'getPostcssResult':
+							contents = contents.replace(
+								/^async function getCustomSyntax\(.+?^\}$/msu,
+								'function getCustomSyntax() {}',
+							);
+							break;
+						case 'lintSource':
+							contents = contents.replace(
+								/^(function createEmptyPostcssResult)\(.+?^\}/msu,
+								'function createEmptyPostcssResult() {}',
+							);
+							break;
+						case 'map-generator':
+							contents = contents.replace(
+								// eslint-disable-next-line @stylistic/max-len
+								/^([ \t]+)(?:addAnnotation|applyPrevMaps|generateMap|generateString|isAnnotation|isInline|isMap|isSourcesContent|outputFile|path|previous|setSourcesContent|sourcePath|toBase64|toFileUrl|toUrl)\(.+?^\1\}$/gmsu,
+								'',
+							);
+							break;
+						case 'normalizeFixMode':
+							contents = contents.replace(
+								'return DEFAULT_FIX_MODE',
+								"return 'strict'",
+							);
+							break;
+						case 'reportUnknownRuleNames':
+							contents = contents.replace(
+								/^(function extractSuggestions)\(.+?^\}$/msu,
+								'$1() { return []; }',
+							);
+						// no default
 					}
 					if (findLastIndex.includes(base)) {
 						contents = contents.replace(
@@ -188,6 +246,7 @@ const config = {
 		cosmiconfig: './shim/cosmiconfig.mjs',
 		debug: './shim/debug.mjs',
 		'fast-glob': './shim/fast-glob.mjs',
+		'fastest-levenshtein': './shim/fastest-levenshtein.mjs',
 		'node:fs': './shim/fs.mjs',
 		'node:fs/promises': './shim/fs-promises.mjs',
 		globby: './shim/globby.mjs',
@@ -195,6 +254,7 @@ const config = {
 		'normalize-path': './shim/normalize-path.mjs',
 		'node:os': './shim/os.mjs',
 		'node:path': './shim/path.mjs',
+		'postcss-safe-parser': './shim/postcss-safe-parser.mjs',
 		'node:process': './shim/process.mjs',
 		'util-deprecate': './shim/util-deprecate.js',
 		'write-file-atomic': './shim/write-file-atomic.mjs',
