@@ -122,7 +122,7 @@ const plugin = {
 						`.map($1)${reduce}`,
 					);
 				} else if (base === 'index') {
-					base = path.basename(p.slice(0, -'/index.mjs'.length));
+					base = path.basename(p.slice(0, p.lastIndexOf('/')));
 					if (at.includes(base)) {
 						contents = contents.replace(
 							/\b(\w+)\.at\(-1\)/gu,
@@ -148,10 +148,16 @@ const plugin = {
 						);
 					}
 					if (trimStart.includes(base)) {
-						contents = contents.replaceAll('.trimStart()', String.raw`.replace(/^\s+/u, '')`);
+						contents = contents.replaceAll(
+							'.trimStart()',
+							String.raw`.replace(/^\s+/u, '')`,
+						);
 					}
 					if (trimEnd.includes(base)) {
-						contents = contents.replaceAll('.trimEnd()', String.raw`.replace(/\s+$/u, '')`);
+						contents = contents.replaceAll(
+							'.trimEnd()',
+							String.raw`.replace(/\s+$/u, '')`,
+						);
 					}
 					if (match.includes(base)) {
 						contents = contents.replace(
@@ -254,6 +260,7 @@ const config = {
 		'normalize-path': './shim/normalize-path.mjs',
 		'node:os': './shim/os.mjs',
 		'node:path': './shim/path.mjs',
+		picocolors: './shim/picocolors.js',
 		'postcss-safe-parser': './shim/postcss-safe-parser.mjs',
 		'node:process': './shim/process.mjs',
 		'util-deprecate': './shim/util-deprecate.js',
