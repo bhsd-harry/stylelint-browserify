@@ -193,8 +193,7 @@ const plugin = {
 							break;
 						case 'map-generator':
 							contents = contents.replace(
-								// eslint-disable-next-line @stylistic/max-len
-								/^([ \t]+)(?:addAnnotation|applyPrevMaps|generateMap|generateString|isAnnotation|isInline|isMap|isSourcesContent|outputFile|path|previous|setSourcesContent|sourcePath|toBase64|toFileUrl|toUrl)\(.+?^\1\}$/gmsu,
+								/^([ \t]+)(?!constructor|clearAnnotation|generate\b)\w+\(.+?^\1\}$/gmsu,
 								'',
 							);
 							break;
@@ -242,8 +241,9 @@ const plugin = {
 	},
 };
 
+const stylelint = require.resolve('stylelint');
 const config = {
-	entryPoints: ['./node_modules/stylelint/lib/standalone.mjs'],
+	entryPoints: [path.join(stylelint, '..', 'standalone.mjs')],
 	charset: 'utf8',
 	bundle: true,
 	format: 'esm',
@@ -263,6 +263,8 @@ const config = {
 		picocolors: './shim/picocolors.js',
 		'postcss-safe-parser': './shim/postcss-safe-parser.mjs',
 		'node:process': './shim/process.mjs',
+		'stylelint/lib/formatters/jsonFormatter': path.join(stylelint, '..', 'formatters', 'jsonFormatter.mjs'),
+		'stylelint/lib/normalizeAllRuleSettings': path.join(stylelint, '..', 'normalizeAllRuleSettings.mjs'),
 		'util-deprecate': './shim/util-deprecate.js',
 		'write-file-atomic': './shim/write-file-atomic.mjs',
 	},

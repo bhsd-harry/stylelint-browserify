@@ -28,9 +28,8 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: ['stylelint-es7*.js'],
+			files: ['stylelint-es*.js'],
 			extends: [
-				'plugin:es-x/no-new-in-es2017',
 				'plugin:es-x/no-new-in-es2018',
 				'plugin:es-x/no-new-in-es2019',
 				'plugin:es-x/no-new-in-es2020',
