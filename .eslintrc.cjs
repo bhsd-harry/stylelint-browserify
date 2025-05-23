@@ -13,7 +13,7 @@ module.exports = {
 			},
 		},
 		{
-			files: ['index-es7.mjs'],
+			files: ['index-*.mjs'],
 			env: {
 				worker: true,
 			},

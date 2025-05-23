@@ -307,8 +307,8 @@ const config = {
 	csstools = true;
 	await esbuild.build({
 		...config,
-		target: 'es2016',
-		outfile: 'bundle/stylelint-es7.js',
+		target: 'es2017',
+		outfile: 'bundle/stylelint-es8.js',
 		legalComments: 'none',
 		plugins: [plugin],
 		banner: {

@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "16.19.1-es7",
+	"version": "16.19.1-es8",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
@@ -15,11 +15,9 @@
 	"license": "MIT",
 	"author": "Bhsd",
 	"files": [
-		"bundle/stylelint.min.js",
-		"bundle/stylelint.min.js.map",
-		"bundle/stylelint-es7.min.js",
-		"bundle/stylelint-es7.min.js.map",
-		"bundle/stylelint.js.LEGAL.txt"
+		"bundle/*.min.js",
+		"bundle/*.LEGAL.txt",
+		"!bundle/.eslintrc.cjs"
 	],
 	"browser": "bundle/stylelint.min.js",
 	"repository": {
@@ -30,7 +28,7 @@
 		"lint": "eslint --cache .",
 		"build": "npm run bundle && npm run minify",
 		"bundle": "node build.js",
-		"minify": "esbuild index.mjs --charset=utf8 --bundle --minify --sourcemap --target=es2019 --outfile=bundle/stylelint.min.js && esbuild index-es7.mjs --charset=utf8 --bundle --minify --sourcemap --target=es2016 --outfile=bundle/stylelint-es7.min.js"
+		"minify": "esbuild index.mjs --charset=utf8 --bundle --minify --sourcemap --target=es2019 --outfile=bundle/stylelint.min.js && esbuild index-es8.mjs --charset=utf8 --bundle --minify --sourcemap --target=es2017 --outfile=bundle/stylelint-es8.min.js"
 	},
 	"devDependencies": {
 		"@bhsd/common": "^0.10.2",
