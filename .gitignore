@@ -1,6 +1,4 @@
 /.vscode/
-/node_modules/
 /bundle/stylelint*
 /bundle/.gitignore
-/package-lock.json
 /.eslintcache

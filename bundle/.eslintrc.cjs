@@ -36,11 +36,6 @@ module.exports = {
 			],
 			rules: {
 				'es-x/no-global-this': 0,
-				'es-x/no-object-entries': 0,
-				'es-x/no-object-getownpropertydescriptors': 0,
-				'es-x/no-object-values': 0,
-				'es-x/no-string-prototype-padstart-padend': 0,
-				'es-x/no-symbol-prototype-description': 0,
 			},
 		},
 	],
