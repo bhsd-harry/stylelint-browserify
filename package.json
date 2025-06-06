@@ -25,13 +25,14 @@
 		"url": "git+https://github.com/bhsd-harry/stylelint-browserify.git"
 	},
 	"scripts": {
-		"lint": "eslint --cache .",
+		"lint:ts": "tsc && eslint --cache .",
+		"lint": "npm run lint:ts",
 		"build": "npm run bundle && npm run minify",
 		"bundle": "node build.js",
-		"minify": "esbuild index.mjs --charset=utf8 --bundle --minify --sourcemap --target=es2019 --outfile=bundle/stylelint.min.js && esbuild index-es8.mjs --charset=utf8 --bundle --minify --sourcemap --target=es2017 --outfile=bundle/stylelint-es8.min.js"
+		"minify": "esbuild index.ts --charset=utf8 --bundle --minify --sourcemap --target=es2019 --outfile=bundle/stylelint.min.js && esbuild index-es8.ts --charset=utf8 --bundle --minify --sourcemap --target=es2017 --outfile=bundle/stylelint-es8.min.js"
 	},
 	"devDependencies": {
-		"@bhsd/common": "^0.11.0",
+		"@bhsd/common": "^0.12.0",
 		"@stylistic/eslint-plugin": "^3.1.0",
 		"@types/node": "^22.13.1",
 		"@typescript-eslint/eslint-plugin": "^8.29.0",

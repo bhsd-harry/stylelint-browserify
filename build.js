@@ -35,28 +35,27 @@ const shim = [
 		'selector-pseudo-element-colon-notation',
 		'unit-allowed-list',
 	],
-	flatRule = [],
-	flatRule2 = [],
-	flatMapRule = [],
-	trimStart = [],
-	trimEnd = [],
-	match = [],
-	matchAll = [],
+	/** @type {string[]} */ flatRule = [],
+	/** @type {string[]} */ flatRule2 = [],
+	/** @type {string[]} */ flatMapRule = [],
+	/** @type {string[]} */ trimStart = [],
+	/** @type {string[]} */ trimEnd = [],
+	/** @type {string[]} */ match = [],
+	/** @type {string[]} */ matchAll = [],
 	findLastIndex = ['getStrippedSelectorSource'],
-	dotAll = [],
-	flat = [],
-	flat2 = [],
-	flatMap = [],
-	shimSet = new Set(shim);
+	/** @type {string[]} */ dotAll = [],
+	/** @type {string[]} */ flat = [],
+	/** @type {string[]} */ flat2 = [],
+	/** @type {string[]} */ flatMap = [],
+	shimSet = new Set(shim),
+	reduce = '.reduce((acc, cur) => acc.concat(cur), [])';
 let csstools = false;
 
-const reduce = '.reduce((acc, cur) => acc.concat(cur), [])',
-
-	/**
-	 * Polyfill for Array.prototype.flat
-	 * @param {string} s source code
-	 */
-	replaceFlat = s => s.replace(
+/**
+ * Polyfill for Array.prototype.flat
+ * @param {string} s source code
+ */
+const replaceFlat = s => s.replace(
 		/\[([\w.]+)\]\.flat\(\)/gu,
 		'(Array.isArray($1) ? $1 : [$1])',
 	),
@@ -67,7 +66,7 @@ const reduce = '.reduce((acc, cur) => acc.concat(cur), [])',
 	 */
 	replaceFlat2 = s => s.replaceAll('.flat()', reduce);
 
-const plugin = {
+const /** @type {esbuild.Plugin} */ plugin = {
 	name: 'alias',
 	setup(build) {
 		build.onResolve(
@@ -242,7 +241,7 @@ const plugin = {
 };
 
 const stylelint = require.resolve('stylelint');
-const config = {
+const /** @type {esbuild.BuildOptions} */ config = {
 	entryPoints: [path.join(stylelint, '..', 'standalone.mjs')],
 	charset: 'utf8',
 	bundle: true,
@@ -271,13 +270,14 @@ const config = {
 };
 
 (async () => {
-	await esbuild.build({
+	let /** @type {esbuild.BuildOptions} */ options = {
 		...config,
 		target: 'es2019',
 		outfile: 'bundle/stylelint.js',
 		legalComments: 'external',
 		plugins: [plugin],
-	});
+	};
+	await esbuild.build(options);
 	if (shimSet.size > 0) {
 		console.error(
 			`The following shims were not used in the bundle: ${[...shimSet].join(', ')}`,
@@ -307,7 +307,7 @@ const config = {
 	match.push('declaration-block-no-redundant-longhand-properties');
 	matchAll.push('no-irregular-whitespace');
 	csstools = true;
-	await esbuild.build({
+	options = {
 		...config,
 		target: 'es2017',
 		outfile: 'bundle/stylelint-es8.js',
@@ -316,5 +316,6 @@ const config = {
 		banner: {
 			js: `const flattenMap = (arr, fn) => arr.map(fn)${reduce};`,
 		},
-	});
+	};
+	await esbuild.build(options);
 })();
