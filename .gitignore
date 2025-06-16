@@ -2,3 +2,4 @@
 /bundle/stylelint*
 /bundle/.gitignore
 /.eslintcache
+/build

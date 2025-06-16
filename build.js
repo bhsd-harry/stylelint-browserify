@@ -9,7 +9,7 @@ const shim = [
 		'augmentConfig',
 		'descriptionlessDisables',
 		'dynamicImport',
-		'emitDeprecationWarning',
+		'emitWarning',
 		'filterFilePaths',
 		'fromJSON',
 		'getConfigForFile',
@@ -273,8 +273,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 	let /** @type {esbuild.BuildOptions} */ options = {
 		...config,
 		target: 'es2019',
-		outfile: 'bundle/stylelint.js',
-		legalComments: 'external',
+		outfile: 'build/stylelint.js',
 		plugins: [plugin],
 	};
 	await esbuild.build(options);
@@ -310,8 +309,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 	options = {
 		...config,
 		target: 'es2017',
-		outfile: 'bundle/stylelint-es8.js',
-		legalComments: 'none',
+		outfile: 'build/stylelint-es8.js',
 		plugins: [plugin],
 		banner: {
 			js: `const flattenMap = (arr, fn) => arr.map(fn)${reduce};`,

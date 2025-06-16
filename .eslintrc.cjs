@@ -4,6 +4,10 @@ const config = require('@bhsd/common/eslintrc.node.cjs');
 
 module.exports = {
 	...config,
+	ignorePatterns: [
+		'build/',
+		'bundle/',
+	],
 	overrides: [
 		...config.overrides,
 		{
