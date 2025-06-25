@@ -1,5 +1,5 @@
-import normalize from 'stylelint/lib/normalizeAllRuleSettings'; // eslint-disable-line n/no-missing-import
+import {augmentConfigFull} from './augmentConfig.mjs';
 
-export default async stylelint => ({
-	config: await normalize(stylelint._options.config), // eslint-disable-line no-underscore-dangle
+export default ({stylelint, filePath}) => augmentConfigFull(stylelint, filePath, {
+	config: stylelint._options.config, // eslint-disable-line no-underscore-dangle,
 });
