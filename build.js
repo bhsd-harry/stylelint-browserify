@@ -49,7 +49,8 @@ const shim = [
 	/** @type {string[]} */ flatMap = [],
 	shimSet = new Set(shim),
 	reduce = '.reduce((acc, cur) => acc.concat(cur), [])';
-let csstools = false;
+let csstools = false,
+	copy = true;
 
 /**
  * Polyfill for Array.prototype.flat
@@ -72,11 +73,18 @@ const /** @type {esbuild.Plugin} */ plugin = {
 		build.onResolve(
 			// eslint-disable-next-line require-unicode-regexp
 			{filter: new RegExp(String.raw`/(?:${shim.join('|')})(?:\.m?js)?$`)},
-			({path: p}) => {
-				const {name, ext} = path.parse(p);
+			({path: p, resolveDir}) => {
+				const {name, ext} = path.parse(p),
+					file = name + (ext || '.js');
 				shimSet.delete(name);
+				if (copy) {
+					fs.copyFileSync(
+						require.resolve(path.join(resolveDir, p)),
+						path.resolve('build', file),
+					);
+				}
 				return {
-					path: path.resolve('shim', name + (ext || '.js')),
+					path: path.resolve('shim', file),
 				};
 			},
 		);
@@ -277,6 +285,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		plugins: [plugin],
 	};
 	await esbuild.build(options);
+	copy = false;
 	if (shimSet.size > 0) {
 		console.error(
 			`The following shims were not used in the bundle: ${[...shimSet].join(', ')}`,
