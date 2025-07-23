@@ -31,6 +31,7 @@ const shim = [
 		'selector-no-qualifying-type',
 	],
 	replaceAll = [
+		'lightness-notation',
 		'no-descending-specificity',
 		'selector-pseudo-element-colon-notation',
 		'unit-allowed-list',
