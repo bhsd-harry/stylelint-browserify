@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "16.22.0",
+	"version": "16.23.0",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
