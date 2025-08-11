@@ -221,7 +221,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					if (findLastIndex.includes(base)) {
 						contents = contents.replace(
 							/ = (\S+)\.findLastIndex\(/gu,
-							' = $1.length - 1 - $1.reverse().findIndex(',
+							' = $1.length - 1 - [...$1].reverse().findIndex(',
 						);
 					}
 					if (dotAll.includes(base)) {

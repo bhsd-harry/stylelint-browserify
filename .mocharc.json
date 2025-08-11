@@ -1,0 +1,6 @@
+{
+	"diff": false,
+	"reporter": "progress",
+	"file": "bundle/stylelint.min.js",
+	"spec": "test/test.js"
+}
