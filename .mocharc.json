@@ -1,6 +1,8 @@
 {
-	"diff": false,
 	"reporter": "progress",
-	"file": "bundle/stylelint.min.js",
-	"spec": "test/test.js"
+	"file": [
+		"bundle/stylelint.min.js",
+		"test/mocha.mjs"
+	],
+	"spec": "test/tests/*.mjs"
 }
