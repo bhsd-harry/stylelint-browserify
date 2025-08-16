@@ -1,6 +1,6 @@
 {
 	"reporter": "progress",
-	"file": [
+	"require": [
 		"bundle/stylelint.min.js",
 		"test/mocha.mjs"
 	],

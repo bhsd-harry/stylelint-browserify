@@ -638,7 +638,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignoreContextFunctionalPseudoClasses: [':not', /^:([hH])as$/] }],
+	config: [0, { ignoreContextFunctionalPseudoClasses: [':not', /^:(h|H)as$/] }],
 
 	accept: [
 		{

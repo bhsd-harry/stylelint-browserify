@@ -38,7 +38,7 @@ testRule({
 			code: 'a::grammar-error { color: pink; }',
 		},
 		{
-			code: String.raw`a\:before { color: pink; }`,
+			code: 'a\\:before { color: pink; }',
 		},
 		{
 			code: 'li::marker { font-variant-numeric: tabular-nums; }',
@@ -154,8 +154,8 @@ testRule({
 			endColumn: 4,
 		},
 		{
-			code: String.raw`a\:before-none::before { color: pink; }`,
-			fixed: String.raw`a\:before-none:before { color: pink; }`,
+			code: 'a\\:before-none::before { color: pink; }',
+			fixed: 'a\\:before-none:before { color: pink; }',
 			fix: {
 				range: [15, 16],
 				text: '',

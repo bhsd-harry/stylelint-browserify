@@ -32,7 +32,7 @@ const IRREGULAR_WHITESPACES = [
 	'\u3000', // Ideographic Space
 ];
 
-const characterToUnicodeString = str =>
+const characterToUnicodeString = (str) =>
 	`\\u${str.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0')}`;
 
 testRule({
@@ -112,7 +112,7 @@ testRule({
 			code: '@font-feature-values "foo\u00A0bar"',
 		},
 		// Generic test for all types of irregular whitespaces.
-		...IRREGULAR_WHITESPACES.map(ws => ({
+		...IRREGULAR_WHITESPACES.map((ws) => ({
 			code: `a[title="irregular${ws}whitespace"] { color: pink; }`,
 			description: `irregular whitespace in attribute selector: ${characterToUnicodeString(ws)}`,
 		})),

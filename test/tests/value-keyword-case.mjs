@@ -2675,7 +2675,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['upper', { ignoreKeywords: [/^([fF])lex$/] }],
+	config: ['upper', { ignoreKeywords: [/^(f|F)lex$/] }],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2787,7 +2787,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { ignoreProperties: [/^([bB])ackground$/] }],
+	config: ['lower', { ignoreProperties: [/^(b|B)ackground$/] }],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2906,7 +2906,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['upper', { ignoreFunctions: ['t', 'camelCase', /^([fF])oo$/] }],
+	config: ['upper', { ignoreFunctions: ['t', 'camelCase', /^(f|F)oo$/] }],
 	fix: true,
 	computeEditInfo: true,
 

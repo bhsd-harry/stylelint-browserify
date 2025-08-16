@@ -211,7 +211,7 @@ testRule({
 			description: 'complex @media',
 		},
 		{
-			code: String.raw`@media screen and (min-width:0\0) {}`,
+			code: '@media screen and (min-width:0\\0) {}',
 			description: 'ignore media query hack',
 		},
 		{

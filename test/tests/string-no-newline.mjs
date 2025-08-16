@@ -17,7 +17,7 @@ testRule({
 			description: 'with escaped slash-slash-n newline',
 		},
 		{
-			code: String.raw`a::before { content: 'one\Atwo'; }`,
+			code: "a::before { content: 'one\\Atwo'; }",
 			description: 'with escaped slash-A newline',
 		},
 		{

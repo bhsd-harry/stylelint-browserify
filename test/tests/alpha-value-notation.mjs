@@ -679,7 +679,7 @@ testRule({
 			fix: { range: [39, 42], text: '0.45' },
 		},
 		{
-			code: 'a { color: red; opacity: 30%; }',
+			code: `a { color: red; opacity: 30%; }`,
 			message: messages.expected('30%', '0.3'),
 			line: 1,
 			column: 26,
@@ -778,7 +778,7 @@ testRule({
 			],
 		},
 		{
-			code: 'a { color: red; opacity: 0.3; }',
+			code: `a { color: red; opacity: 0.3; }`,
 			message: messages.expected('0.3', '30%'),
 			line: 1,
 			column: 26,

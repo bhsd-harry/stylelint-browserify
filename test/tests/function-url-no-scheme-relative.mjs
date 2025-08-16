@@ -152,7 +152,7 @@ testRule({
 			endColumn: 40,
 		},
 		{
-			code: '@import url("//www.example.org/foo.css") screen and (min-width: 768px);',
+			code: `@import url("//www.example.org/foo.css") screen and (min-width: 768px);`,
 			message: messages.rejected,
 			line: 1,
 			column: 13,

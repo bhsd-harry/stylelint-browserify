@@ -232,7 +232,7 @@ testRule({
 			endColumn: 3,
 			fix: {
 				range: [15, 56],
-				text: '(\n\t\tcalc(var(--hue) + 30)\n\t\t28%\n\t\t50% /',
+				text: `(\n\t\tcalc(var(--hue) + 30)\n\t\t28%\n\t\t50% /`,
 			},
 		},
 		{

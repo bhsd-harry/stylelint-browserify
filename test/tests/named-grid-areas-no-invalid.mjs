@@ -68,6 +68,11 @@ testRule({
 						"b c c" 40px / 1fr 1fr 1fr;
 				}`,
 		},
+		{
+			code: `a { grid-template-areas: ${({ $foo }) => ($foo === 'any string with different number of tokens than return values' ? 'a a a' : 'b b b')}; }`,
+			description:
+				'Skip non-standard values to fix false positive in named-grid-areas-no-invalid with styled-components',
+		},
 	],
 
 	reject: [
@@ -189,7 +194,7 @@ testRule({
 			endColumn: 10,
 		},
 		{
-			code: 'a { grid: "" 200px "b" min-content; }',
+			code: `a { grid: "" 200px "b" min-content; }`,
 			message: messages.expectedToken(),
 			line: 1,
 			column: 11,

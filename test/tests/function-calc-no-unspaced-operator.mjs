@@ -747,7 +747,7 @@ testRule({
 		{
 			code: 'a { padding: calc(1rem +\t \t\f\n\f\t1em); }',
 			fixed: 'a { padding: calc(1rem +\n\f\t1em); }',
-			description: String.raw`several whitespace characters after operator but before the \n`,
+			description: 'several whitespace characters after operator but before the \\n',
 			message: messages.expectedAfter('+'),
 			line: 1,
 			column: 24,
@@ -761,7 +761,7 @@ testRule({
 		{
 			code: 'a { padding: calc(1rem +  \t\r\n  1em); }',
 			fixed: 'a { padding: calc(1rem +\r\n  1em); }',
-			description: String.raw`several whitespace characters after operator but before the \r\n`,
+			description: 'several whitespace characters after operator but before the \\r\\n',
 			message: messages.expectedAfter('+'),
 			line: 1,
 			column: 24,
@@ -1130,8 +1130,8 @@ testRule({
 			],
 		},
 		{
-			code: String.raw`a { padding: calc(1\23 - 2px) calc(1\23 a- 2px) calc(1\23 g- 2px); }`,
-			fixed: String.raw`a { padding: calc(1\23  - 2px) calc(1\23 a - 2px) calc(1\23 g - 2px); }`,
+			code: 'a { padding: calc(1\\23 - 2px) calc(1\\23 a- 2px) calc(1\\23 g- 2px); }',
+			fixed: 'a { padding: calc(1\\23  - 2px) calc(1\\23 a - 2px) calc(1\\23 g - 2px); }',
 			description: 'escape sequences as units',
 			warnings: [
 				{

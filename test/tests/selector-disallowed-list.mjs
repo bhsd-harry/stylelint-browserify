@@ -269,7 +269,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [[/[a-z]/i], { ignore: ['keyframe-selectors'] }],
+	config: [[/[A-Z]/i], { ignore: ['keyframe-selectors'] }],
 
 	accept: [
 		{

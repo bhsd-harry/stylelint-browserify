@@ -1213,7 +1213,7 @@ testRule({
 	computeEditInfo: true,
 	accept: [
 		{
-			code: '<span style="color: red;"></span>',
+			code: `<span style="color: red;"></span>`,
 			description: 'Single-line HTML style tag',
 		},
 		{
@@ -1280,7 +1280,7 @@ testRule({
 
 	accept: [
 		{
-			code: '<span style="color: red; font-size: 1rem;"></span>',
+			code: `<span style="color: red; font-size: 1rem;"></span>`,
 			description: 'Single-line HTML style attribute with two declarations',
 		},
 		{

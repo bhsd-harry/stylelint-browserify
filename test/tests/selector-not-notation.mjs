@@ -98,7 +98,7 @@ testRule({
 			endColumn: 16,
 		},
 		{
-			code: 'p, img:not(a\n, div) {}',
+			code: `p, img:not(a\n, div) {}`,
 			fixed: 'p, img:not(a):not(div) {}',
 			fix: {
 				range: [12, 15],

@@ -219,7 +219,9 @@ testRule({
 					color: var(--foo, var(--bar, --baz));
 				}
 			`,
-			warnings: [{ message: messages.rejected('--baz'), line: 6, column: 31, endLine: 6, endColumn: 36 }],
+			warnings: [
+				{ message: messages.rejected('--baz'), line: 6, column: 31, endLine: 6, endColumn: 36 },
+			],
 			description: 'nested var() with second-level fallback missing var() syntax',
 		},
 	],

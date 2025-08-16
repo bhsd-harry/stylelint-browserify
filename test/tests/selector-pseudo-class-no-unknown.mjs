@@ -417,7 +417,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignorePseudoClasses: ['unknown', '/^my-/', /^your-/i] }],
+	config: [true, { ignorePseudoClasses: ['unknown', '/^my-/', /^YOUR-/i] }],
 
 	accept: [
 		{

@@ -45,14 +45,14 @@ testRule({
 		},
 		{
 			code:
-				'@font-face {\n'
-				+ 'font-family: dashicons;\n'
-				+ 'src: url(data:application/font-woff;charset=utf-8;base64, ABCDEF==) format("woff"),\n'
-				+ 'url(../fonts/dashicons.ttf) format("truetype"),\n'
-				+ 'url(../fonts/dashicons.svg#dashicons) format("svg");\n'
-				+ 'font-weight: normal;\n'
-				+ 'font-style: normal;\n'
-				+ '}',
+				'@font-face {\n' +
+				'font-family: dashicons;\n' +
+				'src: url(data:application/font-woff;charset=utf-8;base64, ABCDEF==) format("woff"),\n' +
+				'url(../fonts/dashicons.ttf) format("truetype"),\n' +
+				'url(../fonts/dashicons.svg#dashicons) format("svg");\n' +
+				'font-weight: normal;\n' +
+				'font-style: normal;\n' +
+				'}',
 		},
 	],
 
