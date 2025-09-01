@@ -300,6 +300,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		'declaration-property-unit-disallowed-list',
 		'media-feature-name-unit-allowed-list',
 		'media-feature-name-value-allowed-list',
+		'rule-nesting-at-rule-required-list',
 		'selector-attribute-operator-allowed-list',
 		'selector-attribute-operator-disallowed-list',
 		'unit-allowed-list',
