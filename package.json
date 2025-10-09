@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "16.24.0",
+	"version": "16.25.0",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
@@ -30,18 +30,20 @@
 		"build": "npm run bundle && npm run minify",
 		"bundle": "node build.js",
 		"minify": "esbuild index.ts --charset=utf8 --bundle --minify --sourcemap --target=es2019 --outfile=bundle/stylelint.min.js --legal-comments=external && esbuild index-es8.ts --charset=utf8 --bundle --minify --sourcemap --target=es2017 --outfile=bundle/stylelint-es8.min.js --legal-comments=none",
-		"test": "mocha --no-experimental-require-module",
+		"test:main": "mocha --no-experimental-require-module --require bundle/stylelint.min.js",
+		"test:es8": "mocha --no-experimental-require-module --require bundle/stylelint-es8.min.js --exclude test/tests/no-irregular-whitespace.mjs",
+		"test": "npm run test:main && npm run test:es8",
 		"clean": "find test/tests/ -type f -name '*.mjs' | xargs gsed -i \"s|'../../../testUtils/mergeTestDescriptions.mjs'|'../mergeTestDescriptions.mjs'| ; s|'../../../__tests__/fixtures/postcss-naive-css-in-js.cjs'|'../postcss-naive-css-in-js.mjs'| ; s|'postcss'|'../postcss.mjs'| ; s|'postcss-import'|'../postcss-import.mjs'| ; s|'../../../postcssPlugin.mjs'|'../postcssPlugin.mjs'| ; s|} = rule;|} = {...rule, ruleName: filename(import.meta.url)};|\"; eslint test/tests/*.mjs"
 	},
 	"devDependencies": {
-		"@bhsd/code-standard": "^1.0.1",
+		"@bhsd/code-standard": "^1.2.0",
 		"@stylistic/eslint-plugin": "^3.1.0",
 		"@types/mocha": "^10.0.10",
 		"@types/node": "^24.0.10",
 		"@typescript-eslint/eslint-plugin": "^8.35.1",
 		"@typescript-eslint/parser": "^8.35.1",
 		"common-tags": "^1.8.2",
-		"esbuild": "^0.25.5",
+		"esbuild": "^0.25.10",
 		"eslint": "^8.57.1",
 		"eslint-plugin-es-x": "^8.7.0",
 		"eslint-plugin-eslint-comments": "^3.2.0",
@@ -52,7 +54,7 @@
 		"eslint-plugin-regexp": "^2.9.0",
 		"eslint-plugin-unicorn": "^56.0.1",
 		"mocha": "^11.7.1",
-		"stylelint": "^16.24.0",
+		"stylelint": "^16.25.0",
 		"typescript": "^5.8.2"
 	}
 }
