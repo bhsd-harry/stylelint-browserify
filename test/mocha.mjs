@@ -37,7 +37,7 @@ Object.assign(globalThis, {
 							fixed,
 						);
 					}
-					assert.partialDeepStrictEqual(
+					assert.partialDeepStrictEqual( // eslint-disable-line n/no-unsupported-features/node-builtins
 						(await stylelint.lint({code, config: cfg})).results[0].warnings,
 						(warnings ?? [{fix, line, column, endLine, endColumn}]).map(partial),
 					);
