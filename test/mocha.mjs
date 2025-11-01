@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-/* global stylelint */
 import assert from 'assert';
 import {fileURLToPath} from 'url';
 import {basename} from 'path';
