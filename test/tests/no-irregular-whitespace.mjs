@@ -1,5 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
-
 import { stripIndent } from 'common-tags';
 
 import rule from '../index.mjs';
