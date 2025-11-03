@@ -49,7 +49,7 @@ When the [`computeEditInfo` option](https://stylelint.io/user-guide/options#comp
 - `range` (`[number, number]`) - the pair of 0-based indices in source code text to remove
 - `text` (`string`) - the text to add
 
-For example, to change `a { opacity: 10%; }` to `a { opacity: 0.1; }`, the `EditInfo` might look like:
+For example, to change `a { opacity: 10%; }` to `a { opacity: 0.1; }`, the edit info might look like:
 
 ```jsonc
 {
@@ -61,7 +61,7 @@ For example, to change `a { opacity: 10%; }` to `a { opacity: 0.1; }`, the `Edit
 }
 ```
 
-Only a single `EditInfo` will be recorded for a specific region in source code. If multiple report ranges overlap, only the first will contain `EditInfo`.
+Only a single edit info will be recorded for a specific region in source code. If multiple report ranges overlap, only the first will contain edit info.
 
 ## Syntax errors
 

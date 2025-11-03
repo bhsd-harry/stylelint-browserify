@@ -42,4 +42,27 @@ export default extend(
 			'unicorn/prefer-string-raw': 0,
 		},
 	},
+	{
+		files: [
+			'shim/*.js',
+			'shim/*.mjs',
+		],
+		rules: {
+			'no-underscore-dangle': [
+				2,
+				{
+					allow: [
+						'_',
+						'_options',
+					],
+					enforceInMethodNames: true,
+					enforceInClassFields: true,
+					allowInArrayDestructuring: false,
+					allowInObjectDestructuring: false,
+					allowFunctionParams: false,
+				},
+			],
+			'jsdoc/require-jsdoc': 0,
+		},
+	},
 );

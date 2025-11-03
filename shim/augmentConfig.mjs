@@ -11,7 +11,7 @@ const addOptions = (stylelint, config) => {
 		'validate',
 	];
 	for (const key of subset) {
-		const value = stylelint._options[key]; // eslint-disable-line no-underscore-dangle
+		const value = stylelint._options[key];
 		if (value) {
 			augmentedConfig[key] = key === 'fix' || value;
 		}

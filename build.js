@@ -1,3 +1,4 @@
+/* eslint-disable require-unicode-regexp */
 'use strict';
 
 const path = require('path'),
@@ -51,9 +52,18 @@ const shim = [
 	/** @type {string[]} */ flat2 = [],
 	/** @type {string[]} */ flatMap = [],
 	shimSet = new Set(shim),
-	reduce = '.reduce((acc, cur) => acc.concat(cur), [])';
+	reduce = '.reduce((acc, cur) => acc.concat(cur), [])',
+	resolvePath = path.join('build', 'resolve'),
+	loadPath = path.join('build', 'load');
 let csstools = false,
 	copy = true;
+
+if (!fs.existsSync(resolvePath)) {
+	fs.mkdirSync(resolvePath, {recursive: true});
+}
+if (!fs.existsSync(loadPath)) {
+	fs.mkdirSync(loadPath, {recursive: true});
+}
 
 /**
  * Polyfill for Array.prototype.flat
@@ -74,17 +84,13 @@ const /** @type {esbuild.Plugin} */ plugin = {
 	name: 'alias',
 	setup(build) {
 		build.onResolve(
-			// eslint-disable-next-line require-unicode-regexp
 			{filter: new RegExp(String.raw`/(?:${shim.join('|')})(?:\.m?js)?$`)},
 			({path: p, resolveDir}) => {
 				const {name, ext} = path.parse(p),
 					file = name + (ext || '.js');
 				shimSet.delete(name);
 				if (copy) {
-					fs.copyFileSync(
-						require.resolve(path.join(resolveDir, p)),
-						path.resolve('build', file),
-					);
+					fs.copyFileSync(require.resolve(path.join(resolveDir, p)), path.resolve(resolvePath, file));
 				}
 				return {
 					path: path.resolve('shim', file),
@@ -93,7 +99,6 @@ const /** @type {esbuild.Plugin} */ plugin = {
 		);
 		build.onLoad(
 			{
-				// eslint-disable-next-line require-unicode-regexp
 				filter: new RegExp(
 					String.raw`/(?:(?:${
 						[
@@ -124,8 +129,9 @@ const /** @type {esbuild.Plugin} */ plugin = {
 				),
 			},
 			({path: p}) => {
+				const basename = path.basename(p);
 				let contents = fs.readFileSync(p, 'utf8'),
-					base = path.basename(p.slice(0, -path.extname(p).length));
+					base = path.basename(basename, path.extname(basename));
 				if (csstools && p.includes('/@csstools/')) {
 					contents = contents.replace(
 						/\.flatMap\((\(\w+=>\w+\.tokens\(\)\))\)/gu,
@@ -187,6 +193,9 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							contents = contents.replace(
 								/let fileList = .+?return result;\n\}/su,
 								'}',
+							).replace(
+								/(?<=function postProcessStylelintResult\().+^\}$/msu,
+								') {}',
 							);
 							break;
 						case 'getPostcssResult':
@@ -215,8 +224,8 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							break;
 						case 'reportUnknownRuleNames':
 							contents = contents.replace(
-								/^(function extractSuggestions)\(.+?^\}$/msu,
-								'$1() { return []; }',
+								/(?<=^function extractSuggestions)\(.+?^\}$/msu,
+								'() { return []; }',
 							);
 						// no default
 					}
@@ -244,6 +253,9 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							' flattenMap($1, ',
 						);
 					}
+				}
+				if (!copy && basename !== 'index.mjs') {
+					fs.copyFileSync(p, path.resolve(loadPath, basename));
 				}
 				return {contents};
 			},
@@ -308,14 +320,29 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		'unit-allowed-list',
 		'unit-disallowed-list',
 	);
-	flatRule2.push('declaration-block-no-redundant-longhand-properties', 'value-no-vendor-prefix');
+	flatRule2.push(
+		'declaration-block-no-redundant-longhand-properties',
+		'value-no-vendor-prefix',
+	);
 	flatMapRule.push('no-duplicate-selectors');
-	trimStart.push('function-url-quotes', 'no-invalid-double-slash-comments');
+	trimStart.push(
+		'function-url-quotes',
+		'no-invalid-double-slash-comments',
+	);
 	trimEnd.push('function-linear-gradient-no-nonstandard-direction');
-	dotAll.push('hasScssInterpolation', 'hasTplInterpolation');
+	dotAll.push(
+		'hasScssInterpolation',
+		'hasTplInterpolation',
+	);
 	flat.push('validateOptions');
-	flat2.push('validateObjectWithArrayProps', 'findNotContiguousOrRectangular');
-	flatMap.push('findMediaFeatureNames', 'mediaFeatures');
+	flat2.push(
+		'validateObjectWithArrayProps',
+		'findNotContiguousOrRectangular',
+	);
+	flatMap.push(
+		'findMediaFeatureNames',
+		'mediaFeatures',
+	);
 	match.push('declaration-block-no-redundant-longhand-properties');
 	matchAll.push('no-irregular-whitespace');
 	csstools = true;

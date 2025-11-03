@@ -1,1 +1,1 @@
-export default async () => false; // eslint-disable-line require-await
+export default () => Promise.resolve(false);
