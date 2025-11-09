@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/144196256274430b871abc36e9aa7d86)](https://app.codacy.com/gh/bhsd-harry/stylelint-browserify/dashboard)
 
-# API
+## API
 
 The `stylelint` global variable has a `lint()` method.
 
@@ -26,6 +26,7 @@ A string to lint.
 
 `stylelint.lint()` returns a `Promise` that resolves with an object containing the following properties:
 
+<!-- markdownlint-disable-next-line no-duplicate-heading -->
 ### `code`
 
 A string that contains the autofixed code, if the `fix` option is set to `true`. Otherwise, it is `undefined`.
