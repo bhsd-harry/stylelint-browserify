@@ -43,6 +43,7 @@ const shim = [
 	/** @type {string[]} */ flatRule2 = [],
 	/** @type {string[]} */ flatMapRule = [],
 	/** @type {string[]} */ trimStart = [],
+	/** @type {string[]} */ trimStart2 = [],
 	/** @type {string[]} */ trimEnd = [],
 	/** @type {string[]} */ match = [],
 	/** @type {string[]} */ matchAll = [],
@@ -124,8 +125,9 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							...flat,
 							...flat2,
 							...flatMap,
+							...trimStart2,
 						].join('|')
-					})\.mjs$|/map-generator\.js$|/@csstools/`,
+					})\.mjs$|/map-generator\.js$|/@csstools/.+\.[cm]?js$`,
 				),
 			},
 			({path: p}) => {
@@ -226,6 +228,12 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							contents = contents.replace(
 								/(?<=^function extractSuggestions)\(.+?^\}$/msu,
 								'() { return []; }',
+							);
+							break;
+						case 'mergeSyntaxDefinitions':
+							contents = contents.replaceAll(
+								'.trimStart()',
+								String.raw`.replace(/^\s+/u, '')`,
 							);
 						// no default
 					}
@@ -329,6 +337,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		'function-url-quotes',
 		'no-invalid-double-slash-comments',
 	);
+	trimStart2.push('mergeSyntaxDefinitions');
 	trimEnd.push('function-linear-gradient-no-nonstandard-direction');
 	dotAll.push(
 		'hasScssInterpolation',
