@@ -5,7 +5,7 @@ const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
-	config: ['hover', 'nth-child', 'root', 'placeholder', 'has'],
+	config: ['hover', 'nth-child', 'root', '/^(-moz-)?placeholder$/', 'has'],
 
 	accept: [
 		{

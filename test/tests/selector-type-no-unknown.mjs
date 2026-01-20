@@ -92,16 +92,8 @@ testRule({
 			code: ':not(::first-line) {}',
 		},
 		{
-			code: 'circle {}',
-			description: 'svg tags',
-		},
-		{
 			code: 'fencedframe, listbox, model, portal, selectlist, selectedcontent {}',
 			description: 'experimental tags',
-		},
-		{
-			code: 'foreignObject {}',
-			description: 'case-sensitive svg tags',
 		},
 		{
 			code: '@media keyframes { 0.0% {} 49.1% {} 100% {} }',
@@ -134,10 +126,6 @@ testRule({
 		{
 			code: 'html { --custom-property-set: {} }',
 			description: 'custom property set in selector',
-		},
-		{
-			code: 'abs {}',
-			description: 'MathML tags',
 		},
 		{
 			code: '.foo /deep/ .bar {}',

@@ -65,4 +65,10 @@ export default extend(
 			'jsdoc/require-jsdoc': 0,
 		},
 	},
+	{
+		files: ['shim/sourceMap.js'],
+		languageOptions: {
+			sourceType: 'module',
+		},
+	},
 );

@@ -19,8 +19,6 @@ const addOptions = (stylelint, config) => {
 	return augmentedConfig;
 };
 
-export const augmentConfigExtended = () => {};
-
 export const augmentConfigFull = async (stylelint, _, {config}) => ({
 	config: await normalizeAllRuleSettings(addOptions(stylelint, config)),
 });

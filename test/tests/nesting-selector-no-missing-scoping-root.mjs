@@ -1,3 +1,5 @@
+import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
+
 import rule from '../index.mjs';
 const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
 
@@ -256,6 +258,24 @@ testRule({
 			column: 10,
 			endLine: 1,
 			endColumn: 11,
+		},
+	],
+});
+
+testRule({
+	ruleName,
+	config: [true],
+	customSyntax: naiveCssInJs,
+
+	accept: [
+		{
+			code: 'css` &::before {} `;',
+		},
+		{
+			code: 'css` @media all { & {} } `;',
+		},
+		{
+			code: 'css` @scope (&) {} `;',
 		},
 	],
 });

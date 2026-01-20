@@ -5,7 +5,7 @@ const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
-	config: ['before', 'selection', /^my/i],
+	config: ['before', '/^(-webkit-)?selection$/', /^my/i],
 
 	accept: [
 		{
