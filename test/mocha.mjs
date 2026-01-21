@@ -54,7 +54,56 @@ Object.assign(globalThis, {
 	testRuleConfigs() {
 		//
 	},
-	expect() {
-		//
+	expect(actual) {
+		return {
+			rejects: {
+				async toThrow(expected) {
+					try {
+						await actual();
+					} catch (e) {
+						assert.deepStrictEqual(e, expected);
+					}
+				},
+			},
+			not: {toThrow: actual},
+			toContain(expected) {
+				assert.ok(actual.includes(expected));
+			},
+			toHaveLength(expected) {
+				assert.strictEqual(actual.length, expected);
+			},
+			toBe(expected) {
+				assert.strictEqual(actual, expected);
+			},
+			toBeUndefined() {
+				assert.strictEqual(actual, undefined);
+			},
+			toBeTruthy() {
+				assert.ok(actual);
+			},
+			toEqual(expected) {
+				assert.deepStrictEqual(JSON.parse(JSON.stringify(actual)), expected);
+			},
+			toContainEqual(expected) {
+				assert.ok(
+					actual.some(item => {
+						try {
+							// eslint-disable-next-line n/no-unsupported-features/node-builtins
+							assert.partialDeepStrictEqual(item, expected);
+							return true;
+						} catch {
+							return false;
+						}
+					}),
+				);
+			},
+		};
+	},
+	test(title, fn) {
+		it(title, fn);
+	},
+	suite(title, fn) {
+		describe(title, fn);
 	},
 });
+expect.objectContaining = obj => obj;

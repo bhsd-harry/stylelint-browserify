@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -306,7 +306,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['inside-single-line-block'] }],
+	config: ['always', {ignore: ['inside-single-line-block']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -336,7 +336,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['after-comment'] }],
+	config: ['always', {ignore: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -390,7 +390,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['after-declaration'] }],
+	config: ['always', {ignore: ['after-declaration']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -503,7 +503,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['first-nested'] }],
+	config: ['always', {ignore: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -572,7 +572,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['first-nested'] }],
+	config: ['always', {except: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -631,7 +631,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-block'] }],
+	config: ['always', {except: ['after-block']}],
 	fix: true,
 	computeEditInfo: true,
 	accept: [
@@ -679,7 +679,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-comment'] }],
+	config: ['always', {except: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -747,7 +747,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-declaration'] }],
+	config: ['always', {except: ['after-declaration']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -807,7 +807,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-declaration'] }],
+	config: ['always', {except: ['after-declaration']}],
 	customSyntax: 'postcss-scss',
 	fix: true,
 	computeEditInfo: true,
@@ -861,7 +861,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-declaration'] }],
+	config: ['always', {except: ['after-declaration']}],
 	customSyntax: 'postcss-less',
 	fix: true,
 	computeEditInfo: true,
@@ -903,7 +903,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['first-nested', 'after-comment'] }],
+	config: ['always', {except: ['first-nested', 'after-comment']}],
 
 	accept: [
 		{
@@ -1044,7 +1044,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['first-nested'] }],
+	config: ['never', {except: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -1099,7 +1099,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['after-block'] }],
+	config: ['never', {except: ['after-block']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -1193,7 +1193,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['after-comment'] }],
+	config: ['never', {except: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -1272,7 +1272,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['after-declaration'] }],
+	config: ['never', {except: ['after-declaration']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -1355,7 +1355,7 @@ testRule({
 	computeEditInfo: true,
 	accept: [
 		{
-			code: `<span style="color: red;"></span>`,
+			code: '<span style="color: red;"></span>',
 			description: 'Single-line HTML style tag',
 		},
 		{
@@ -1415,14 +1415,14 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['inside-single-line-block'] }],
+	config: ['always', {ignore: ['inside-single-line-block']}],
 	customSyntax: 'postcss-html',
 	fix: true,
 	computeEditInfo: true,
 
 	accept: [
 		{
-			code: `<span style="color: red; font-size: 1rem;"></span>`,
+			code: '<span style="color: red; font-size: 1rem;"></span>',
 			description: 'Single-line HTML style attribute with two declarations',
 		},
 		{

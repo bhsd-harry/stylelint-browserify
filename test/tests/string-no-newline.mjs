@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -17,7 +17,7 @@ testRule({
 			description: 'with escaped slash-slash-n newline',
 		},
 		{
-			code: "a::before { content: 'one\\Atwo'; }",
+			code: String.raw`a::before { content: 'one\Atwo'; }`,
 			description: 'with escaped slash-A newline',
 		},
 		{
@@ -148,7 +148,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['at-rule-preludes'] }],
+	config: [true, {ignore: ['at-rule-preludes']}],
 
 	accept: [
 		{
@@ -192,7 +192,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['declaration-values'] }],
+	config: [true, {ignore: ['declaration-values']}],
 
 	accept: [
 		{

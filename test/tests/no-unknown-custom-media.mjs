@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -68,8 +68,8 @@ testRule({
 		{
 			code: '@media (--bar), (--baz) {};',
 			warnings: [
-				{ message: messages.rejected('--bar'), line: 1, column: 9, endLine: 1, endColumn: 14 },
-				{ message: messages.rejected('--baz'), line: 1, column: 18, endLine: 1, endColumn: 23 },
+				{message: messages.rejected('--bar'), line: 1, column: 9, endLine: 1, endColumn: 14},
+				{message: messages.rejected('--baz'), line: 1, column: 18, endLine: 1, endColumn: 23},
 			],
 		},
 		{

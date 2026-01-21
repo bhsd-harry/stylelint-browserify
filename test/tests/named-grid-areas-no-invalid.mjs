@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -69,7 +69,7 @@ testRule({
 				}`,
 		},
 		{
-			code: `a { grid-template-areas: ${({ $foo }) => ($foo === 'any string with different number of tokens than return values' ? 'a a a' : 'b b b')}; }`,
+			code: `a { grid-template-areas: ${({$foo}) => ($foo === 'any string with different number of tokens than return values' ? 'a a a' : 'b b b')}; }`,
 			description:
 				'Skip non-standard values to fix false positive in named-grid-areas-no-invalid with styled-components',
 		},
@@ -154,9 +154,9 @@ testRule({
 		{
 			code: 'a { grid-template-areas: "" "" ""; }',
 			warnings: [
-				{ message: messages.expectedToken(), line: 1, column: 26, endLine: 1, endColumn: 28 },
-				{ message: messages.expectedToken(), line: 1, column: 29, endLine: 1, endColumn: 31 },
-				{ message: messages.expectedToken(), line: 1, column: 32, endLine: 1, endColumn: 34 },
+				{message: messages.expectedToken(), line: 1, column: 26, endLine: 1, endColumn: 28},
+				{message: messages.expectedToken(), line: 1, column: 29, endLine: 1, endColumn: 31},
+				{message: messages.expectedToken(), line: 1, column: 32, endLine: 1, endColumn: 34},
 			],
 		},
 		{
@@ -194,7 +194,7 @@ testRule({
 			endColumn: 10,
 		},
 		{
-			code: `a { grid: "" 200px "b" min-content; }`,
+			code: 'a { grid: "" 200px "b" min-content; }',
 			message: messages.expectedToken(),
 			line: 1,
 			column: 11,

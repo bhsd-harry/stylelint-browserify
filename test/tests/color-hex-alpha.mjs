@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -38,8 +38,8 @@ testRule({
 		{
 			code: 'a { background: linear-gradient(to left, #fff, #000000 100%); }',
 			warnings: [
-				{ message: messages.expected('#fff'), line: 1, column: 42, endLine: 1, endColumn: 46 },
-				{ message: messages.expected('#000000'), line: 1, column: 48, endLine: 1, endColumn: 55 },
+				{message: messages.expected('#fff'), line: 1, column: 42, endLine: 1, endColumn: 46},
+				{message: messages.expected('#000000'), line: 1, column: 48, endLine: 1, endColumn: 55},
 			],
 		},
 	],

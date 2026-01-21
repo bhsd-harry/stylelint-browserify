@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -313,7 +313,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { ignoreFunctions: ['someFunction', '/^get.*$/'] }],
+	config: ['lower', {ignoreFunctions: ['someFunction', '/^get.*$/']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -397,7 +397,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { ignoreFunctions: [/someFunction/] }],
+	config: ['lower', {ignoreFunctions: [/someFunction/]}],
 	fix: true,
 	computeEditInfo: true,
 

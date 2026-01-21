@@ -1,27 +1,27 @@
 import rule from '../index.mjs';
 
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
 	config: ['foo-.+'],
 
 	accept: [
-		{ code: 'a { color: red; }' },
-		{ code: 'a { container-name: initial; }' },
-		{ code: 'a { container-name: REVERT; }' },
-		{ code: 'a { container: initial / inline-size; }' },
-		{ code: '@container NONE {}' },
-		{ code: '@container foo-bar {}' },
-		{ code: ' @CONTAINER foo-bar   {}' },
-		{ code: ' @container foo-bar {}' },
-		{ code: '@container foo-bar {\n}' },
-		{ code: '@container foo-bar (width > 400px) {}' },
-		{ code: '@container foo-bar () {}' },
-		{ code: '@container foo-bar style(--cards small) {}' },
-		{ code: '@container foo-bar scroll-state(stuck: top) {}' },
-		{ code: '@container foo-bar (inline-size > 30em), foo-baz style(--large: true) {}' },
-		{ code: '@container foo-bar (inline-size > 30em) and foo-baz style(--large: true) {}' },
+		{code: 'a { color: red; }'},
+		{code: 'a { container-name: initial; }'},
+		{code: 'a { container-name: REVERT; }'},
+		{code: 'a { container: initial / inline-size; }'},
+		{code: '@container NONE {}'},
+		{code: '@container foo-bar {}'},
+		{code: ' @CONTAINER foo-bar   {}'},
+		{code: ' @container foo-bar {}'},
+		{code: '@container foo-bar {\n}'},
+		{code: '@container foo-bar (width > 400px) {}'},
+		{code: '@container foo-bar () {}'},
+		{code: '@container foo-bar style(--cards small) {}'},
+		{code: '@container foo-bar scroll-state(stuck: top) {}'},
+		{code: '@container foo-bar (inline-size > 30em), foo-baz style(--large: true) {}'},
+		{code: '@container foo-bar (inline-size > 30em) and foo-baz style(--large: true) {}'},
 		{
 			code: '@container () {}',
 			description: 'nameless container condition',

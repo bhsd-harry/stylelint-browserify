@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -211,7 +211,7 @@ testRule({
 			description: 'complex @media',
 		},
 		{
-			code: '@media screen and (min-width:0\\0) {}',
+			code: String.raw`@media screen and (min-width:0\0) {}`,
 			description: 'ignore media query hack',
 		},
 		{
@@ -562,7 +562,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreUnits: ['pix', '/^--my-/', '/^--YOUR-/i'] }],
+	config: [true, {ignoreUnits: ['pix', '/^--my-/', '/^--YOUR-/i']}],
 
 	accept: [
 		{
@@ -607,7 +607,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreUnits: [/^--my-/] }],
+	config: [true, {ignoreUnits: [/^--my-/]}],
 
 	accept: [
 		{
@@ -629,7 +629,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreFunctions: ['foo', '/^my-/', '/^YOUR-/i'] }],
+	config: [true, {ignoreFunctions: ['foo', '/^my-/', '/^YOUR-/i']}],
 
 	accept: [
 		{

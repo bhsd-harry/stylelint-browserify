@@ -2,7 +2,7 @@ import mergeTestDescriptions from '../mergeTestDescriptions.mjs';
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 const sharedTests = {
 	accept: [
@@ -79,7 +79,7 @@ testRule(
 				column: 12,
 				endLine: 1,
 				endColumn: 19,
-				fix: { range: [15, 18], text: '' },
+				fix: {range: [15, 18], text: ''},
 			},
 			{
 				code: 'a { color: #FfaAFF; }',
@@ -89,7 +89,7 @@ testRule(
 				column: 12,
 				endLine: 1,
 				endColumn: 19,
-				fix: { range: [13, 17], text: 'a' },
+				fix: {range: [13, 17], text: 'a'},
 			},
 			{
 				code: 'a { color: #00aa00aa; }',
@@ -99,7 +99,7 @@ testRule(
 				column: 12,
 				endLine: 1,
 				endColumn: 21,
-				fix: { range: [13, 19], text: 'a0' },
+				fix: {range: [13, 19], text: 'a0'},
 			},
 			{
 				code: 'a { something: #fff, #aba, #00ffAAaa; }',
@@ -109,7 +109,7 @@ testRule(
 				column: 28,
 				endLine: 1,
 				endColumn: 37,
-				fix: { range: [29, 35], text: 'fA' },
+				fix: {range: [29, 35], text: 'fA'},
 			},
 		],
 	}),
@@ -177,7 +177,7 @@ testRule(
 				column: 12,
 				endLine: 1,
 				endColumn: 16,
-				fix: { range: [14, 15], text: 'FFFF' },
+				fix: {range: [14, 15], text: 'FFFF'},
 			},
 			{
 				code: 'a { color: #Ffa; }',
@@ -187,7 +187,7 @@ testRule(
 				column: 12,
 				endLine: 1,
 				endColumn: 16,
-				fix: { range: [13, 14], text: 'Fffa' },
+				fix: {range: [13, 14], text: 'Fffa'},
 			},
 			{
 				code: 'a { color: #0a0a; }',
@@ -197,7 +197,7 @@ testRule(
 				column: 12,
 				endLine: 1,
 				endColumn: 17,
-				fix: { range: [13, 15], text: '0aa00a' },
+				fix: {range: [13, 15], text: '0aa00a'},
 			},
 			{
 				code: 'a { something: #ffffff, #aabbaa, #0fAa; }',
@@ -207,7 +207,7 @@ testRule(
 				column: 34,
 				endLine: 1,
 				endColumn: 39,
-				fix: { range: [35, 37], text: '0ffAAa' },
+				fix: {range: [35, 37], text: '0ffAAa'},
 			},
 		],
 	}),
@@ -250,14 +250,14 @@ testRule({
 			code: 'css` color: #aaaaaa; `;',
 			fixed: 'css` color: #aaa; `;',
 			message: messages.expected('#aaaaaa', '#aaa'),
-			fix: { range: [12, 15], text: '' },
+			fix: {range: [12, 15], text: ''},
 		},
 		{
 			code: 'css` background: linear-gradient(#aabbcc, #0000ffcc); `;',
 			fixed: 'css` background: linear-gradient(#abc, #00fc); `;',
 
 			warnings: [
-				{ message: messages.expected('#aabbcc', '#abc'), fix: { range: [31, 35], text: 'b' } },
+				{message: messages.expected('#aabbcc', '#abc'), fix: {range: [31, 35], text: 'b'}},
 				{
 					message: messages.expected('#0000ffcc', '#00fc'),
 					fix: undefined,
@@ -304,14 +304,14 @@ testRule({
 			code: 'css` color: #aaa; `;',
 			fixed: 'css` color: #aaaaaa; `;',
 			message: messages.expected('#aaa', '#aaaaaa'),
-			fix: { range: [11, 12], text: 'aaaa' },
+			fix: {range: [11, 12], text: 'aaaa'},
 		},
 		{
 			code: 'css` background: linear-gradient(#abc, #00fc); `;',
 			fixed: 'css` background: linear-gradient(#aabbcc, #0000ffcc); `;',
 			warnings: [
-				{ message: messages.expected('#abc', '#aabbcc'), fix: { range: [31, 32], text: 'abbc' } },
-				{ message: messages.expected('#00fc', '#0000ffcc'), fix: undefined },
+				{message: messages.expected('#abc', '#aabbcc'), fix: {range: [31, 32], text: 'abbc'}},
+				{message: messages.expected('#00fc', '#0000ffcc'), fix: undefined},
 			],
 		},
 	],

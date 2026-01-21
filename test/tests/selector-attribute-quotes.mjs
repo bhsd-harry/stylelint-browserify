@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -85,7 +85,7 @@ testRule({
 			column: 9,
 			endLine: 1,
 			endColumn: 15,
-			fix: { range: [8, 14], text: '"flower"' },
+			fix: {range: [8, 14], text: '"flower"'},
 		},
 		{
 			code: 'a[ title=flower ] { }',
@@ -95,7 +95,7 @@ testRule({
 			column: 10,
 			endLine: 1,
 			endColumn: 16,
-			fix: { range: [9, 15], text: '"flower"' },
+			fix: {range: [9, 15], text: '"flower"'},
 		},
 		{
 			code: '[class^=top] { }',
@@ -105,7 +105,7 @@ testRule({
 			column: 9,
 			endLine: 1,
 			endColumn: 12,
-			fix: { range: [8, 11], text: '"top"' },
+			fix: {range: [8, 11], text: '"top"'},
 		},
 		{
 			code: '[class ^= top] { }',
@@ -115,7 +115,7 @@ testRule({
 			column: 11,
 			endLine: 1,
 			endColumn: 14,
-			fix: { range: [10, 13], text: '"top"' },
+			fix: {range: [10, 13], text: '"top"'},
 		},
 		{
 			code: '[frame=hsides i] { }',
@@ -125,7 +125,7 @@ testRule({
 			column: 8,
 			endLine: 1,
 			endColumn: 14,
-			fix: { range: [7, 13], text: '"hsides"' },
+			fix: {range: [7, 13], text: '"hsides"'},
 		},
 		{
 			code: '[data-style=value][data-loading] { }',
@@ -135,37 +135,37 @@ testRule({
 			column: 13,
 			endLine: 1,
 			endColumn: 18,
-			fix: { range: [12, 17], text: '"value"' },
+			fix: {range: [12, 17], text: '"value"'},
 		},
 		{
-			code: `[href=te\\'s\\"t] { }`,
-			fixed: `[href="te's\\"t"] { }`,
+			code: String.raw`[href=te\'s\"t] { }`,
+			fixed: String.raw`[href="te's\"t"] { }`,
 			message: messages.expected(`te's"t`),
 			line: 1,
 			column: 7,
 			endLine: 1,
 			endColumn: 15,
-			fix: { range: [6, 14], text: `"te's\\"t"` },
+			fix: {range: [6, 14], text: String.raw`"te's\"t"`},
 		},
 		{
-			code: '[href=\\"test\\"] { }',
-			fixed: '[href="\\"test\\""] { }',
+			code: String.raw`[href=\"test\"] { }`,
+			fixed: String.raw`[href="\"test\""] { }`,
 			message: messages.expected('"test"'),
 			line: 1,
 			column: 7,
 			endLine: 1,
 			endColumn: 15,
-			fix: { range: [6, 13], text: '"\\"test\\"' },
+			fix: {range: [6, 13], text: String.raw`"\"test\"`},
 		},
 		{
-			code: "[href=\\'test\\'] { }",
+			code: String.raw`[href=\'test\'] { }`,
 			fixed: `[href="'test'"] { }`,
 			message: messages.expected("'test'"),
 			line: 1,
 			column: 7,
 			endLine: 1,
 			endColumn: 15,
-			fix: { range: [6, 14], text: `"'test'"` },
+			fix: {range: [6, 14], text: `"'test'"`},
 		},
 		{
 			code: stripIndent`
@@ -191,7 +191,7 @@ testRule({
 					endLine: 2,
 					line: 2,
 					message: messages.expected('flower'),
-					fix: { range: [24, 30], text: '"flower"' },
+					fix: {range: [24, 30], text: '"flower"'},
 				},
 				{
 					column: 10,
@@ -235,15 +235,15 @@ testRule({
 			code: '[data-style=value][data-loading] { }',
 		},
 		{
-			code: `a[href=te\\'s\\"t] { }`,
+			code: String.raw`a[href=te\'s\"t] { }`,
 			description: 'attribute contains inner quotes',
 		},
 		{
-			code: '[href=\\"test\\"] { }',
+			code: String.raw`[href=\"test\"] { }`,
 			description: 'escaped double-quotes are not considered as framing quotes',
 		},
 		{
-			code: "[href=\\'test\\'] { }",
+			code: String.raw`[href=\'test\'] { }`,
 			description: 'escaped single-quotes are not considered as framing quotes',
 		},
 		{
@@ -265,7 +265,7 @@ testRule({
 			column: 10,
 			endLine: 1,
 			endColumn: 18,
-			fix: { range: [9, 17], text: '_blank' },
+			fix: {range: [9, 17], text: '_blank'},
 		},
 		{
 			code: 'a[ target="_blank" ] { }',
@@ -275,7 +275,7 @@ testRule({
 			column: 11,
 			endLine: 1,
 			endColumn: 19,
-			fix: { range: [10, 18], text: '_blank' },
+			fix: {range: [10, 18], text: '_blank'},
 		},
 		{
 			code: '[class|="top"] { }',
@@ -285,7 +285,7 @@ testRule({
 			column: 9,
 			endLine: 1,
 			endColumn: 14,
-			fix: { range: [8, 13], text: 'top' },
+			fix: {range: [8, 13], text: 'top'},
 		},
 		{
 			code: '[class |= "top"] { }',
@@ -295,7 +295,7 @@ testRule({
 			column: 11,
 			endLine: 1,
 			endColumn: 16,
-			fix: { range: [10, 15], text: 'top' },
+			fix: {range: [10, 15], text: 'top'},
 		},
 		{
 			code: "[title~='text'] { }",
@@ -305,7 +305,7 @@ testRule({
 			column: 9,
 			endLine: 1,
 			endColumn: 15,
-			fix: { range: [8, 14], text: 'text' },
+			fix: {range: [8, 14], text: 'text'},
 		},
 		{
 			code: "[data-attribute='component'] { }",
@@ -315,7 +315,7 @@ testRule({
 			column: 17,
 			endLine: 1,
 			endColumn: 28,
-			fix: { range: [16, 27], text: 'component' },
+			fix: {range: [16, 27], text: 'component'},
 		},
 		{
 			code: '[frame="hsides" i] { }',
@@ -325,7 +325,7 @@ testRule({
 			column: 8,
 			endLine: 1,
 			endColumn: 16,
-			fix: { range: [7, 15], text: 'hsides' },
+			fix: {range: [7, 15], text: 'hsides'},
 		},
 		{
 			code: "[frame='hsides' i] { }",
@@ -335,7 +335,7 @@ testRule({
 			column: 8,
 			endLine: 1,
 			endColumn: 16,
-			fix: { range: [7, 15], text: 'hsides' },
+			fix: {range: [7, 15], text: 'hsides'},
 		},
 		{
 			code: "[data-style='value'][data-loading] { }",
@@ -345,27 +345,27 @@ testRule({
 			column: 13,
 			endLine: 1,
 			endColumn: 20,
-			fix: { range: [12, 19], text: 'value' },
+			fix: {range: [12, 19], text: 'value'},
 		},
 		{
-			code: "[href='te\\'s\\'t'] { }",
-			fixed: "[href=te\\'s\\'t] { }",
+			code: String.raw`[href='te\'s\'t'] { }`,
+			fixed: String.raw`[href=te\'s\'t] { }`,
 			message: messages.rejected("te's't"),
 			line: 1,
 			column: 7,
 			endLine: 1,
 			endColumn: 17,
-			fix: { range: [6, 16], text: "te\\'s\\'t" },
+			fix: {range: [6, 16], text: String.raw`te\'s\'t`},
 		},
 		{
-			code: '[href="te\\"s\\"t"] { }',
-			fixed: '[href=te\\"s\\"t] { }',
+			code: String.raw`[href="te\"s\"t"] { }`,
+			fixed: String.raw`[href=te\"s\"t] { }`,
 			message: messages.rejected('te"s"t'),
 			line: 1,
 			column: 7,
 			endLine: 1,
 			endColumn: 17,
-			fix: { range: [6, 16], text: 'te\\"s\\"t' },
+			fix: {range: [6, 16], text: String.raw`te\"s\"t`},
 		},
 		{
 			code: 'a[target="_blank"], /* comment */ a { }',
@@ -375,7 +375,7 @@ testRule({
 			column: 10,
 			endLine: 1,
 			endColumn: 18,
-			fix: { range: [9, 17], text: '_blank' },
+			fix: {range: [9, 17], text: '_blank'},
 		},
 	],
 });

@@ -1,18 +1,18 @@
 import rule from '../index.mjs';
 
-const { ruleName, messages } = {...rule, ruleName: filename(import.meta.url)};
+const {ruleName, messages} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
 	config: /^[a-z][a-z0-9-]*$/,
 	accept: [
-		{ code: '@layer foo;' },
-		{ code: '@layer {}' },
-		{ code: '@layer foo {}' },
-		{ code: '@layer foo-bar {}' },
-		{ code: '@layer foo, bar {}' },
-		{ code: '@import "foo.css" layer(foo)' },
-		{ code: '@import "foo.css" layer(foo, bar)' },
+		{code: '@layer foo;'},
+		{code: '@layer {}'},
+		{code: '@layer foo {}'},
+		{code: '@layer foo-bar {}'},
+		{code: '@layer foo, bar {}'},
+		{code: '@import "foo.css" layer(foo)'},
+		{code: '@import "foo.css" layer(foo, bar)'},
 	],
 	reject: [
 		{
@@ -99,7 +99,7 @@ testRule({
 testRule({
 	ruleName,
 	config: 'foo',
-	accept: [{ code: '@layer foo {}' }, { code: '@import "bar.css" layer(foo)' }],
+	accept: [{code: '@layer foo {}'}, {code: '@import "bar.css" layer(foo)'}],
 	reject: [
 		{
 			code: '@layer bar {}',

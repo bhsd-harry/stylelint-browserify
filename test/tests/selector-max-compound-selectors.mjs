@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 // Testing plain selectors, different combinators
 testRule({
@@ -351,7 +351,7 @@ testRule({
 // Testing ignoreSelectors
 testRule({
 	ruleName,
-	config: [2, { ignoreSelectors: ['::v-deep', '/-moz-.*/', /-screen$/, '.ignored'] }],
+	config: [2, {ignoreSelectors: ['::v-deep', '/-moz-.*/', /-screen$/, '.ignored']}],
 
 	accept: [
 		{

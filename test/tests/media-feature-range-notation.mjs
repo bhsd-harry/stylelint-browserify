@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -128,7 +128,7 @@ testRule({
 					column: 8,
 					endLine: 1,
 					endColumn: 24,
-					fix: { range: [8, 18], text: 'width >=' },
+					fix: {range: [8, 18], text: 'width >='},
 				},
 				{
 					message: messages.expected('context'),
@@ -153,7 +153,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['context', { except: ['exact-value'] }],
+	config: ['context', {except: ['exact-value']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -316,7 +316,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['prefix', { except: ['exact-value'] }],
+	config: ['prefix', {except: ['exact-value']}],
 	fix: true,
 	computeEditInfo: true,
 

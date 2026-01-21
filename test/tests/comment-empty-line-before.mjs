@@ -1,6 +1,6 @@
 import mergeTestDescriptions from '../mergeTestDescriptions.mjs';
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 const alwaysTests = {
 	accept: [
@@ -44,27 +44,27 @@ const alwaysTests = {
 		{
 			code: '/** comment */\n/** comment */',
 			fixed: '/** comment */\n\n/** comment */',
-			fix: { range: [14, 15], text: '\n\n' },
+			fix: {range: [14, 15], text: '\n\n'},
 			message: messages.expected,
 			description: 'one newline between comments',
 		},
 		{
 			code: '/** comment */\r\n/** comment */',
 			fixed: '/** comment */\r\n\r\n/** comment */',
-			fix: { range: [15, 16], text: '\n\r\n' },
+			fix: {range: [15, 16], text: '\n\r\n'},
 			message: messages.expected,
 			description: 'CRLF newline between comments',
 		},
 		{
 			code: 'a { color: pink;\n/** comment */\ntop: 0; }',
 			fixed: 'a { color: pink;\n\n/** comment */\ntop: 0; }',
-			fix: { range: [16, 17], text: '\n\n' },
+			fix: {range: [16, 17], text: '\n\n'},
 			message: messages.expected,
 		},
 		{
 			code: 'a { color: pink;\r\n/** comment */\r\ntop: 0; }',
 			fixed: 'a { color: pink;\r\n\r\n/** comment */\r\ntop: 0; }',
-			fix: { range: [17, 18], text: '\n\r\n' },
+			fix: {range: [17, 18], text: '\n\r\n'},
 			description: 'CRLF',
 			message: messages.expected,
 		},
@@ -95,7 +95,7 @@ testRule(
 				column: 3,
 				endLine: 2,
 				endColumn: 16,
-				fix: { range: [3, 4], text: '\n\n' },
+				fix: {range: [3, 4], text: '\n\n'},
 			},
 		],
 	}),
@@ -104,7 +104,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(alwaysTests, {
 		ruleName,
-		config: ['always', { except: ['first-nested'] }],
+		config: ['always', {except: ['first-nested']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -127,7 +127,7 @@ testRule(
 				message: messages.rejected,
 				line: 3,
 				column: 3,
-				fix: { range: [4, 5], text: '' },
+				fix: {range: [4, 5], text: ''},
 			},
 			{
 				code: 'a { /* shared-line comment */\n\n  /* comment */\n  color: pink;\n}',
@@ -136,7 +136,7 @@ testRule(
 				message: messages.rejected,
 				line: 3,
 				column: 3,
-				fix: { range: [30, 31], text: '' },
+				fix: {range: [30, 31], text: ''},
 			},
 		],
 	}),
@@ -145,7 +145,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(alwaysTests, {
 		ruleName,
-		config: ['always', { ignore: ['stylelint-commands'] }],
+		config: ['always', {ignore: ['stylelint-commands']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -161,7 +161,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(alwaysTests, {
 		ruleName,
-		config: ['always', { ignoreComments: [/^ignore/u, '/ignore$/', 'string-ignored-comment'] }],
+		config: ['always', {ignoreComments: [/^ignore/u, '/ignore$/', 'string-ignored-comment']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -196,7 +196,7 @@ testRule(
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['after-comment'] }],
+	config: ['always', {ignore: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -216,7 +216,7 @@ testRule({
 			code: 'a { color: pink;\n/** comment */\n/** comment */\ntop: 0; }',
 			fixed: 'a { color: pink;\n\n/** comment */\n/** comment */\ntop: 0; }',
 			message: messages.expected,
-			fix: { range: [16, 17], text: '\n\n' },
+			fix: {range: [16, 17], text: '\n\n'},
 		},
 	],
 });
@@ -261,26 +261,26 @@ testRule({
 			column: 1,
 			endLine: 3,
 			endColumn: 15,
-			fix: { range: [15, 16], text: '' },
+			fix: {range: [15, 16], text: ''},
 		},
 		{
 			code: 'a {}\n\n\n/** comment */',
 			fixed: 'a {}\n/** comment */',
 			message: messages.rejected,
-			fix: { range: [5, 7], text: '' },
+			fix: {range: [5, 7], text: ''},
 		},
 		{
 			code: 'a {}\r\n\r\n\r\n/** comment */',
 			fixed: 'a {}\r\n/** comment */',
 			description: 'CRLF',
 			message: messages.rejected,
-			fix: { range: [6, 10], text: '' },
+			fix: {range: [6, 10], text: ''},
 		},
 		{
 			code: 'a { color: pink;\n\n/** comment */\ntop: 0; }',
 			fixed: 'a { color: pink;\n/** comment */\ntop: 0; }',
 			message: messages.rejected,
-			fix: { range: [17, 18], text: '' },
+			fix: {range: [17, 18], text: ''},
 		},
 	],
 });

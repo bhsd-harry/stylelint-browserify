@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -574,7 +574,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { propertiesSyntax: { size: '<length-percentage>' } }],
+	config: [true, {propertiesSyntax: {size: '<length-percentage>'}}],
 
 	accept: [
 		{
@@ -599,8 +599,8 @@ testRule({
 	config: [
 		true,
 		{
-			propertiesSyntax: { top: '| <--foo()>' },
-			typesSyntax: { '--foo()': '--foo( <length-percentage> )' },
+			propertiesSyntax: {top: '| <--foo()>'},
+			typesSyntax: {'--foo()': '--foo( <length-percentage> )'},
 		},
 	],
 

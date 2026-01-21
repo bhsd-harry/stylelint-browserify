@@ -1,7 +1,7 @@
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -231,7 +231,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreAtRules: ['--foo', '/^--bar-/'] }],
+	config: [true, {ignoreAtRules: ['--foo', '/^--bar-/']}],
 
 	accept: [
 		{

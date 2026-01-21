@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -98,7 +98,7 @@ testRule({
 			endColumn: 16,
 		},
 		{
-			code: `p, img:not(a\n, div) {}`,
+			code: 'p, img:not(a\n, div) {}',
 			fixed: 'p, img:not(a):not(div) {}',
 			fix: {
 				range: [12, 15],

@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 // Sanity checks
 testRule({
@@ -307,7 +307,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignoreAfterCombinators: ['>'] }],
+	config: [1, {ignoreAfterCombinators: ['>']}],
 
 	accept: [
 		{
@@ -332,7 +332,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignoreAfterCombinators: ['~', '+', '>', ' '] }],
+	config: [0, {ignoreAfterCombinators: ['~', '+', '>', ' ']}],
 
 	accept: [
 		{

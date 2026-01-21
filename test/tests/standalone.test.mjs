@@ -1,0 +1,437 @@
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+
+import replaceBackslashes from '../replaceBackslashes.mjs';
+import standalone from '../standalone.mjs';
+
+const configBlockNoEmpty = {
+	rules: {
+		'block-no-empty': true,
+	},
+};
+
+const fixturesPath = replaceBackslashes(new URL('./fixtures', import.meta.url));
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+
+describe.skip('standalone with one input file', () => {
+	let report;
+	let results;
+
+	beforeEach(async () => {
+		const data = await standalone({
+			files: `${fixturesPath}/empty-block.css`,
+			// Path to config file
+			configFile: path.join(__dirname, 'fixtures/config-block-no-empty.json'),
+		});
+
+		report = data.report;
+		results = data.results;
+	});
+
+	it('triggers warning', () => {
+		expect(report).toContain('block-no-empty');
+		expect(results).toHaveLength(1);
+		expect(results[0].warnings).toHaveLength(1);
+		expect(results[0].warnings[0].rule).toBe('block-no-empty');
+	});
+});
+
+it.skip('standalone with two file-specific globs', async () => {
+	const {report, results} = await standalone({
+		files: [`${fixturesPath}/e*y-block.*`, `${fixturesPath}/invalid-h*.css`],
+		config: {
+			rules: {'block-no-empty': true, 'color-no-invalid-hex': true},
+		},
+	});
+
+	expect(report).toContain('block-no-empty');
+	expect(report).toContain('color-no-invalid-hex');
+	expect(results).toHaveLength(2);
+	expect(results[0].warnings).toHaveLength(1);
+	expect(results[1].warnings).toHaveLength(1);
+
+	/**
+	 * Expecting warnings for these two rules, and order of warnings is not important,
+	 * because files could be linted in any order
+	 * [
+	 * 	{ warnings: [{ rule: 'block-no-empty' }] },
+	 * 	{ warnings: [{ rule: 'color-no-invalid-hex' }] },
+	 * ]
+	 */
+	expect(results).toEqual(
+		expect.arrayContaining([
+			expect.objectContaining({
+				warnings: expect.arrayContaining([
+					expect.objectContaining({
+						rule: 'block-no-empty',
+					}),
+				]),
+			}),
+			expect.objectContaining({
+				warnings: expect.arrayContaining([
+					expect.objectContaining({
+						rule: 'color-no-invalid-hex',
+					}),
+				]),
+			}),
+		]),
+	);
+});
+
+describe.skip('standalone with files and globbyOptions', () => {
+	let report;
+	let results;
+
+	beforeEach(async () => {
+		const data = await standalone({
+			files: 'empty-block.css',
+			globbyOptions: {cwd: fixturesPath},
+			// Path to config file
+			configFile: path.join(__dirname, 'fixtures/config-block-no-empty.json'),
+		});
+
+		report = data.report;
+		results = data.results;
+	});
+
+	it('triggers warning', () => {
+		expect(report).toContain('block-no-empty');
+		expect(results).toHaveLength(1);
+		expect(results[0].warnings).toHaveLength(1);
+		expect(results[0].warnings[0].rule).toBe('block-no-empty');
+	});
+});
+
+describe.skip('standalone with files and cwd', () => {
+	let report;
+	let results;
+
+	beforeEach(async () => {
+		const data = await standalone({
+			files: 'empty-block.css',
+			cwd: fixturesPath,
+			// Path to config file
+			configFile: path.join(__dirname, 'fixtures/config-block-no-empty.json'),
+		});
+
+		report = data.report;
+		results = data.results;
+	});
+
+	it('triggers warning', () => {
+		expect(report).toContain('block-no-empty');
+		expect(results).toHaveLength(1);
+		expect(results[0].warnings).toHaveLength(1);
+		expect(results[0].warnings[0].rule).toBe('block-no-empty');
+	});
+});
+
+describe.skip('absence of option validation', async () => {
+	const {
+		results: [result],
+	} = await standalone({
+		files: 'empty-block.css',
+		cwd: fixturesPath,
+		config: {
+			rules: {
+				'block-no-empty': '',
+			},
+		},
+		validate: false,
+	});
+
+	expect(result.errored).toBe(true);
+	expect(result.invalidOptionWarnings).toHaveLength(0);
+});
+
+it('standalone with input css', async () => {
+	const {report, results} = await standalone({
+		code: 'a {}',
+		config: configBlockNoEmpty,
+	});
+
+	expect(report).toContain('block-no-empty');
+	expect(results).toHaveLength(1);
+	expect(results[0].warnings).toHaveLength(1);
+	expect(results[0].warnings[0].rule).toBe('block-no-empty');
+});
+
+it('standalone without input css and file(s) should throw error', async () => {
+	const expectedError = new Error(
+		'You must pass stylelint a `files` glob or a `code` string, though not both',
+	);
+
+	await expect(() => standalone({config: configBlockNoEmpty})).rejects.toThrow(expectedError);
+});
+
+describe.skip('standalone with nonexistent-file', () => {
+	it('allowEmptyInput enabled quietly exits', async () => {
+		const {results, errored, report} = await standalone({
+			files: `${fixturesPath}/nonexistent-file.css`,
+			config: configBlockNoEmpty,
+			allowEmptyInput: true,
+		});
+
+		expect(results).toHaveLength(0);
+		expect(errored).toBe(false);
+		expect(report).toBe('[]');
+	});
+
+	it('allowEmptyInput enabled (in config) quietly exits', async () => {
+		const {results, errored, report} = await standalone({
+			files: `${fixturesPath}/nonexistent-file.css`,
+			config: {...configBlockNoEmpty, allowEmptyInput: true},
+		});
+
+		expect(results).toHaveLength(0);
+		expect(errored).toBe(false);
+		expect(report).toBe('[]');
+	});
+
+	it('allowEmptyInput enabled (in config file) quietly exits', async () => {
+		const {results, errored, report} = await standalone({
+			files: `${fixturesPath}/nonexistent-file.css`,
+			configFile: `${fixturesPath}/config-allow-empty-input.json`,
+		});
+
+		expect(results).toHaveLength(0);
+		expect(errored).toBe(false);
+		expect(report).toBe('[]');
+	});
+});
+
+describe('standalone passing code with syntax error', () => {
+	let results;
+
+	beforeEach(async () => {
+		const data = await standalone({
+			code: "a { color: 'red; }",
+			config: {rules: {'block-no-empty': true}},
+		});
+
+		results = data.results;
+	});
+
+	it('<input css 1> as source', () => {
+		expect(results[0].source).toBe('<input css 1>');
+	});
+
+	it('empty deprecations', () => {
+		expect(results[0].deprecations).toHaveLength(0);
+	});
+
+	it('empty invalidOptionWarnings', () => {
+		expect(results[0].invalidOptionWarnings).toHaveLength(0);
+	});
+
+	it('empty parseError', () => {
+		expect(results[0].parseErrors).toHaveLength(0);
+	});
+
+	it('error registered', () => {
+		expect(results[0].errored).toBeTruthy();
+	});
+
+	it('syntax error rule is CssSyntaxError', () => {
+		expect(results[0].warnings).toHaveLength(1);
+		expect(results[0].warnings[0].rule).toBe('CssSyntaxError');
+	});
+
+	it('syntax error severity is error', () => {
+		expect(results[0].warnings[0].severity).toBe('error');
+	});
+
+	it('(CssSyntaxError) in warning text', () => {
+		expect(results[0].warnings[0].text).toContain(' (CssSyntaxError)');
+	});
+});
+
+it.skip('standalone passing file with syntax error', async () => {
+	const {results} = await standalone({
+		code: "a { color: 'red; }",
+
+		config: {rules: {'block-no-empty': true}},
+	});
+
+	expect(results[0].source).toContain('syntax-error.css');
+});
+
+it('syntax error sets errored to true', async () => {
+	const {errored} = await standalone({
+		code: "a { color: 'red; }",
+		config: {rules: {'block-no-empty': true}},
+	});
+
+	expect(errored).toBe(true);
+});
+
+it('error `Cannot parse selector` sets errored to true', async () => {
+	const {errored} = await standalone({
+		code: "data-something='true'] { }",
+		config: {rules: {'selector-type-no-unknown': true}},
+	});
+
+	expect(errored).toBe(true);
+});
+
+it('configuration error sets errored to true', async () => {
+	const {errored} = await standalone({
+		code: "a { color: 'red'; }",
+		config: {rules: {'block-no-empty': 'wahoo'}},
+	});
+
+	expect(errored).toBe(true);
+});
+
+it.skip('unknown formatter option', async () => {
+	await expect(
+		standalone({
+			formatter: 'unknown',
+			code: '',
+			config: {rules: {'block-no-empty': 'wahoo'}},
+		}),
+	).rejects.toThrow(/^You must use a valid formatter option/);
+});
+
+describe.skip('standalone with different configs per file', () => {
+	let results;
+
+	beforeEach(async () => {
+		const data = await standalone({
+			files: `${fixturesPath}/config-per-file/**/*.css`,
+		});
+
+		results = data.results;
+	});
+
+	it('no warnings for A', () => {
+		const resultA = results.find(result => result.source.includes('a.css'));
+
+		expect(resultA.warnings).toHaveLength(0);
+	});
+
+	it('one warning for B', () => {
+		const resultB = results.find(result => result.source.includes('b.css'));
+
+		expect(resultB.warnings).toHaveLength(1);
+	});
+
+	it('correct warning for B', () => {
+		const resultB = results.find(result => result.source.includes('b.css'));
+
+		expect(resultB.warnings[0].text).toContain('Unexpected empty block');
+	});
+
+	it('no warnings for C', () => {
+		const resultC = results.find(result => result.source.includes('c.css'));
+
+		expect(resultC.warnings).toHaveLength(0);
+	});
+
+	it('no warnings for D', () => {
+		const resultD = results.find(result => result.source.includes('d.css'));
+
+		expect(resultD.warnings).toHaveLength(0);
+	});
+});
+
+describe.skip('standalone with config locatable from process.cwd not file', () => {
+	let results;
+
+	beforeEach(async () => {
+		const data = await standalone({
+			files: [replaceBackslashes(path.join(__dirname, './fixtures/empty-block.css'))],
+		});
+
+		results = data.results;
+	});
+
+	it('two warning', () => {
+		expect(results[0].warnings).toHaveLength(2);
+	});
+
+	it("'block-no-empty' correct warning", () => {
+		expect(results[0].warnings.find(warn => warn.rule === 'block-no-empty')).toBeTruthy();
+	});
+
+	it("'plugin/warn-about-foo' correct warning", () => {
+		expect(results[0].warnings.find(warn => warn.rule === 'plugin/warn-about-foo')).toBeTruthy();
+	});
+});
+
+describe.skip('standalone with config locatable from options.cwd not file', () => {
+	let results;
+
+	beforeEach(async () => {
+		const data = await standalone({
+			cwd: path.join(__dirname, './fixtures/getConfigForFile/a/b'),
+			files: [replaceBackslashes(path.join(__dirname, './fixtures/empty-block.css'))],
+		});
+
+		results = data.results;
+	});
+
+	it('two warning', () => {
+		expect(results[0].warnings).toHaveLength(2);
+	});
+
+	it("'block-no-empty' correct warning", () => {
+		expect(results[0].warnings.find(warn => warn.rule === 'block-no-empty')).toBeTruthy();
+	});
+
+	it("'plugin/warn-about-foo' correct warning", () => {
+		expect(results[0].warnings.find(warn => warn.rule === 'plugin/warn-about-foo')).toBeTruthy();
+	});
+});
+
+describe('nonexistent codeFilename with loaded config', () => {
+	it('does not cause error', async () => {
+		await expect(() =>
+			standalone({
+				code: 'a {}',
+
+			})).not.toThrow();
+	});
+
+	it.skip('does load config from process.cwd', async () => {
+		const {results} = await standalone({
+			code: 'a {}',
+
+		});
+
+		expect(results[0].warnings).toHaveLength(1);
+	});
+});
+
+describe('nonexistent codeFilename with loaded config and options.cwd', () => {
+	it('does not cause error', async () => {
+		await expect(() =>
+			standalone({
+				code: 'a {}',
+
+				cwd: path.join(__dirname, './fixtures/getConfigForFile/a/b'),
+			})).not.toThrow();
+	});
+
+	it.skip('does load config from options.cwd', async () => {
+		const {results} = await standalone({
+			code: 'a {}',
+
+			cwd: path.join(__dirname, './fixtures/getConfigForFile/a/b'),
+		});
+
+		expect(results[0].warnings).toHaveLength(1);
+	});
+});
+
+describe('existing codeFilename for nested config detection', () => {
+	it.skip('loads config from a nested directory', async () => {
+		const {results} = await standalone({
+			code: 'a {}',
+
+		});
+
+		expect(results[0].warnings).toHaveLength(1);
+	});
+});

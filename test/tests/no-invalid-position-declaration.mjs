@@ -1,8 +1,8 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -148,8 +148,8 @@ testRule({
 				color: blue;
 			`,
 			warnings: [
-				{ message: messages.rejected, line: 1, column: 1, endLine: 1, endColumn: 12 },
-				{ message: messages.rejected, line: 2, column: 1, endLine: 2, endColumn: 13 },
+				{message: messages.rejected, line: 1, column: 1, endLine: 1, endColumn: 12},
+				{message: messages.rejected, line: 2, column: 1, endLine: 2, endColumn: 13},
 			],
 			description: 'multiple properties at root level',
 		},
@@ -190,8 +190,8 @@ testRule({
 				color: pink;
 			`,
 			warnings: [
-				{ message: messages.rejected, line: 1, column: 1, endLine: 1, endColumn: 12 },
-				{ message: messages.rejected, line: 7, column: 1, endLine: 7, endColumn: 13 },
+				{message: messages.rejected, line: 1, column: 1, endLine: 1, endColumn: 12},
+				{message: messages.rejected, line: 7, column: 1, endLine: 7, endColumn: 13},
 			],
 			description: 'properties at root before and after selector',
 		},
@@ -284,8 +284,8 @@ testRule({
 				}
 			`,
 			warnings: [
-				{ message: messages.rejected, line: 2, column: 2, endLine: 2, endColumn: 13 },
-				{ message: messages.rejected, line: 3, column: 2, endLine: 3, endColumn: 14 },
+				{message: messages.rejected, line: 2, column: 2, endLine: 2, endColumn: 13},
+				{message: messages.rejected, line: 3, column: 2, endLine: 3, endColumn: 14},
 			],
 		},
 		{
@@ -357,7 +357,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreAtRules: ['--foo', '/^--bar-/'] }],
+	config: [true, {ignoreAtRules: ['--foo', '/^--bar-/']}],
 
 	accept: [
 		{

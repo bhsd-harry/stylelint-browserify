@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -440,7 +440,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { ignoreTypes: ['$childClass', '/(p|P)arent.*/', /foo$/i] }],
+	config: ['lower', {ignoreTypes: ['$childClass', '/(p|P)arent.*/', /foo$/i]}],
 	computeEditInfo: true,
 
 	accept: [

@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -100,7 +100,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignore: ['blockless-at-rules'] }],
+	config: [1, {ignore: ['blockless-at-rules']}],
 
 	accept: [
 		{
@@ -132,7 +132,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignore: ['pseudo-classes'] }],
+	config: [1, {ignore: ['pseudo-classes']}],
 
 	accept: [
 		{
@@ -187,7 +187,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignorePseudoClasses: ['hover', '/^--custom-.*$/'] }],
+	config: [1, {ignorePseudoClasses: ['hover', '/^--custom-.*$/']}],
 
 	accept: [
 		{
@@ -219,7 +219,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignoreAtRules: ['media', '/^my-/'] }],
+	config: [1, {ignoreAtRules: ['media', '/^my-/']}],
 
 	accept: [
 		{
@@ -254,7 +254,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignoreAtRules: [/^my-/] }],
+	config: [1, {ignoreAtRules: [/^my-/]}],
 
 	accept: [
 		{
@@ -272,7 +272,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignoreRules: [/^.some-sel/, '.my-selector'] }],
+	config: [1, {ignoreRules: [/^.some-sel/, '.my-selector']}],
 
 	accept: [
 		{
@@ -361,7 +361,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignoreRules: ['&'], ignore: ['pseudo-classes'] }],
+	config: [1, {ignoreRules: ['&'], ignore: ['pseudo-classes']}],
 
 	accept: [
 		{
@@ -384,7 +384,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [1, { ignoreRules: ['&'] }],
+	config: [1, {ignoreRules: ['&']}],
 
 	reject: [
 		{

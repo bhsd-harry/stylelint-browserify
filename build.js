@@ -17,6 +17,7 @@ const shim = [
 		'getFileIgnorer',
 		'getFormatter',
 		'getModulePath',
+		'ident',
 		'invalidScopeDisables',
 		'isPathIgnored',
 		'isPathNotFoundError',
@@ -27,11 +28,14 @@ const shim = [
 		'previous-map',
 		'resolveFilePath',
 		'sourceMap',
+		'stripComments',
 		'suppressionsService',
 		'timing',
 		'unscopedDisables',
+		'warn-once',
 	],
 	at = [
+		'display-notation',
 		'function-calc-no-unspaced-operator',
 		'selector-no-qualifying-type',
 	],
@@ -43,7 +47,12 @@ const shim = [
 	],
 	findLastIndex = ['getStrippedSelectorSource'],
 	toSorted = ['declaration-block-no-redundant-longhand-properties'],
-	shimSet = new Set(shim),
+	shimSet = new Set([
+		...shim,
+		'create',
+		'walk',
+	]),
+	originalSet = new Set(),
 	resolvePath = path.join('build', 'resolve'),
 	loadPath = path.join('build', 'load'),
 	shimPath = path.resolve('shim');
@@ -59,13 +68,29 @@ const /** @type {esbuild.Plugin} */ plugin = {
 	name: 'alias',
 	setup(build) {
 		build.onResolve(
-			{filter: new RegExp(String.raw`/(?:${shim.join('|')})(?:\.m?js)?$`)},
+			{
+				filter: new RegExp(
+					String.raw`/(?:${
+						shim.join('|')
+					})(?:\.m?js)?$|/(?:${
+						[
+							'convertor/create',
+							'walk',
+						].join('|')
+					})\.js$`,
+				),
+			},
 			({path: p, resolveDir}) => {
 				const {name, ext} = path.parse(p),
-					file = name + (ext || '.js');
+					file = name + (ext || '.js'),
+					fullPath = path.join(resolveDir, p);
 				if (resolveDir !== shimPath) {
+					if (!shimSet.has(name) && !originalSet.has(fullPath)) {
+						throw new Error(`Ambiguous shim name: ${name}`);
+					}
 					shimSet.delete(name);
-					fs.copyFileSync(require.resolve(path.join(resolveDir, p)), path.resolve(resolvePath, file));
+					originalSet.add(fullPath);
+					fs.copyFileSync(require.resolve(fullPath), path.resolve(resolvePath, file));
 				}
 				return {
 					path: path.join(shimPath, file),
@@ -83,89 +108,191 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						].join('|')
 					})/index|${
 						[
-							'standalone',
 							'getPostcssResult',
 							'lintSource',
 							'reportUnknownRuleNames',
+							'postcss',
+							'standalone',
 							...findLastIndex,
 						].join('|')
-					})\.mjs$|/(?:map-generator|postcss)\.js$`,
+					})\.mjs$|/(?:${
+						[
+							'attribute',
+							'lib/container',
+							'css-syntax-error',
+							'import',
+							'lazy-result',
+							'Lexer',
+							'List',
+							'map-generator',
+							'lib/node',
+							'postcss',
+							'dist/processor',
+							'lib/processor',
+						].join('|')
+					})\.js$`,
 				),
 			},
 			({path: p}) => {
-				const basename = path.basename(p);
+				const basename = path.basename(p),
+					extname = path.extname(basename);
 				let contents = fs.readFileSync(p, 'utf8'),
-					base = path.basename(basename, path.extname(basename));
-				if (base === 'index') {
-					base = path.basename(p.slice(0, p.lastIndexOf('/')));
-					if (at.includes(base)) {
+					base = path.basename(basename, extname);
+				switch (base) {
+					case 'attribute':
 						contents = contents.replace(
-							/\.at\(-1\)/gu,
-							'.slice(-1)[0]',
+							/^([ \t]+)_proto\.(getQuotedValue|_determineQuoteMark|setValue|(?:smart|preferred)QuoteMark) = function \2\(.+?^\1\};?$/gmsu,
+							'',
 						);
-					}
-					if (replaceAll.includes(base)) {
+						break;
+					case 'container':
+					case 'node':
 						contents = contents.replace(
-							/\.replaceAll\('(.)'/gu,
-							String.raw`.replace(/\$1/g`,
+							/^([ \t]+)(?:getProxyProcessor|toProxy|cleanRaws|replaceValues)\(.+?^\1\}$/gmsu,
+							'',
 						);
-					}
-					if (toSorted.includes(base)) {
+						break;
+					case 'css-syntax-error':
 						contents = contents.replace(
-							/\.toSorted\(/gu,
-							'.slice().sort(',
+							/(?<=^([ \t]+)showSourceCode\().+?^\1\}$/msu,
+							') { return ""; }',
 						);
-					}
-				} else {
-					switch (base) {
-						case 'standalone':
+						break;
+					case 'getPostcssResult':
+						contents = contents.replace(
+							/(?<=^async function getCustomSyntax\().+?^\}$/msu,
+							') {}',
+						);
+						break;
+					case 'import':
+						contents = contents.replace(
+							/(?<=^const parseFunctions = \{).+?^(?=\};$)/msu,
+							'',
+						);
+						break;
+					case 'index':
+						base = path.basename(p.slice(0, p.lastIndexOf('/')));
+						if (at.includes(base)) {
+							contents = contents.replaceAll(
+								'.at(-1)',
+								'.slice(-1)[0]',
+							).replaceAll(
+								'.at(0)',
+								'[0]',
+							);
+						}
+						if (replaceAll.includes(base)) {
 							contents = contents.replace(
-								/let fileList = .+?return result;\n\}/su,
-								'}',
+								/\.replaceAll\('(.)'/gu,
+								String.raw`.replace(/\$1/g`,
+							);
+						}
+						if (toSorted.includes(base)) {
+							contents = contents.replaceAll(
+								'.toSorted(',
+								'.slice().sort(',
+							);
+						}
+						break;
+					case 'lazy-result':
+						contents = contents.replace(
+							/^([ \t]+)(?:catch|finally|then|runOnRoot|handleError|visitTick|(?:visit|walk)Sync)\(.+?^\1\}$/gmsu,
+							'',
+						).replace(
+							/(?<=^([ \t]+)prepareVisitors\().+?^\1\}$/msu,
+							') {}',
+						).replace(
+							/(?<=^([ \t]+)async runAsync\().+?^\1\}$/msu,
+							`) {
+								this.plugin = 0;
+								this.prepareVisitors();
+								this.processed = true;
+								return this.stringify();
+							}`,
+						).replace(
+							/(?<=^([ \t]+)sync\().+?^\1\}$/msu,
+							`) {
+								if (this.error) throw this.error;
+								if (this.processed) return this.result;
+								this.processed = true;
+								if (this.processing) throw this.getAsyncError();
+								this.prepareVisitors();
+								return this.result;
+							}`,
+						);
+						break;
+					case 'Lexer':
+						contents = contents.replace(
+							/^([ \t]+)(?:find\w+Fragments|match|dump|toString|validate|checkStructure|match(?:Declaration|Type)|get(?:Atrule\w+|Type))\(.+?^\1\}$/gmsu,
+							'',
+						);
+						break;
+					case 'lintSource':
+						contents = contents.replace(
+							/(?<=^function createEmptyPostcssResult\().+?^\}/msu,
+							') {}',
+						);
+						break;
+					case 'List':
+						contents = contents.replace(
+							/^([ \t]+)(?:fromArray|forEachRight|copy|(?:next|prev)Until|(?:prepend|insert)Data|(?:pre|ap)pendList)\(.+?^\1\}$/gmsu,
+							'',
+						);
+						break;
+					case 'map-generator':
+						contents = contents.replace(
+							/^([ \t]+)(?!constructor|clearAnnotation|generate\b)\w+\(.+?^\1\}$/gmsu,
+							'',
+						);
+						break;
+					case 'postcss':
+						contents = contents.replace(
+							extname === '.mjs' ? /^export const (?!Node ).+$/gmu : /^postcss\.plugin = .+?^\}$/msu,
+							'',
+						);
+						break;
+					case 'processor':
+						base = path.basename(p.slice(0, p.lastIndexOf('/')));
+						contents = base === 'lib'
+							? contents.replace(
+								/(?<=^([ \t]+)normalize\().+?^\1\}$/msu,
+								') { return []; }',
 							).replace(
-								/(?<=function postProcessStylelintResult\().+^\}$/msu,
-								') {}',
-							);
-							break;
-						case 'getPostcssResult':
-							contents = contents.replace(
-								/^async function getCustomSyntax\(.+?^\}$/msu,
-								'function getCustomSyntax() {}',
-							);
-							break;
-						case 'lintSource':
-							contents = contents.replace(
-								/^(function createEmptyPostcssResult)\(.+?^\}/msu,
-								'function createEmptyPostcssResult() {}',
-							);
-							break;
-						case 'map-generator':
-							contents = contents.replace(
-								/^([ \t]+)(?!constructor|clearAnnotation|generate\b)\w+\(.+?^\1\}$/gmsu,
+								/^([ \t]+)use\(.+?^\1\}$/msu,
+								'',
+							)
+							: contents.replace(
+								/^([ \t]+)_proto\.(_shouldUpdateSelector|_run|ast|process|transform(?:Sync)?) = function \2\d*\(.+?^\1\};?$/gmsu,
 								'',
 							);
-							break;
-						case 'postcss':
-							contents = contents.replace(
-								/^postcss\.plugin = .+?^\}$/msu,
-								'',
-							);
-							break;
-						case 'reportUnknownRuleNames':
-							contents = contents.replace(
-								/(?<=^function extractSuggestions)\(.+?^\}$/msu,
-								'() { return []; }',
-							);
-						// no default
-					}
-					if (findLastIndex.includes(base)) {
+						break;
+					case 'reportUnknownRuleNames':
 						contents = contents.replace(
-							/ = (\S+)\.findLastIndex\(/gu,
-							' = $1.length - 1 - $1.slice().reverse().findIndex(',
+							/(?<=^function extractSuggestions\().+?^\}$/msu,
+							') { return []; }',
 						);
-					}
+						break;
+					case 'standalone':
+						contents = contents.replace(
+							/let fileList = .+?return result;\n\}/su,
+							'}',
+						).replace(
+							/(?<=function postProcessStylelintResult\().+^\}$/msu,
+							') {}',
+						);
+					// no default
 				}
-				if (basename !== 'index.mjs') {
+				if (findLastIndex.includes(base)) {
+					contents = contents.replace(
+						/ = (\S+)\.findLastIndex\(/gu,
+						' = $1.length - 1 - $1.slice().reverse().findIndex(',
+					);
+				}
+				if (basename === 'index.mjs') {
+					fs.copyFileSync(p, path.resolve(loadPath, `${base}.mjs`));
+				} else if (basename === 'processor.js') {
+					fs.copyFileSync(p, path.resolve(loadPath, `${base}-processor.js`));
+				} else {
 					fs.copyFileSync(p, path.resolve(loadPath, basename));
 				}
 				return {contents};
@@ -201,6 +328,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		'stylelint/lib/formatters/jsonFormatter': path.join(stylelint, '..', 'formatters', 'jsonFormatter.mjs'),
 		'stylelint/lib/normalizeAllRuleSettings': path.join(stylelint, '..', 'normalizeAllRuleSettings.mjs'),
 		'svg-tags': './shim/svg-tags.js',
+		'node:url': './shim/url.mjs',
 		'util-deprecate': './shim/util-deprecate.js',
 		'write-file-atomic': './shim/write-file-atomic.mjs',
 	},

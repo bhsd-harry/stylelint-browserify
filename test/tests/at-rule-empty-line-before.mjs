@@ -1,8 +1,8 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import mergeTestDescriptions from '../mergeTestDescriptions.mjs';
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 const sharedAlwaysTests = {
 	accept: [
@@ -53,61 +53,61 @@ const sharedAlwaysTests = {
 			code: 'a {} @media {}',
 			fixed: 'a {}\n\n @media {}',
 			message: messages.expected,
-			fix: { range: [3, 4], text: '}\n\n' },
+			fix: {range: [3, 4], text: '}\n\n'},
 		},
 		{
 			code: 'a {} @mEdIa {}',
 			fixed: 'a {}\n\n @mEdIa {}',
 			message: messages.expected,
-			fix: { range: [3, 4], text: '}\n\n' },
+			fix: {range: [3, 4], text: '}\n\n'},
 		},
 		{
 			code: 'a {} @MEDIA {}',
 			fixed: 'a {}\n\n @MEDIA {}',
 			message: messages.expected,
-			fix: { range: [3, 4], text: '}\n\n' },
+			fix: {range: [3, 4], text: '}\n\n'},
 		},
 		{
 			code: '@keyframes foo {} @media {}',
 			fixed: '@keyframes foo {}\n\n @media {}',
 			message: messages.expected,
-			fix: { range: [16, 17], text: '}\n\n' },
+			fix: {range: [16, 17], text: '}\n\n'},
 		},
 		{
 			code: '@-webkit-keyframes foo {} @media {}',
 			fixed: '@-webkit-keyframes foo {}\n\n @media {}',
 			message: messages.expected,
-			fix: { range: [24, 25], text: '}\n\n' },
+			fix: {range: [24, 25], text: '}\n\n'},
 		},
 		{
 			code: '@-webkit-keyframes foo {} @-webkit-keyframes bar {}',
 			fixed: '@-webkit-keyframes foo {}\n\n @-webkit-keyframes bar {}',
 			message: messages.expected,
-			fix: { range: [24, 25], text: '}\n\n' },
+			fix: {range: [24, 25], text: '}\n\n'},
 		},
 		{
 			code: 'a {}\n@media {}',
 			fixed: 'a {}\n\n@media {}',
 			message: messages.expected,
-			fix: { range: [4, 5], text: '\n\n' },
+			fix: {range: [4, 5], text: '\n\n'},
 		},
 		{
 			code: 'a {}\r\n@media {}',
 			fixed: 'a {}\r\n\r\n@media {}',
 			message: messages.expected,
-			fix: { range: [5, 6], text: '\n\r\n' },
+			fix: {range: [5, 6], text: '\n\r\n'},
 		},
 		{
 			code: 'a {}\n\n/* comment */\n@media {}',
 			fixed: 'a {}\n\n/* comment */\n\n@media {}',
 			message: messages.expected,
-			fix: { range: [19, 20], text: '\n\n' },
+			fix: {range: [19, 20], text: '\n\n'},
 		},
 		{
 			code: 'a {}\r\n\r\n/* comment */\r\n@media {}',
 			fixed: 'a {}\r\n\r\n/* comment */\r\n\r\n@media {}',
 			message: messages.expected,
-			fix: { range: [22, 23], text: '\n\r\n' },
+			fix: {range: [22, 23], text: '\n\r\n'},
 		},
 	],
 };
@@ -141,25 +141,25 @@ const sharedNeverTests = {
 			code: 'a {}\n\n@media {}',
 			fixed: 'a {}\n@media {}',
 			message: messages.rejected,
-			fix: { range: [5, 6], text: '' },
+			fix: {range: [5, 6], text: ''},
 		},
 		{
 			code: 'a {}\r\n\r\n@media {}',
 			fixed: 'a {}\r\n@media {}',
 			message: messages.rejected,
-			fix: { range: [6, 8], text: '' },
+			fix: {range: [6, 8], text: ''},
 		},
 		{
 			code: '@keyframes foo {}\n/* comment */\n\n@media {}',
 			fixed: '@keyframes foo {}\n/* comment */\n@media {}',
 			message: messages.rejected,
-			fix: { range: [32, 33], text: '' },
+			fix: {range: [32, 33], text: ''},
 		},
 		{
 			code: '@keyframes foo {}\r\n/* comment */\r\n\r\n@media {}',
 			fixed: '@keyframes foo {}\r\n/* comment */\r\n@media {}',
 			message: messages.rejected,
-			fix: { range: [34, 36], text: '' },
+			fix: {range: [34, 36], text: ''},
 		},
 	],
 };
@@ -182,7 +182,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(sharedAlwaysTests, {
 		ruleName,
-		config: ['always', { except: ['blockless-after-blockless'] }],
+		config: ['always', {except: ['blockless-after-blockless']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -209,13 +209,13 @@ testRule(
 				code: "@keyframes foo {}\n@import 'x.css'",
 				fixed: "@keyframes foo {}\n\n@import 'x.css'",
 				message: messages.expected,
-				fix: { range: [17, 18], text: '\n\n' },
+				fix: {range: [17, 18], text: '\n\n'},
 			},
 			{
 				code: "@import 'x.css';\n\n@import 'y.css'",
 				fixed: "@import 'x.css';\n@import 'y.css'",
 				message: messages.rejected,
-				fix: { range: [17, 18], text: '' },
+				fix: {range: [17, 18], text: ''},
 			},
 		],
 	}),
@@ -223,7 +223,7 @@ testRule(
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['blockless-after-blockless'] }],
+	config: ['always', {except: ['blockless-after-blockless']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -245,20 +245,20 @@ testRule({
 			code: "@keyframes foo {}\n@import 'x.css'",
 			fixed: "@keyframes foo {}\n\n@import 'x.css'",
 			message: messages.expected,
-			fix: { range: [17, 18], text: '\n\n' },
+			fix: {range: [17, 18], text: '\n\n'},
 		},
 		{
 			code: "@import 'x.css';\n\n@import 'y.css'",
 			fixed: "@import 'x.css';\n@import 'y.css'",
 			message: messages.rejected,
-			fix: { range: [17, 18], text: '' },
+			fix: {range: [17, 18], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['blockless-after-blockless'] }],
+	config: ['always', {ignore: ['blockless-after-blockless']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -275,20 +275,20 @@ testRule({
 			message: messages.expected,
 			line: 1,
 			column: 18,
-			fix: { range: [15, 16], text: ';\n\n' },
+			fix: {range: [15, 16], text: ';\n\n'},
 		},
 		{
 			code: "@import 'test'; @include mixin(1) { @content; };",
 			fixed: "@import 'test';\n\n @include mixin(1) { @content; };",
 			message: messages.expected,
-			fix: { range: [14, 15], text: ';\n\n' },
+			fix: {range: [14, 15], text: ';\n\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['after-comment'] }],
+	config: ['always', {ignore: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -310,7 +310,7 @@ testRule({
 			code: 'a {} @media {}',
 			fixed: 'a {}\n\n @media {}',
 			message: messages.expected,
-			fix: { range: [3, 4], text: '}\n\n' },
+			fix: {range: [3, 4], text: '}\n\n'},
 		},
 		{
 			code: 'bar {} /* foo */\n@media {}',
@@ -319,14 +319,14 @@ testRule({
 			line: 2,
 			column: 1,
 			description: 'after shared-line comment',
-			fix: { range: [16, 17], text: '\n\n' },
+			fix: {range: [16, 17], text: '\n\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['first-nested'] }],
+	config: ['always', {ignore: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -346,7 +346,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 3,
-			fix: { range: [23, 24], text: '\n\n' },
+			fix: {range: [23, 24], text: '\n\n'},
 		},
 	],
 });
@@ -354,7 +354,7 @@ testRule({
 testRule(
 	mergeTestDescriptions(sharedAlwaysTests, {
 		ruleName,
-		config: ['always', { except: ['inside-block'] }],
+		config: ['always', {except: ['inside-block']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -372,13 +372,13 @@ testRule(
 				code: 'a {\n\n  @mixin foo;\n  color: pink;\n}',
 				fixed: 'a {\n  @mixin foo;\n  color: pink;\n}',
 				message: messages.rejected,
-				fix: { range: [4, 5], text: '' },
+				fix: {range: [4, 5], text: ''},
 			},
 			{
 				code: 'a {\n\n  color: pink;\n\n  @mixin foo;\n}',
 				fixed: 'a {\n\n  color: pink;\n  @mixin foo;\n}',
 				message: messages.rejected,
-				fix: { range: [20, 21], text: '' },
+				fix: {range: [20, 21], text: ''},
 			},
 		],
 	}),
@@ -387,7 +387,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(sharedAlwaysTests, {
 		ruleName,
-		config: ['always', { except: ['first-nested'] }],
+		config: ['always', {except: ['first-nested']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -406,19 +406,19 @@ testRule(
 				code: 'a {\n  color: pink;\n  @mixin foo;\n}',
 				fixed: 'a {\n  color: pink;\n\n  @mixin foo;\n}',
 				message: messages.expected,
-				fix: { range: [18, 19], text: '\n\n' },
+				fix: {range: [18, 19], text: '\n\n'},
 			},
 			{
 				code: 'a {\n\n  @mixin foo;\n  color: pink;\n}',
 				fixed: 'a {\n  @mixin foo;\n  color: pink;\n}',
 				message: messages.rejected,
-				fix: { range: [4, 5], text: '' },
+				fix: {range: [4, 5], text: ''},
 			},
 			{
 				code: 'a {/* comment */\n\n  @mixin foo;\n  color: pink;\n}',
 				fixed: 'a {/* comment */\n  @mixin foo;\n  color: pink;\n}',
 				message: messages.rejected,
-				fix: { range: [17, 18], text: '' },
+				fix: {range: [17, 18], text: ''},
 			},
 		],
 	}),
@@ -427,7 +427,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(sharedAlwaysTests, {
 		ruleName,
-		config: ['always', { ignore: ['inside-block'] }],
+		config: ['always', {ignore: ['inside-block']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -451,7 +451,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(sharedAlwaysTests, {
 		ruleName,
-		config: ['always', { except: ['blockless-after-blockless', 'inside-block'] }],
+		config: ['always', {except: ['blockless-after-blockless', 'inside-block']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -484,25 +484,25 @@ testRule(
 				code: "@keyframes foo {}\n@import 'x.css'",
 				fixed: "@keyframes foo {}\n\n@import 'x.css'",
 				message: messages.expected,
-				fix: { range: [17, 18], text: '\n\n' },
+				fix: {range: [17, 18], text: '\n\n'},
 			},
 			{
 				code: "@import 'x.css';\n\n@import 'y.css'",
 				fixed: "@import 'x.css';\n@import 'y.css'",
 				message: messages.rejected,
-				fix: { range: [17, 18], text: '' },
+				fix: {range: [17, 18], text: ''},
 			},
 			{
 				code: 'a {\n\n  @mixin foo;\n  color: pink;\n}',
 				fixed: 'a {\n  @mixin foo;\n  color: pink;\n}',
 				message: messages.rejected,
-				fix: { range: [4, 5], text: '' },
+				fix: {range: [4, 5], text: ''},
 			},
 			{
 				code: 'a {\n\n  color: pink;\n\n  @mixin foo;\n}',
 				fixed: 'a {\n\n  color: pink;\n  @mixin foo;\n}',
 				message: messages.rejected,
-				fix: { range: [20, 21], text: '' },
+				fix: {range: [20, 21], text: ''},
 			},
 		],
 	}),
@@ -526,7 +526,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(sharedNeverTests, {
 		ruleName,
-		config: ['never', { except: ['blockless-after-blockless'] }],
+		config: ['never', {except: ['blockless-after-blockless']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -553,13 +553,13 @@ testRule(
 				code: "@keyframes foo {}\n\n@import 'x.css'",
 				fixed: "@keyframes foo {}\n@import 'x.css'",
 				message: messages.rejected,
-				fix: { range: [18, 19], text: '' },
+				fix: {range: [18, 19], text: ''},
 			},
 			{
 				code: "@import 'x.css';\n@import 'y.css'",
 				fixed: "@import 'x.css';\n\n@import 'y.css'",
 				message: messages.expected,
-				fix: { range: [16, 17], text: '\n\n' },
+				fix: {range: [16, 17], text: '\n\n'},
 			},
 		],
 	}),
@@ -568,7 +568,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(sharedNeverTests, {
 		ruleName,
-		config: ['never', { except: ['inside-block'] }],
+		config: ['never', {except: ['inside-block']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -586,13 +586,13 @@ testRule(
 				code: 'a {\n  @mixin foo;\n  color: pink;\n}',
 				fixed: 'a {\n\n  @mixin foo;\n  color: pink;\n}',
 				message: messages.expected,
-				fix: { range: [3, 4], text: '\n\n' },
+				fix: {range: [3, 4], text: '\n\n'},
 			},
 			{
 				code: 'a {\n\n  color: pink;\n  @mixin foo;\n}',
 				fixed: 'a {\n\n  color: pink;\n\n  @mixin foo;\n}',
 				message: messages.expected,
-				fix: { range: [19, 20], text: '\n\n' },
+				fix: {range: [19, 20], text: '\n\n'},
 			},
 		],
 	}),
@@ -601,7 +601,7 @@ testRule(
 testRule(
 	mergeTestDescriptions(sharedNeverTests, {
 		ruleName,
-		config: ['never', { except: ['first-nested'] }],
+		config: ['never', {except: ['first-nested']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -616,13 +616,13 @@ testRule(
 				code: 'a {\n  color: pink;\n\n  @mixin foo;\n}',
 				fixed: 'a {\n  color: pink;\n  @mixin foo;\n}',
 				message: messages.rejected,
-				fix: { range: [19, 20], text: '' },
+				fix: {range: [19, 20], text: ''},
 			},
 			{
 				code: 'a {\n  @mixin foo;\n  color: pink;\n}',
 				fixed: 'a {\n\n  @mixin foo;\n  color: pink;\n}',
 				message: messages.expected,
-				fix: { range: [3, 4], text: '\n\n' },
+				fix: {range: [3, 4], text: '\n\n'},
 			},
 		],
 	}),
@@ -630,7 +630,7 @@ testRule(
 
 testRule({
 	ruleName,
-	config: ['never', { ignore: ['blockless-after-blockless'] }],
+	config: ['never', {ignore: ['blockless-after-blockless']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -670,14 +670,14 @@ testRule({
 			message: messages.rejected,
 			line: 4,
 			column: 7,
-			fix: { range: [24, 25], text: '' },
+			fix: {range: [24, 25], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['never', { ignore: ['after-comment'] }],
+	config: ['never', {ignore: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -699,14 +699,14 @@ testRule({
 			code: 'b {}\n\n@media {}',
 			fixed: 'b {}\n@media {}',
 			message: messages.rejected,
-			fix: { range: [5, 6], text: '' },
+			fix: {range: [5, 6], text: ''},
 		},
 		{
 			code: 'b {}\r\n\r\n@media {}',
 			fixed: 'b {}\r\n@media {}',
 			description: 'CRLF',
 			message: messages.rejected,
-			fix: { range: [6, 8], text: '' },
+			fix: {range: [6, 8], text: ''},
 		},
 		{
 			code: 'b {} /* comment */\n\n@media {}',
@@ -715,7 +715,7 @@ testRule({
 			message: messages.rejected,
 			line: 3,
 			column: 1,
-			fix: { range: [19, 20], text: '' },
+			fix: {range: [19, 20], text: ''},
 		},
 	],
 });
@@ -723,7 +723,7 @@ testRule({
 testRule(
 	mergeTestDescriptions(sharedNeverTests, {
 		ruleName,
-		config: ['never', { ignore: ['inside-block'] }],
+		config: ['never', {ignore: ['inside-block']}],
 		fix: true,
 		computeEditInfo: true,
 
@@ -746,7 +746,7 @@ testRule(
 
 testRule({
 	ruleName,
-	config: ['always', { ignoreAtRules: ['else'] }],
+	config: ['always', {ignoreAtRules: ['else']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -794,7 +794,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 9,
-			fix: { range: [25, 26], text: '}\n\n' },
+			fix: {range: [25, 26], text: '}\n\n'},
 		},
 		{
 			code: `
@@ -811,14 +811,14 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 7,
-			fix: { range: [20, 21], text: '\n\n' },
+			fix: {range: [20, 21], text: '\n\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { ignoreAtRules: /^--my-/ }],
+	config: ['always', {ignoreAtRules: /^--my-/}],
 
 	accept: [
 		{
@@ -832,7 +832,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignoreAtRules: '/el/' }],
+	config: ['always', {ignoreAtRules: '/el/'}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -867,14 +867,14 @@ testRule({
 			message: messages.expected,
 			line: 5,
 			column: 7,
-			fix: { range: [43, 44], text: '\n\n' },
+			fix: {range: [43, 44], text: '\n\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['never', { ignoreAtRules: ['else'] }],
+	config: ['never', {ignoreAtRules: ['else']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -922,7 +922,7 @@ testRule({
 			message: messages.rejected,
 			line: 5,
 			column: 7,
-			fix: { range: [27, 28], text: '' },
+			fix: {range: [27, 28], text: ''},
 		},
 		{
 			code: `
@@ -941,14 +941,14 @@ testRule({
 			message: messages.rejected,
 			line: 5,
 			column: 7,
-			fix: { range: [27, 28], text: '' },
+			fix: {range: [27, 28], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['never', { ignoreAtRules: '/el/' }],
+	config: ['never', {ignoreAtRules: '/el/'}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -988,7 +988,7 @@ testRule({
 			message: messages.rejected,
 			line: 6,
 			column: 7,
-			fix: { range: [44, 45], text: '' },
+			fix: {range: [44, 45], text: ''},
 		},
 	],
 });
@@ -1048,7 +1048,7 @@ testRule(
 				message: messages.expected,
 				line: 2,
 				column: 1,
-				fix: { range: [17, 18], text: '\n\n' },
+				fix: {range: [17, 18], text: '\n\n'},
 			},
 			{
 				code: stripIndent`
@@ -1071,7 +1071,7 @@ testRule(
 				message: messages.expected,
 				line: 5,
 				column: 3,
-				fix: { range: [38, 39], text: '\n\n' },
+				fix: {range: [38, 39], text: '\n\n'},
 			},
 		],
 	}),
@@ -1132,7 +1132,7 @@ testRule(
 				message: messages.expected,
 				line: 2,
 				column: 1,
-				fix: { range: [17, 18], text: '\n\n' },
+				fix: {range: [17, 18], text: '\n\n'},
 			},
 			{
 				code: stripIndent`
@@ -1155,7 +1155,7 @@ testRule(
 				message: messages.expected,
 				line: 5,
 				column: 3,
-				fix: { range: [38, 39], text: '\n\n' },
+				fix: {range: [38, 39], text: '\n\n'},
 			},
 		],
 	}),
@@ -1208,7 +1208,7 @@ testRule(
 				message: messages.expected,
 				line: 3,
 				column: 1,
-				fix: { range: [37, 38], text: '\n\n' },
+				fix: {range: [37, 38], text: '\n\n'},
 			},
 			{
 				code: stripIndent`
@@ -1227,7 +1227,7 @@ testRule(
 				message: messages.expected,
 				line: 4,
 				column: 3,
-				fix: { range: [37, 38], text: '\n\n' },
+				fix: {range: [37, 38], text: '\n\n'},
 			},
 		],
 	}),
@@ -1279,7 +1279,7 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 1,
-			fix: { range: [17, 18], text: '\n\n' },
+			fix: {range: [17, 18], text: '\n\n'},
 		},
 		{
 			code: stripIndent`
@@ -1302,7 +1302,7 @@ testRule({
 			message: messages.expected,
 			line: 5,
 			column: 3,
-			fix: { range: [38, 39], text: '\n\n' },
+			fix: {range: [38, 39], text: '\n\n'},
 		},
 	],
 });
@@ -1354,7 +1354,7 @@ testRule(
 				message: messages.expected,
 				line: 3,
 				column: 1,
-				fix: { range: [29, 30], text: '\n\n' },
+				fix: {range: [29, 30], text: '\n\n'},
 			},
 			{
 				code: stripIndent`
@@ -1373,7 +1373,7 @@ testRule(
 				message: messages.expected,
 				line: 4,
 				column: 3,
-				fix: { range: [34, 35], text: '\n\n' },
+				fix: {range: [34, 35], text: '\n\n'},
 			},
 		],
 	}),

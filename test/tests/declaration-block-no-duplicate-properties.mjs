@@ -1,7 +1,7 @@
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -323,7 +323,7 @@ testRule({
 			column: 5,
 			endLine: 1,
 			endColumn: 10,
-			fix: { range: [11, 24], text: '' },
+			fix: {range: [11, 24], text: ''},
 		},
 		{
 			code: 'a { COlOr: pink; coLOR: pink; color: pink }',
@@ -335,7 +335,7 @@ testRule({
 					column: 5,
 					endLine: 1,
 					endColumn: 10,
-					fix: { range: [4, 17], text: '' },
+					fix: {range: [4, 17], text: ''},
 				},
 				{
 					message: messages.rejected('coLOR'),
@@ -354,7 +354,7 @@ testRule({
 			column: 5,
 			endLine: 1,
 			endColumn: 10,
-			fix: { range: [4, 17], text: '' },
+			fix: {range: [4, 17], text: ''},
 		},
 		{
 			code: 'a { color: pink; background: orange; background: pink; }',
@@ -363,14 +363,14 @@ testRule({
 			column: 18,
 			endLine: 1,
 			endColumn: 28,
-			fix: { range: [29, 49], text: '' },
+			fix: {range: [29, 49], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['consecutive-duplicates'] }],
+	config: [true, {ignore: ['consecutive-duplicates']}],
 	fix: true,
 
 	accept: [
@@ -419,7 +419,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['consecutive-duplicates'] }],
+	config: [true, {ignore: ['consecutive-duplicates']}],
 	computeEditInfo: true,
 
 	accept: [],
@@ -428,24 +428,24 @@ testRule({
 		{
 			code: 'p { font-size: 16px; font-weight: 400; font-size: 1rem; }',
 			message: messages.rejected('font-size'),
-			fix: { range: [9, 26], text: '' },
+			fix: {range: [9, 26], text: ''},
 		},
 		{
 			code: 'p { font-size: 16px !important; font-weight: 400; font-size: 1rem; }',
 			message: messages.rejected('font-size'),
-			fix: { range: [50, 67], text: '' },
+			fix: {range: [50, 67], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['consecutive-duplicates-with-different-values'] }],
+	config: [true, {ignore: ['consecutive-duplicates-with-different-values']}],
 	fix: true,
 
 	accept: [
-		{ code: 'p { font-size: 16px; font-size: 1rem; font-weight: 400; }' },
-		{ code: 'p { font-size: 16px; font-size: 18px; font-weight: 400; }' },
+		{code: 'p { font-size: 16px; font-size: 1rem; font-weight: 400; }'},
+		{code: 'p { font-size: 16px; font-size: 18px; font-weight: 400; }'},
 	],
 
 	reject: [
@@ -482,25 +482,25 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['consecutive-duplicates-with-different-syntaxes'] }],
+	config: [true, {ignore: ['consecutive-duplicates-with-different-syntaxes']}],
 	fix: true,
 
 	accept: [
-		{ code: 'p { width: 100vw; height: 100vh; }' },
-		{ code: 'p { width: 100vw; width: 100dvw; height: 100vh; }' },
-		{ code: 'p { margin: 10dvw 10dvw; margin: 10vw 10vw; padding: 0; }' },
-		{ code: 'p { margin: 10dvh 10dvw 10dvh; margin: 10vw 10vw; padding: 0; }' },
-		{ code: 'p { width: 100%; width: fit-content; }' },
-		{ code: 'p { width: min-content; width: max-content; }' },
-		{ code: 'p { width: calc(10px + 2px); width: calc(10px + 2rem); }' },
-		{ code: 'p { width: calc(10px + 2px); width: calc(10rem + 2rem); }' },
-		{ code: 'p { width: min(10px, 11px); width: max(10px, 11px); }' },
-		{ code: 'p { width: calc((10px + 2px)); width: calc((10rem + 2rem)); }' },
-		{ code: 'p { width: calc((10px + 2px) + 10px); width: calc((10rem + 2rem) + 10px); }' },
-		{ code: 'p { width: $a; width: calc(1 + $a); }', description: 'using SCSS variables' },
-		{ code: 'p { width: _$a; width: _$a2; }', description: 'using invalid value' },
-		{ code: 'p { width: env(foo); width: env(--bar); }' },
-		{ code: 'p { width: env(--foo); width: env(bar); }' },
+		{code: 'p { width: 100vw; height: 100vh; }'},
+		{code: 'p { width: 100vw; width: 100dvw; height: 100vh; }'},
+		{code: 'p { margin: 10dvw 10dvw; margin: 10vw 10vw; padding: 0; }'},
+		{code: 'p { margin: 10dvh 10dvw 10dvh; margin: 10vw 10vw; padding: 0; }'},
+		{code: 'p { width: 100%; width: fit-content; }'},
+		{code: 'p { width: min-content; width: max-content; }'},
+		{code: 'p { width: calc(10px + 2px); width: calc(10px + 2rem); }'},
+		{code: 'p { width: calc(10px + 2px); width: calc(10rem + 2rem); }'},
+		{code: 'p { width: min(10px, 11px); width: max(10px, 11px); }'},
+		{code: 'p { width: calc((10px + 2px)); width: calc((10rem + 2rem)); }'},
+		{code: 'p { width: calc((10px + 2px) + 10px); width: calc((10rem + 2rem) + 10px); }'},
+		{code: 'p { width: $a; width: calc(1 + $a); }', description: 'using SCSS variables'},
+		{code: 'p { width: _$a; width: _$a2; }', description: 'using invalid value'},
+		{code: 'p { width: env(foo); width: env(--bar); }'},
+		{code: 'p { width: env(--foo); width: env(bar); }'},
 	],
 
 	reject: [
@@ -604,7 +604,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['consecutive-duplicates-with-same-prefixless-values'] }],
+	config: [true, {ignore: ['consecutive-duplicates-with-same-prefixless-values']}],
 	fix: true,
 
 	accept: [
@@ -661,7 +661,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['consecutive-duplicates-with-different-values'] }],
+	config: [true, {ignore: ['consecutive-duplicates-with-different-values']}],
 	computeEditInfo: true,
 
 	accept: [],
@@ -674,14 +674,14 @@ testRule({
 			column: 5,
 			endLine: 1,
 			endColumn: 14,
-			fix: { range: [19, 36], text: '' },
+			fix: {range: [19, 36], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: [true, { ignoreProperties: ['color'] }],
+	config: [true, {ignoreProperties: ['color']}],
 	fix: true,
 
 	accept: [
@@ -720,7 +720,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreProperties: ['/background-/', /padding-/] }],
+	config: [true, {ignoreProperties: ['/background-/', /padding-/]}],
 	fix: true,
 
 	accept: [

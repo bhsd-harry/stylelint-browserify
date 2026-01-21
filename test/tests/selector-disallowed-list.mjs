@@ -1,8 +1,8 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
 
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -70,7 +70,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [/^\.(foo)[,\s]?(?!\w).*$/, { ignore: ['inside-block'], splitList: true }],
+	config: [/^\.(foo)[,\s]?(?!\w).*$/, {ignore: ['inside-block'], splitList: true}],
 	accept: [
 		{
 			code: 'a.foo {}',
@@ -269,7 +269,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [[/[A-Z]/i], { ignore: ['keyframe-selectors'] }],
+	config: [[/[a-z]/i], {ignore: ['keyframe-selectors']}],
 
 	accept: [
 		{
@@ -317,7 +317,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [/from/, { ignore: ['keyframe-selectors'], splitList: true }],
+	config: [/from/, {ignore: ['keyframe-selectors'], splitList: true}],
 
 	accept: [
 		{

@@ -54,11 +54,11 @@ For example, to change `a { opacity: 10%; }` to `a { opacity: 0.1; }`, the edit 
 
 ```jsonc
 {
-  // "line", "column", "rule", ...
-  "fix": {
-    "range": [13, 16], // Indices of "10%"
-    "text": "0.1" // Replacement text
-  }
+	// "line", "column", "rule", ...
+	"fix": {
+		"range": [13, 16], // Indices of "10%"
+		"text": "0.1" // Replacement text
+	}
 }
 ```
 

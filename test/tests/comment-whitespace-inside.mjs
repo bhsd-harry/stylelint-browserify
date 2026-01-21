@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -53,7 +53,7 @@ testRule({
 			message: messages.expectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [1, 2], text: '* ' },
+			fix: {range: [1, 2], text: '* '},
 		},
 		{
 			code: '/**comment **/',
@@ -61,7 +61,7 @@ testRule({
 			message: messages.expectedOpening,
 			line: 1,
 			column: 4,
-			fix: { range: [2, 3], text: '* ' },
+			fix: {range: [2, 3], text: '* '},
 		},
 		{
 			code: '/* comment*/',
@@ -69,7 +69,7 @@ testRule({
 			message: messages.expectedClosing,
 			line: 1,
 			column: 10,
-			fix: { range: [9, 10], text: 't ' },
+			fix: {range: [9, 10], text: 't '},
 		},
 		{
 			code: '/*comment comment */',
@@ -77,7 +77,7 @@ testRule({
 			message: messages.expectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [1, 2], text: '* ' },
+			fix: {range: [1, 2], text: '* '},
 		},
 		{
 			code: '/* comment comment*/',
@@ -85,7 +85,7 @@ testRule({
 			message: messages.expectedClosing,
 			line: 1,
 			column: 18,
-			fix: { range: [17, 18], text: 't ' },
+			fix: {range: [17, 18], text: 't '},
 		},
 		{
 			code: '/*comment\n\ncomment */',
@@ -93,7 +93,7 @@ testRule({
 			message: messages.expectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [1, 2], text: '* ' },
+			fix: {range: [1, 2], text: '* '},
 		},
 		{
 			code: '/* comment\n\ncomment*/',
@@ -101,7 +101,7 @@ testRule({
 			message: messages.expectedClosing,
 			line: 3,
 			column: 7,
-			fix: { range: [18, 19], text: 't ' },
+			fix: {range: [18, 19], text: 't '},
 		},
 		{
 			code: '/*!copyright */',
@@ -109,7 +109,7 @@ testRule({
 			message: messages.expectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [1, 2], text: '* ' },
+			fix: {range: [1, 2], text: '* '},
 		},
 		{
 			code: '/*comment\n *comment\n *comment\n */',
@@ -117,7 +117,7 @@ testRule({
 			message: messages.expectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [1, 2], text: '* ' },
+			fix: {range: [1, 2], text: '* '},
 		},
 		{
 			code: '/*comment*/',
@@ -129,7 +129,7 @@ testRule({
 					column: 3,
 					endLine: 1,
 					endColumn: 4,
-					fix: { range: [1, 2], text: '* ' },
+					fix: {range: [1, 2], text: '* '},
 				},
 				{
 					message: messages.expectedClosing,
@@ -184,7 +184,7 @@ testRule({
 			message: messages.rejectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [2, 3], text: '' },
+			fix: {range: [2, 3], text: ''},
 		},
 		{
 			code: '/** comment*/',
@@ -192,7 +192,7 @@ testRule({
 			message: messages.rejectedOpening,
 			line: 1,
 			column: 4,
-			fix: { range: [3, 4], text: '' },
+			fix: {range: [3, 4], text: ''},
 		},
 		{
 			code: '/*comment */',
@@ -200,7 +200,7 @@ testRule({
 			message: messages.rejectedClosing,
 			line: 1,
 			column: 10,
-			fix: { range: [9, 10], text: '' },
+			fix: {range: [9, 10], text: ''},
 		},
 		{
 			code: '/*  comment*/',
@@ -210,7 +210,7 @@ testRule({
 			column: 3,
 			endLine: 1,
 			endColumn: 5,
-			fix: { range: [2, 4], text: '' },
+			fix: {range: [2, 4], text: ''},
 		},
 		{
 			code: '/*comment  */',
@@ -220,7 +220,7 @@ testRule({
 			column: 10,
 			endLine: 1,
 			endColumn: 12,
-			fix: { range: [9, 11], text: '' },
+			fix: {range: [9, 11], text: ''},
 		},
 		{
 			code: '/*\ncomment*/',
@@ -228,7 +228,7 @@ testRule({
 			message: messages.rejectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [2, 3], text: '' },
+			fix: {range: [2, 3], text: ''},
 		},
 		{
 			code: '/*comment\n*/',
@@ -236,7 +236,7 @@ testRule({
 			message: messages.rejectedClosing,
 			line: 1,
 			column: 10,
-			fix: { range: [9, 10], text: '' },
+			fix: {range: [9, 10], text: ''},
 		},
 		{
 			code: '/* comment comment*/',
@@ -244,7 +244,7 @@ testRule({
 			message: messages.rejectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [2, 3], text: '' },
+			fix: {range: [2, 3], text: ''},
 		},
 		{
 			code: '/*comment comment */',
@@ -252,7 +252,7 @@ testRule({
 			message: messages.rejectedClosing,
 			line: 1,
 			column: 18,
-			fix: { range: [17, 18], text: '' },
+			fix: {range: [17, 18], text: ''},
 		},
 		{
 			code: '/* comment\n\ncomment*/',
@@ -260,7 +260,7 @@ testRule({
 			message: messages.rejectedOpening,
 			line: 1,
 			column: 3,
-			fix: { range: [2, 3], text: '' },
+			fix: {range: [2, 3], text: ''},
 		},
 		{
 			code: '/*comment\n\ncomment */',
@@ -268,7 +268,7 @@ testRule({
 			message: messages.rejectedClosing,
 			line: 3,
 			column: 8,
-			fix: { range: [18, 19], text: '' },
+			fix: {range: [18, 19], text: ''},
 			endLine: 3,
 			endColumn: 9,
 		},
@@ -280,7 +280,7 @@ testRule({
 			column: 10,
 			endLine: 4,
 			endColumn: 2,
-			fix: { range: [29, 31], text: '' },
+			fix: {range: [29, 31], text: ''},
 		},
 		{
 			code: '/*comment\n \t*/',
@@ -290,7 +290,7 @@ testRule({
 			column: 10,
 			endLine: 2,
 			endColumn: 3,
-			fix: { range: [9, 12], text: '' },
+			fix: {range: [9, 12], text: ''},
 		},
 	],
 });

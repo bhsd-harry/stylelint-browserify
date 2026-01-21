@@ -1,9 +1,9 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -434,7 +434,7 @@ testRule({
 			code: '@font-face { font-family: \'foo\'; src: url($variable + "foo.ttf" + $variable); }',
 		},
 		{
-			code: 'a { background: url("data:image/svg+xml;utf8,<svg height=\\"100\\" width=\\"100\\"></svg>"); }',
+			code: String.raw`a { background: url("data:image/svg+xml;utf8,<svg height=\"100\" width=\"100\"></svg>"); }`,
 			description: 'data URI with embedded quotes requires quotes (#8544)',
 		},
 		{
@@ -804,12 +804,12 @@ testRule({
 			],
 		},
 		{
-			code: `a { background-image: url( "data:image/svg+xml,<svg\\ viewBox=\\"0\\ 0\\ 10\\ 10\\"></svg>" ); }`,
+			code: String.raw`a { background-image: url( "data:image/svg+xml,<svg\ viewBox=\"0\ 0\ 10\ 10\"></svg>" ); }`,
 			fixed:
-				'a { background-image: url( data:image/svg+xml,<svg\\ viewBox=\\"0\\ 0\\ 10\\ 10\\"></svg> ); }',
+				String.raw`a { background-image: url( data:image/svg+xml,<svg\ viewBox=\"0\ 0\ 10\ 10\"></svg> ); }`,
 			fix: {
 				range: [27, 85],
-				text: 'data:image/svg+xml,<svg\\ viewBox=\\"0\\ 0\\ 10\\ 10\\"></svg>',
+				text: String.raw`data:image/svg+xml,<svg\ viewBox=\"0\ 0\ 10\ 10\"></svg>`,
 			},
 			message: messages.rejected('url'),
 			line: 1,
@@ -822,7 +822,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['empty'] }],
+	config: ['always', {except: ['empty']}],
 
 	accept: [
 		{
@@ -860,7 +860,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['empty'] }],
+	config: ['never', {except: ['empty']}],
 
 	accept: [
 		{

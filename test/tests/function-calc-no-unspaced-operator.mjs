@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -270,7 +270,7 @@ testRule({
 					column: 18,
 					endLine: 1,
 					endColumn: 19,
-					fix: { range: [17, 18], text: '+ ' },
+					fix: {range: [17, 18], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -292,7 +292,7 @@ testRule({
 					column: 28,
 					endLine: 1,
 					endColumn: 29,
-					fix: { range: [27, 28], text: '+ ' },
+					fix: {range: [27, 28], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -314,7 +314,7 @@ testRule({
 					column: 29,
 					endLine: 1,
 					endColumn: 30,
-					fix: { range: [28, 29], text: '+ ' },
+					fix: {range: [28, 29], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -336,7 +336,7 @@ testRule({
 					column: 18,
 					endLine: 1,
 					endColumn: 19,
-					fix: { range: [17, 18], text: '+ ' },
+					fix: {range: [17, 18], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -358,7 +358,7 @@ testRule({
 					column: 30,
 					endLine: 1,
 					endColumn: 31,
-					fix: { range: [29, 30], text: '+ ' },
+					fix: {range: [29, 30], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -747,7 +747,7 @@ testRule({
 		{
 			code: 'a { padding: calc(1rem +\t \t\f\n\f\t1em); }',
 			fixed: 'a { padding: calc(1rem +\n\f\t1em); }',
-			description: 'several whitespace characters after operator but before the \\n',
+			description: String.raw`several whitespace characters after operator but before the \n`,
 			message: messages.expectedAfter('+'),
 			line: 1,
 			column: 24,
@@ -761,7 +761,7 @@ testRule({
 		{
 			code: 'a { padding: calc(1rem +  \t\r\n  1em); }',
 			fixed: 'a { padding: calc(1rem +\r\n  1em); }',
-			description: 'several whitespace characters after operator but before the \\r\\n',
+			description: String.raw`several whitespace characters after operator but before the \r\n`,
 			message: messages.expectedAfter('+'),
 			line: 1,
 			column: 24,
@@ -795,7 +795,7 @@ testRule({
 					endLine: 1,
 					column: 22,
 					endColumn: 23,
-					fix: { range: [21, 22], text: '+ ' },
+					fix: {range: [21, 22], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -833,7 +833,7 @@ testRule({
 					endLine: 1,
 					column: 22,
 					endColumn: 23,
-					fix: { range: [21, 22], text: '+ ' },
+					fix: {range: [21, 22], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -871,7 +871,7 @@ testRule({
 					endLine: 1,
 					column: 22,
 					endColumn: 23,
-					fix: { range: [21, 22], text: '+ ' },
+					fix: {range: [21, 22], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -968,7 +968,7 @@ testRule({
 					endLine: 1,
 					column: 39,
 					endColumn: 40,
-					fix: { range: [38, 39], text: '+ ' },
+					fix: {range: [38, 39], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -991,7 +991,7 @@ testRule({
 					endLine: 1,
 					column: 20,
 					endColumn: 21,
-					fix: { range: [19, 20], text: '+ ' },
+					fix: {range: [19, 20], text: '+ '},
 				},
 				{
 					message: messages.expectedAfter('-'),
@@ -1022,7 +1022,7 @@ testRule({
 					endLine: 1,
 					column: 20,
 					endColumn: 21,
-					fix: { range: [19, 20], text: '+ ' },
+					fix: {range: [19, 20], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -1045,7 +1045,7 @@ testRule({
 					endLine: 1,
 					column: 22,
 					endColumn: 23,
-					fix: { range: [20, 21], text: 'x ' },
+					fix: {range: [20, 21], text: 'x '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -1069,7 +1069,7 @@ testRule({
 					endLine: 1,
 					column: 29,
 					endColumn: 30,
-					fix: { range: [28, 29], text: '+ ' },
+					fix: {range: [28, 29], text: '+ '},
 				},
 				{
 					message: messages.expectedBefore('+'),
@@ -1130,8 +1130,8 @@ testRule({
 			],
 		},
 		{
-			code: 'a { padding: calc(1\\23 - 2px) calc(1\\23 a- 2px) calc(1\\23 g- 2px); }',
-			fixed: 'a { padding: calc(1\\23  - 2px) calc(1\\23 a - 2px) calc(1\\23 g - 2px); }',
+			code: String.raw`a { padding: calc(1\23 - 2px) calc(1\23 a- 2px) calc(1\23 g- 2px); }`,
+			fixed: String.raw`a { padding: calc(1\23  - 2px) calc(1\23 a - 2px) calc(1\23 g - 2px); }`,
 			description: 'escape sequences as units',
 			warnings: [
 				{
@@ -1140,7 +1140,7 @@ testRule({
 					endLine: 1,
 					column: 24,
 					endColumn: 25,
-					fix: { range: [22, 23], text: '  ' },
+					fix: {range: [22, 23], text: '  '},
 				},
 				{
 					message: messages.expectedBefore('-'),

@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -132,7 +132,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreAtRules: ['bar', '/^my-/', /foo/] }],
+	config: [true, {ignoreAtRules: ['bar', '/^my-/', /foo/]}],
 
 	accept: [
 		{

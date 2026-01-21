@@ -1,7 +1,7 @@
 import rule from '../index.mjs';
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,

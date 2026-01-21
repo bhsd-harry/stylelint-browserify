@@ -1,9 +1,9 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
-	config: { width: 'em', '/height/': ['em', 'rem'] },
+	config: {width: 'em', '/height/': ['em', 'rem']},
 
 	accept: [
 		{
@@ -146,7 +146,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: { grid: [], 'prefers-reduced-motion': [], 'video-dynamic-range': [] },
+	config: {grid: [], 'prefers-reduced-motion': [], 'video-dynamic-range': []},
 
 	accept: [
 		{

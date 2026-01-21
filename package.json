@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "17.0.0",
+	"version": "17.1.0",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
@@ -27,6 +27,7 @@
 	},
 	"scripts": {
 		"lint:ts": "tsc && eslint --cache . && eslint --no-ignore --no-config-lookup -c eslint.build.mjs --report-unused-disable-directives-severity 0 build/stylelint*.js",
+		"lint:bundle": "eslint --no-ignore --no-config-lookup --rule 'no-unused-vars: 2' build/stylelint.js",
 		"lint:md": "markdownlint-cli2 '**/*.md'",
 		"lint": "npm run lint:ts && npm run lint:md",
 		"build": "npm run bundle && npm run minify",
@@ -34,7 +35,7 @@
 		"minify": "esbuild index.ts --charset=utf8 --bundle --minify --sourcemap --target=es2019 --outfile=bundle/stylelint.min.js --legal-comments=external",
 		"coverage": "c8 npm test && node test/coverage.mjs",
 		"test": "mocha --no-experimental-require-module",
-		"clean": "find test/tests/ -type f -name '*.mjs' | xargs gsed -i \"s|'../../../testUtils/mergeTestDescriptions.mjs'|'../mergeTestDescriptions.mjs'| ; s|'../../../__tests__/fixtures/postcss-naive-css-in-js.cjs'|'../postcss-naive-css-in-js.mjs'| ; s|'postcss'|'../postcss.mjs'| ; s|'postcss-import'|'../postcss-import.mjs'| ; s|'../../../postcssPlugin.mjs'|'../postcssPlugin.mjs'| ; s|} = rule;|} = {...rule, ruleName: filename(import.meta.url)};|\"; eslint test/tests/*.mjs"
+		"clean": "find test/tests/ -type f -name '*.mjs' | xargs gsed -i \"s|'../../../testUtils/mergeTestDescriptions.mjs'|'../mergeTestDescriptions.mjs'| ; s|'../testUtils/replaceBackslashes.mjs'|'../replaceBackslashes.mjs'| ; s|'../../../__tests__/fixtures/postcss-naive-css-in-js.cjs'|'../postcss-naive-css-in-js.mjs'| ; s|'postcss'|'../postcss.mjs'| ; s|'postcss-import'|'../postcss-import.mjs'| ; s|'../../../postcssPlugin.mjs'|'../postcssPlugin.mjs'| ; s|} = rule;|} = {...rule, ruleName: filename(import.meta.url)};| ; s| Did you mean .*|',|g ; s|codeFilename: .*||g ; s|expect(result.report).toBe('');||g\"; eslint --fix test/tests/*.mjs"
 	},
 	"c8": {
 		"reporter": [
@@ -43,7 +44,7 @@
 		]
 	},
 	"devDependencies": {
-		"@bhsd/code-standard": "^1.3.2",
+		"@bhsd/code-standard": "^1.4.0",
 		"@stylistic/eslint-plugin": "^5.5.0",
 		"@types/mocha": "^10.0.10",
 		"@types/node": "^24.10.1",
@@ -64,7 +65,7 @@
 		"globals": "^16.5.0",
 		"markdownlint-cli2": "^0.19.0",
 		"mocha": "^11.7.5",
-		"stylelint": "^17.0.0",
+		"stylelint": "^17.1.0",
 		"typescript": "^5.9.3"
 	}
 }

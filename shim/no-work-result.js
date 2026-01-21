@@ -1,5 +1,3 @@
-'use strict';
-
 class NoWorkResult {}
 
 module.exports = NoWorkResult;

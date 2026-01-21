@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -77,7 +77,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreFontFamilyNames: ['monospace', '/my-/', '/^YOUR-/i'] }],
+	config: [true, {ignoreFontFamilyNames: ['monospace', '/my-/', '/^YOUR-/i']}],
 
 	accept: [
 		{
@@ -119,7 +119,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreFontFamilyNames: [/my-/] }],
+	config: [true, {ignoreFontFamilyNames: [/my-/]}],
 
 	accept: [
 		{

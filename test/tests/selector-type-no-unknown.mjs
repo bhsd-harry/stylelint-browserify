@@ -1,9 +1,9 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -92,7 +92,11 @@ testRule({
 			code: ':not(::first-line) {}',
 		},
 		{
-			code: 'fencedframe, listbox, model, portal, selectlist, selectedcontent {}',
+			code: 'menuitem {}',
+			description: 'obsolete tag',
+		},
+		{
+			code: 'fencedframe, listbox, model, portal, selectlist, selectedcontent, geolocation, usermedia {}',
 			description: 'experimental tags',
 		},
 		{
@@ -317,7 +321,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreTypes: ['unknown', '/^my-/', '/^your-/i'] }],
+	config: [true, {ignoreTypes: ['unknown', '/^my-/', '/^your-/i']}],
 
 	accept: [
 		{
@@ -373,7 +377,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreTypes: [/^my-/] }],
+	config: [true, {ignoreTypes: [/^my-/]}],
 
 	accept: [
 		{
@@ -393,7 +397,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreNamespaces: ['unknown', '/^my-/'] }],
+	config: [true, {ignoreNamespaces: ['unknown', '/^my-/']}],
 
 	accept: [
 		{
@@ -437,7 +441,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreNamespaces: [/^my-/] }],
+	config: [true, {ignoreNamespaces: [/^my-/]}],
 
 	accept: [
 		{
@@ -457,7 +461,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['default-namespace'] }],
+	config: [true, {ignore: ['default-namespace']}],
 
 	accept: [
 		{
@@ -480,7 +484,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['custom-elements'] }],
+	config: [true, {ignore: ['custom-elements']}],
 
 	accept: [
 		{

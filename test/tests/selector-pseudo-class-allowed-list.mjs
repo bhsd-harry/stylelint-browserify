@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -250,8 +250,8 @@ testRule({
 		{
 			code: '@page:blank:first {}',
 			warnings: [
-				{ message: messages.rejected(':blank'), line: 1, column: 6, endLine: 1, endColumn: 12 },
-				{ message: messages.rejected(':first'), line: 1, column: 12, endLine: 1, endColumn: 18 },
+				{message: messages.rejected(':blank'), line: 1, column: 6, endLine: 1, endColumn: 12},
+				{message: messages.rejected(':first'), line: 1, column: 12, endLine: 1, endColumn: 18},
 			],
 			skip: true,
 		},

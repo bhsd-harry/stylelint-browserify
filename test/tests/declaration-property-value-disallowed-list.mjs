@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -185,7 +185,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: { position: ['fixed'] },
+	config: {position: ['fixed']},
 	accept: [
 		{
 			code: 'a { font-size: 1em; }',

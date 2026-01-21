@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -232,7 +232,7 @@ testRule({
 			endColumn: 3,
 			fix: {
 				range: [15, 56],
-				text: `(\n\t\tcalc(var(--hue) + 30)\n\t\t28%\n\t\t50% /`,
+				text: '(\n\t\tcalc(var(--hue) + 30)\n\t\t28%\n\t\t50% /',
 			},
 		},
 		{
@@ -317,7 +317,7 @@ testRule({
 					column: 3,
 					endLine: 4,
 					endColumn: 23,
-					fix: { range: [57, 71], text: '(30 75 115 /' },
+					fix: {range: [57, 71], text: '(30 75 115 /'},
 				},
 				{
 					message: messages.expected('modern'),
@@ -449,8 +449,8 @@ testRule({
 				}
 			`,
 			warnings: [
-				{ message: messages.expected('legacy'), line: 4, column: 3, endLine: 4, endColumn: 21 },
-				{ message: messages.expected('legacy'), line: 5, column: 3, endLine: 5, endColumn: 19 },
+				{message: messages.expected('legacy'), line: 4, column: 3, endLine: 4, endColumn: 21},
+				{message: messages.expected('legacy'), line: 5, column: 3, endLine: 5, endColumn: 19},
 			],
 		},
 	],
@@ -533,7 +533,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['modern', { ignore: 'with-var-inside' }],
+	config: ['modern', {ignore: 'with-var-inside'}],
 	fix: true,
 
 	accept: [
@@ -548,7 +548,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['legacy', { ignore: 'with-var-inside' }],
+	config: ['legacy', {ignore: 'with-var-inside'}],
 	fix: true,
 
 	accept: [

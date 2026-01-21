@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 // Sanity checks
 testRule({
@@ -335,7 +335,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignoreAttributes: ['dir', 'dir="rtl"', '/^my-/'] }],
+	config: [0, {ignoreAttributes: ['dir', 'dir="rtl"', '/^my-/']}],
 
 	accept: [
 		{
@@ -382,7 +382,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignoreAttributes: [/^my-/] }],
+	config: [0, {ignoreAttributes: [/^my-/]}],
 
 	accept: [
 		{

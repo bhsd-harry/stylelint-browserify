@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 const basicAZTests = {
 	accept: [
@@ -187,7 +187,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['^&:(?:hover|focus)$', { splitList: true }],
+	config: ['^&:(?:hover|focus)$', {splitList: true}],
 
 	accept: [
 		{

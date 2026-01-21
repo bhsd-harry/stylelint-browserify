@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 // Sanity checks
 testRule({
@@ -277,7 +277,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignore: ['descendant'] }],
+	config: [0, {ignore: ['descendant']}],
 
 	accept: [
 		{
@@ -399,7 +399,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignore: ['compounded'] }],
+	config: [0, {ignore: ['compounded']}],
 
 	accept: [
 		{
@@ -447,7 +447,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignore: ['child'] }],
+	config: [0, {ignore: ['child']}],
 
 	accept: [
 		{
@@ -575,7 +575,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignore: ['custom-elements'] }],
+	config: [0, {ignore: ['custom-elements']}],
 
 	accept: [
 		{
@@ -616,7 +616,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignore: ['compounded', 'descendant'] }],
+	config: [0, {ignore: ['compounded', 'descendant']}],
 
 	accept: [
 		{
@@ -639,7 +639,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignore: ['child', 'descendant'] }],
+	config: [0, {ignore: ['child', 'descendant']}],
 
 	accept: [
 		{
@@ -651,7 +651,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignore: ['child', 'compounded'] }],
+	config: [0, {ignore: ['child', 'compounded']}],
 
 	accept: [
 		{
@@ -805,7 +805,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignoreTypes: ['fieldset', '/^my-/'] }],
+	config: [0, {ignoreTypes: ['fieldset', '/^my-/']}],
 
 	accept: [
 		{
@@ -849,7 +849,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [0, { ignore: ['next-sibling'] }],
+	config: [0, {ignore: ['next-sibling']}],
 	accept: [
 		{
 			code: '.foo + a {}',

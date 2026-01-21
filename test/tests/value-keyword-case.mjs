@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -2480,7 +2480,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { ignoreKeywords: ['Block', '/^(f|F)lex$/'] }],
+	config: ['lower', {ignoreKeywords: ['Block', '/^(f|F)lex$/']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2586,7 +2586,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['upper', { ignoreKeywords: ['Block', 'bLoCk', 'block', '/^(f|F)lex$/'] }],
+	config: ['upper', {ignoreKeywords: ['Block', 'bLoCk', 'block', '/^(f|F)lex$/']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2675,7 +2675,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['upper', { ignoreKeywords: [/^(f|F)lex$/] }],
+	config: ['upper', {ignoreKeywords: [/^([fF])lex$/]}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2708,7 +2708,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { ignoreProperties: ['display', '/^(b|B)ackground$/'] }],
+	config: ['lower', {ignoreProperties: ['display', '/^(b|B)ackground$/']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2760,7 +2760,7 @@ testRule({
 testRule({
 	ruleName,
 	customSyntax: 'postcss-scss',
-	config: ['lower', { ignoreProperties: ['$fontFamily'] }],
+	config: ['lower', {ignoreProperties: ['$fontFamily']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2787,7 +2787,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { ignoreProperties: [/^(b|B)ackground$/] }],
+	config: ['lower', {ignoreProperties: [/^([bB])ackground$/]}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2816,7 +2816,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { ignoreProperties: ['BACKGROUND'] }],
+	config: ['lower', {ignoreProperties: ['BACKGROUND']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2845,7 +2845,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['upper', { ignoreProperties: ['display', '/^(b|B)ackground$/'] }],
+	config: ['upper', {ignoreProperties: ['display', '/^(b|B)ackground$/']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2906,7 +2906,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['upper', { ignoreFunctions: ['t', 'camelCase', /^(f|F)oo$/] }],
+	config: ['upper', {ignoreFunctions: ['t', 'camelCase', /^([fF])oo$/]}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2959,7 +2959,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { camelCaseSvgKeywords: true }],
+	config: ['lower', {camelCaseSvgKeywords: true}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -2989,7 +2989,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['lower', { camelCaseSvgKeywords: false }],
+	config: ['lower', {camelCaseSvgKeywords: false}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -3019,7 +3019,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['upper', { camelCaseSvgKeywords: true }],
+	config: ['upper', {camelCaseSvgKeywords: true}],
 	fix: true,
 	computeEditInfo: true,
 

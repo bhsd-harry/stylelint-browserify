@@ -1,7 +1,7 @@
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -228,7 +228,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { checkPrefixed: true }],
+	config: [true, {checkPrefixed: true}],
 
 	accept: [
 		{
@@ -263,7 +263,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreSelectors: [':export', ':import'] }],
+	config: [true, {ignoreSelectors: [':export', ':import']}],
 
 	accept: [
 		{
@@ -290,7 +290,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreSelectors: ['/:export/', /^:import/] }],
+	config: [true, {ignoreSelectors: ['/:export/', /^:import/]}],
 
 	accept: [
 		{
@@ -363,7 +363,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreAtRules: ['supports', /^lay/] }],
+	config: [true, {ignoreAtRules: ['supports', /^lay/]}],
 
 	accept: [
 		{

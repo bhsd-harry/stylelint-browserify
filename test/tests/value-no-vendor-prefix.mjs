@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -257,7 +257,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreValues: /^-moz-hangul$/ }],
+	config: [true, {ignoreValues: /^-moz-hangul$/}],
 
 	accept: [
 		{
@@ -270,7 +270,7 @@ testRule({
 	ruleName,
 	config: [
 		true,
-		{ ignoreValues: ['-webkit-grab', '-moz-hangul', '/^-webkit-linear-/', /^-moz-all$/] },
+		{ignoreValues: ['-webkit-grab', '-moz-hangul', '/^-webkit-linear-/', /^-moz-all$/]},
 	],
 	fix: true,
 	computeEditInfo: true,

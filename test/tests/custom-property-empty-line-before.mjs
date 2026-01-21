@@ -1,7 +1,7 @@
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -43,7 +43,7 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 1,
-			fix: { range: [3, 4], text: '\n\n' },
+			fix: {range: [3, 4], text: '\n\n'},
 		},
 		{
 			code: 'a {\r\n --custom-prop: value;\r\n}',
@@ -51,7 +51,7 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 2,
-			fix: { range: [4, 5], text: '\n\r\n' },
+			fix: {range: [4, 5], text: '\n\r\n'},
 		},
 		{
 			code: 'a{\n\n --custom-prop: value; \n --custom-prop2: value;}',
@@ -59,7 +59,7 @@ testRule({
 			message: messages.expected,
 			line: 4,
 			column: 2,
-			fix: { range: [27, 28], text: '\n\n' },
+			fix: {range: [27, 28], text: '\n\n'},
 		},
 		{
 			code: 'a{\r\n\r\n --custom-prop: value;\r\n --custom-prop2: value;}',
@@ -67,7 +67,7 @@ testRule({
 			message: messages.expected,
 			line: 4,
 			column: 2,
-			fix: { range: [29, 30], text: '\n\r\n' },
+			fix: {range: [29, 30], text: '\n\r\n'},
 		},
 		{
 			code: 'a{\n top: 10px;\n --custom-prop: value;}',
@@ -75,7 +75,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [14, 15], text: '\n\n' },
+			fix: {range: [14, 15], text: '\n\n'},
 		},
 		{
 			code: 'a{\r\n @extends .class;\r\n --custom-prop: value;}',
@@ -83,7 +83,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [22, 23], text: '\n\r\n' },
+			fix: {range: [22, 23], text: '\n\r\n'},
 		},
 		{
 			code: 'a{\n $var: value;\n --custom-prop: value;}',
@@ -91,14 +91,14 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [16, 17], text: '\n\n' },
+			fix: {range: [16, 17], text: '\n\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['after-comment'] }],
+	config: ['always', {ignore: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -118,7 +118,7 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 2,
-			fix: { range: [3, 4], text: '\n\n' },
+			fix: {range: [3, 4], text: '\n\n'},
 		},
 		{
 			code: 'a {\ncolor: pink; /* comment */\n--custom-prop: value;\n}',
@@ -126,7 +126,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 1,
-			fix: { range: [30, 31], text: '\n\n' },
+			fix: {range: [30, 31], text: '\n\n'},
 			description: 'shared-line comments do not apply',
 		},
 		{
@@ -135,7 +135,7 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 15,
-			fix: { range: [16, 17], text: '/\n\n' },
+			fix: {range: [16, 17], text: '/\n\n'},
 			description: 'shared-line comments do not apply',
 		},
 	],
@@ -143,7 +143,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['after-custom-property'] }],
+	config: ['always', {ignore: ['after-custom-property']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -256,7 +256,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['first-nested'] }],
+	config: ['always', {ignore: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -282,7 +282,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [26, 27], text: '\n\n' },
+			fix: {range: [26, 27], text: '\n\n'},
 		},
 		{
 			code: 'a {\n\n --custom-prop: value;\n --custom-prop2: value;\n}',
@@ -290,7 +290,7 @@ testRule({
 			message: messages.expected,
 			line: 4,
 			column: 2,
-			fix: { range: [27, 28], text: '\n\n' },
+			fix: {range: [27, 28], text: '\n\n'},
 		},
 		{
 			code: 'a {\r\n --custom-prop: value;\r\n --custom-prop2: value;\r\n}',
@@ -298,7 +298,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [28, 29], text: '\n\r\n' },
+			fix: {range: [28, 29], text: '\n\r\n'},
 		},
 		{
 			code: 'a {\r\n\r\n --custom-prop: value;\r\n --custom-prop2: value;\r\n}',
@@ -306,14 +306,14 @@ testRule({
 			message: messages.expected,
 			line: 4,
 			column: 2,
-			fix: { range: [30, 31], text: '\n\r\n' },
+			fix: {range: [30, 31], text: '\n\r\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['inside-single-line-block'] }],
+	config: ['always', {ignore: ['inside-single-line-block']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -333,14 +333,14 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 2,
-			fix: { range: [3, 4], text: '\n\n' },
+			fix: {range: [3, 4], text: '\n\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['first-nested'] }],
+	config: ['always', {except: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -367,7 +367,7 @@ testRule({
 			message: messages.rejected,
 			line: 3,
 			column: 2,
-			fix: { range: [4, 5], text: '' },
+			fix: {range: [4, 5], text: ''},
 		},
 		{
 			code: 'a {\r\n\r\n --custom-prop: value;\r\n}',
@@ -375,7 +375,7 @@ testRule({
 			message: messages.rejected,
 			line: 3,
 			column: 2,
-			fix: { range: [5, 7], text: '' },
+			fix: {range: [5, 7], text: ''},
 		},
 		{
 			code: 'a { /* comment*/\n\n --custom-prop: value;\n}',
@@ -383,14 +383,14 @@ testRule({
 			message: messages.rejected,
 			line: 3,
 			column: 2,
-			fix: { range: [17, 18], text: '' },
+			fix: {range: [17, 18], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-block'] }],
+	config: ['always', {except: ['after-block']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -419,7 +419,7 @@ testRule({
 			message: messages.rejected,
 			line: 6,
 			column: 2,
-			fix: { range: [25, 26], text: '' },
+			fix: {range: [25, 26], text: ''},
 		},
 		{
 			code: 'a {\r\n a {} \r\n\r\n --foo: red;}',
@@ -427,7 +427,7 @@ testRule({
 			message: messages.rejected,
 			line: 4,
 			column: 2,
-			fix: { range: [13, 15], text: '' },
+			fix: {range: [13, 15], text: ''},
 		},
 		{
 			code: 'a {\n\n --foo: red;\n @media all {} \n\n --bar: red;}',
@@ -435,7 +435,7 @@ testRule({
 			message: messages.rejected,
 			line: 6,
 			column: 2,
-			fix: { range: [34, 35], text: '' },
+			fix: {range: [34, 35], text: ''},
 		},
 		{
 			code: 'a {\r\n @media all {} \r\n\r\n --foo: red;}',
@@ -443,14 +443,14 @@ testRule({
 			message: messages.rejected,
 			line: 4,
 			column: 2,
-			fix: { range: [22, 24], text: '' },
+			fix: {range: [22, 24], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-comment'] }],
+	config: ['always', {except: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -473,7 +473,7 @@ testRule({
 			message: messages.rejected,
 			line: 6,
 			column: 2,
-			fix: { range: [51, 52], text: '' },
+			fix: {range: [51, 52], text: ''},
 		},
 		{
 			code: 'a {\r\n /* I am a comment */ \r\n\r\n --custom-prop2: value;}',
@@ -481,7 +481,7 @@ testRule({
 			message: messages.rejected,
 			line: 4,
 			column: 2,
-			fix: { range: [29, 31], text: '' },
+			fix: {range: [29, 31], text: ''},
 		},
 		{
 			code: 'a {\ncolor: pink; /* I am a comment */\n--custom-prop2: value;}',
@@ -489,7 +489,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 1,
-			fix: { range: [37, 38], text: '\n\n' },
+			fix: {range: [37, 38], text: '\n\n'},
 			description: 'shared-line comments do not apply',
 		},
 		{
@@ -498,7 +498,7 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 2,
-			fix: { range: [24, 25], text: '\n\n' },
+			fix: {range: [24, 25], text: '\n\n'},
 			description: 'shared-line comments still do not apply',
 		},
 	],
@@ -506,7 +506,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-custom-property'] }],
+	config: ['always', {except: ['after-custom-property']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -529,7 +529,7 @@ testRule({
 			message: messages.rejected,
 			line: 5,
 			column: 2,
-			fix: { range: [27, 28], text: '' },
+			fix: {range: [27, 28], text: ''},
 		},
 		{
 			code: 'a {\r\n\r\n --custom-prop: value;\r\n\r\n --custom-prop2: value;}',
@@ -537,14 +537,14 @@ testRule({
 			message: messages.rejected,
 			line: 5,
 			column: 2,
-			fix: { range: [31, 33], text: '' },
+			fix: {range: [31, 33], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-comment', 'first-nested'] }],
+	config: ['always', {except: ['after-comment', 'first-nested']}],
 
 	accept: [
 		{
@@ -611,7 +611,7 @@ testRule({
 			message: messages.rejected,
 			line: 3,
 			column: 2,
-			fix: { range: [4, 5], text: '' },
+			fix: {range: [4, 5], text: ''},
 		},
 		{
 			code: 'a {\r\n\r\n --custom-prop: value;\r\n}',
@@ -619,7 +619,7 @@ testRule({
 			message: messages.rejected,
 			line: 3,
 			column: 2,
-			fix: { range: [5, 7], text: '' },
+			fix: {range: [5, 7], text: ''},
 		},
 		{
 			code: 'a{\n top: 10px;\n\n --custom-prop: value;}',
@@ -627,7 +627,7 @@ testRule({
 			message: messages.rejected,
 			line: 4,
 			column: 2,
-			fix: { range: [15, 16], text: '' },
+			fix: {range: [15, 16], text: ''},
 		},
 		{
 			code: 'a{\r\n @extends .class;\r\n\r\n --custom-prop: value;}',
@@ -635,7 +635,7 @@ testRule({
 			message: messages.rejected,
 			line: 4,
 			column: 2,
-			fix: { range: [23, 25], text: '' },
+			fix: {range: [23, 25], text: ''},
 		},
 		{
 			code: 'a{\n $var: value;\n\n --custom-prop: value;}',
@@ -643,14 +643,14 @@ testRule({
 			message: messages.rejected,
 			line: 4,
 			column: 2,
-			fix: { range: [17, 18], text: '' },
+			fix: {range: [17, 18], text: ''},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['first-nested'] }],
+	config: ['never', {except: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -673,7 +673,7 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 2,
-			fix: { range: [3, 4], text: '\n\n' },
+			fix: {range: [3, 4], text: '\n\n'},
 		},
 		{
 			code: 'a {\r\n --custom-prop: value;\r\n}',
@@ -681,14 +681,14 @@ testRule({
 			message: messages.expected,
 			line: 2,
 			column: 2,
-			fix: { range: [4, 5], text: '\n\r\n' },
+			fix: {range: [4, 5], text: '\n\r\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['after-block'] }],
+	config: ['never', {except: ['after-block']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -717,7 +717,7 @@ testRule({
 			message: messages.expected,
 			line: 4,
 			column: 2,
-			fix: { range: [23, 24], text: '\n\n' },
+			fix: {range: [23, 24], text: '\n\n'},
 		},
 		{
 			code: 'a {\r\n a {} \r\n --foo: red;}',
@@ -725,7 +725,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [12, 13], text: '\n\r\n' },
+			fix: {range: [12, 13], text: '\n\r\n'},
 		},
 		{
 			code: 'a {\n --foo: red;\n @media all {} \n --bar: red;}',
@@ -733,7 +733,7 @@ testRule({
 			message: messages.expected,
 			line: 4,
 			column: 2,
-			fix: { range: [32, 33], text: '\n\n' },
+			fix: {range: [32, 33], text: '\n\n'},
 		},
 		{
 			code: 'a {\r\n @media all {} \r\n --foo: red;}',
@@ -741,14 +741,14 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [21, 22], text: '\n\r\n' },
+			fix: {range: [21, 22], text: '\n\r\n'},
 		},
 	],
 });
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['after-comment'] }],
+	config: ['never', {except: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -771,7 +771,7 @@ testRule({
 			message: messages.expected,
 			line: 4,
 			column: 2,
-			fix: { range: [49, 50], text: '\n\n' },
+			fix: {range: [49, 50], text: '\n\n'},
 		},
 		{
 			code: 'a {\r\n /* I am a comment */ \r\n --custom-prop2: value;}',
@@ -779,7 +779,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [28, 29], text: '\n\r\n' },
+			fix: {range: [28, 29], text: '\n\r\n'},
 		},
 		{
 			code: 'a {/* I am a comment */ \n\n --custom-prop2: value;}',
@@ -787,7 +787,7 @@ testRule({
 			message: messages.rejected,
 			line: 3,
 			column: 2,
-			fix: { range: [25, 26], text: '' },
+			fix: {range: [25, 26], text: ''},
 			description: 'shared-line comments do not apply',
 		},
 	],
@@ -795,7 +795,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['after-custom-property'] }],
+	config: ['never', {except: ['after-custom-property']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -822,7 +822,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 1,
-			fix: { range: [25, 26], text: '\n\n' },
+			fix: {range: [25, 26], text: '\n\n'},
 		},
 		{
 			code: 'a {\n --custom-prop: value;\n --custom-prop2: value;}',
@@ -830,7 +830,7 @@ testRule({
 			message: messages.expected,
 			line: 3,
 			column: 2,
-			fix: { range: [26, 27], text: '\n\n' },
+			fix: {range: [26, 27], text: '\n\n'},
 		},
 	],
 });
@@ -854,7 +854,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['first-nested'] }],
+	config: ['always', {except: ['first-nested']}],
 	customSyntax: naiveCssInJs,
 
 	accept: [

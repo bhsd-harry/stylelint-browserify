@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -166,7 +166,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['comments'] }],
+	config: [true, {ignore: ['comments']}],
 
 	accept: [
 		{
@@ -280,7 +280,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['comments'] }],
+	config: [true, {ignore: ['comments']}],
 	customSyntax: 'postcss-scss',
 
 	accept: [

@@ -1,9 +1,9 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -456,7 +456,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['selectors-within-list'] }],
+	config: [true, {ignore: ['selectors-within-list']}],
 
 	accept: [
 		{

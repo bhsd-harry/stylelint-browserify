@@ -1,8 +1,8 @@
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -1104,7 +1104,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreLonghands: 'text-decoration-thickness' }],
+	config: [true, {ignoreLonghands: 'text-decoration-thickness'}],
 	fix: true,
 
 	accept: [
@@ -1133,7 +1133,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreShorthands: ['/border/', 'padding'] }],
+	config: [true, {ignoreShorthands: ['/border/', 'padding']}],
 
 	accept: [
 		{
@@ -1158,7 +1158,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreShorthands: [/border/] }],
+	config: [true, {ignoreShorthands: [/border/]}],
 
 	accept: [
 		{

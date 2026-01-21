@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -104,7 +104,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['after-comment'] }],
+	config: ['always', {ignore: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -160,7 +160,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['first-nested'] }],
+	config: ['always', {ignore: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -190,7 +190,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { ignore: ['inside-block'] }],
+	config: ['always', {ignore: ['inside-block']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -218,7 +218,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-rule'] }],
+	config: ['always', {except: ['after-rule']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -286,7 +286,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-single-line-comment'] }],
+	config: ['always', {except: ['after-single-line-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -350,7 +350,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['first-nested'] }],
+	config: ['always', {except: ['first-nested']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -477,7 +477,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['after-single-line-comment', 'first-nested'] }],
+	config: ['always', {except: ['after-single-line-comment', 'first-nested']}],
 
 	accept: [
 		{
@@ -489,7 +489,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['inside-block-and-after-rule'] }],
+	config: ['always', {except: ['inside-block-and-after-rule']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -598,7 +598,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['always', { except: ['inside-block'] }],
+	config: ['always', {except: ['inside-block']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -714,7 +714,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['after-rule'] }],
+	config: ['never', {except: ['after-rule']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -782,7 +782,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { except: ['after-single-line-comment'] }],
+	config: ['never', {except: ['after-single-line-comment']}],
 	fix: true,
 	computeEditInfo: true,
 
@@ -843,7 +843,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { ignore: ['after-comment'] }],
+	config: ['never', {ignore: ['after-comment']}],
 	fix: true,
 	computeEditInfo: true,
 

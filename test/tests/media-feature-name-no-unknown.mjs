@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -368,7 +368,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreMediaFeatureNames: ['/^my-/', 'custom', '/^YOUR-/i'] }],
+	config: [true, {ignoreMediaFeatureNames: ['/^my-/', 'custom', '/^YOUR-/i']}],
 
 	accept: [
 		{
@@ -423,7 +423,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreMediaFeatureNames: [/^my-/] }],
+	config: [true, {ignoreMediaFeatureNames: [/^my-/]}],
 
 	accept: [
 		{

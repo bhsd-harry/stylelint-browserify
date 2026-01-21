@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -385,7 +385,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['number', { exceptProperties: ['opacity'] }],
+	config: ['number', {exceptProperties: ['opacity']}],
 	fix: true,
 
 	accept: [
@@ -444,7 +444,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['percentage', { exceptProperties: ['opacity'] }],
+	config: ['percentage', {exceptProperties: ['opacity']}],
 	fix: true,
 
 	accept: [
@@ -598,7 +598,7 @@ testRule({
 			column: 14,
 			endLine: 1,
 			endColumn: 17,
-			fix: { range: [13, 16], text: '0.1' },
+			fix: {range: [13, 16], text: '0.1'},
 		},
 		{
 			code: 'a { shape-image-threshold: 50% };',
@@ -607,7 +607,7 @@ testRule({
 			column: 28,
 			endLine: 1,
 			endColumn: 31,
-			fix: { range: [27, 30], text: '0.5' },
+			fix: {range: [27, 30], text: '0.5'},
 		},
 		{
 			code: 'feDropShadow { flood-opacity: 50% }',
@@ -616,7 +616,7 @@ testRule({
 			column: 31,
 			endLine: 1,
 			endColumn: 34,
-			fix: { range: [30, 33], text: '0.5' },
+			fix: {range: [30, 33], text: '0.5'},
 		},
 		{
 			code: 'a { color: rgba(0, 0, 0, 50%) }',
@@ -625,7 +625,7 @@ testRule({
 			column: 26,
 			endLine: 1,
 			endColumn: 29,
-			fix: { range: [25, 28], text: '0.5' },
+			fix: {range: [25, 28], text: '0.5'},
 		},
 		{
 			code: 'a { color: rgba(0, 0, 0, 50%); background-color: rgba(0, 0, 0, 70%); }',
@@ -636,7 +636,7 @@ testRule({
 					column: 26,
 					endLine: 1,
 					endColumn: 29,
-					fix: { range: [25, 28], text: '0.5' },
+					fix: {range: [25, 28], text: '0.5'},
 				},
 				{
 					message: messages.expected('70%', '0.7'),
@@ -644,7 +644,7 @@ testRule({
 					column: 64,
 					endLine: 1,
 					endColumn: 67,
-					fix: { range: [63, 66], text: '0.7' },
+					fix: {range: [63, 66], text: '0.7'},
 				},
 			],
 		},
@@ -657,7 +657,7 @@ testRule({
 					column: 14,
 					endLine: 1,
 					endColumn: 17,
-					fix: { range: [13, 16], text: '0.1' },
+					fix: {range: [13, 16], text: '0.1'},
 				},
 				{
 					message: messages.expected('50%', '0.5'),
@@ -665,7 +665,7 @@ testRule({
 					column: 42,
 					endLine: 1,
 					endColumn: 45,
-					fix: { range: [41, 44], text: '0.5' },
+					fix: {range: [41, 44], text: '0.5'},
 				},
 			],
 		},
@@ -676,16 +676,16 @@ testRule({
 			column: 40,
 			endLine: 1,
 			endColumn: 43,
-			fix: { range: [39, 42], text: '0.45' },
+			fix: {range: [39, 42], text: '0.45'},
 		},
 		{
-			code: `a { color: red; opacity: 30%; }`,
+			code: 'a { color: red; opacity: 30%; }',
 			message: messages.expected('30%', '0.3'),
 			line: 1,
 			column: 26,
 			endLine: 1,
 			endColumn: 29,
-			fix: { range: [25, 28], text: '0.3' },
+			fix: {range: [25, 28], text: '0.3'},
 		},
 	],
 });
@@ -706,7 +706,7 @@ testRule({
 			column: 14,
 			endLine: 1,
 			endColumn: 17,
-			fix: { range: [13, 16], text: '10%' },
+			fix: {range: [13, 16], text: '10%'},
 		},
 		{
 			code: 'a { shape-image-threshold: 0.5 }',
@@ -715,7 +715,7 @@ testRule({
 			column: 28,
 			endLine: 1,
 			endColumn: 31,
-			fix: { range: [27, 30], text: '50%' },
+			fix: {range: [27, 30], text: '50%'},
 		},
 		{
 			code: 'feDropShadow { flood-opacity: 0.5 }',
@@ -724,7 +724,7 @@ testRule({
 			column: 31,
 			endLine: 1,
 			endColumn: 34,
-			fix: { range: [30, 33], text: '50%' },
+			fix: {range: [30, 33], text: '50%'},
 		},
 		{
 			code: 'a { color: rgba(0, 0, 0, 0.5) }',
@@ -733,7 +733,7 @@ testRule({
 			column: 26,
 			endLine: 1,
 			endColumn: 29,
-			fix: { range: [25, 28], text: '50%' },
+			fix: {range: [25, 28], text: '50%'},
 		},
 		{
 			code: 'a { color: rgba(0, 0, 0, 0.5); background-color: rgba(0, 0, 0, 0.7); }',
@@ -744,7 +744,7 @@ testRule({
 					column: 26,
 					endLine: 1,
 					endColumn: 29,
-					fix: { range: [25, 28], text: '50%' },
+					fix: {range: [25, 28], text: '50%'},
 				},
 				{
 					message: messages.expected('0.7', '70%'),
@@ -752,7 +752,7 @@ testRule({
 					column: 64,
 					endLine: 1,
 					endColumn: 67,
-					fix: { range: [63, 66], text: '70%' },
+					fix: {range: [63, 66], text: '70%'},
 				},
 			],
 		},
@@ -765,7 +765,7 @@ testRule({
 					column: 14,
 					endLine: 1,
 					endColumn: 17,
-					fix: { range: [13, 16], text: '10%' },
+					fix: {range: [13, 16], text: '10%'},
 				},
 				{
 					message: messages.expected('0.5', '50%'),
@@ -773,18 +773,18 @@ testRule({
 					column: 42,
 					endLine: 1,
 					endColumn: 45,
-					fix: { range: [41, 44], text: '50%' },
+					fix: {range: [41, 44], text: '50%'},
 				},
 			],
 		},
 		{
-			code: `a { color: red; opacity: 0.3; }`,
+			code: 'a { color: red; opacity: 0.3; }',
 			message: messages.expected('0.3', '30%'),
 			line: 1,
 			column: 26,
 			endLine: 1,
 			endColumn: 29,
-			fix: { range: [25, 28], text: '30%' },
+			fix: {range: [25, 28], text: '30%'},
 		},
 	],
 });

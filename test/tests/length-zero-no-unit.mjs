@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -886,7 +886,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreFunctions: ['var', /^--/] }],
+	config: [true, {ignoreFunctions: ['var', /^--/]}],
 	fix: true,
 	computeEditInfo: true,
 	accept: [
@@ -948,7 +948,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignore: ['custom-properties'] }],
+	config: [true, {ignore: ['custom-properties']}],
 	accept: [
 		{
 			code: 'a { --x: 0px; }',
@@ -993,7 +993,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignorePreludeOfAtRules: ['media'] }],
+	config: [true, {ignorePreludeOfAtRules: ['media']}],
 	accept: [
 		{
 			code: '@media (height > 0px) {}',
@@ -1007,7 +1007,7 @@ testRule({
 testRule({
 	ruleName,
 	customSyntax: 'postcss-scss',
-	config: [true, { ignorePreludeOfAtRules: [/^mix/] }],
+	config: [true, {ignorePreludeOfAtRules: [/^mix/]}],
 	accept: [
 		{
 			code: '@mixin foo($x: 0px) { width: $x; }',

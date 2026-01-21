@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'node:url';
-import { stripIndent } from 'common-tags';
+import {fileURLToPath} from 'node:url';
+import {stripIndent} from 'common-tags';
 
 import postcss from '../postcss.mjs';
 import postcssImport from '../postcss-import.mjs';
@@ -8,7 +8,7 @@ import postcssStylelint from '../postcssPlugin.mjs';
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -446,7 +446,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { disallowInList: true }],
+	config: [true, {disallowInList: true}],
 
 	accept: [
 		{
@@ -557,7 +557,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreSelectors: ['a', '/foo/'] }],
+	config: [true, {ignoreSelectors: ['a', '/foo/']}],
 
 	accept: [
 		{
@@ -607,7 +607,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { disallowInList: true, ignoreSelectors: ['a'] }],
+	config: [true, {disallowInList: true, ignoreSelectors: ['a']}],
 
 	accept: [
 		{
@@ -616,42 +616,38 @@ testRule({
 	],
 });
 
-it('with postcss-import and duplicates within a file, a warning strikes', () => {
-	return postcss()
-		.use(postcssImport())
-		.use(
-			postcssStylelint({
-				config: {
-					rules: { [ruleName]: true },
-				},
-			}),
-		)
-		.process("@import 'fixtures/using-foo-twice.css';", {
-			from: fileURLToPath(new URL('./test.css', import.meta.url)),
-		})
-		.then((result) => {
-			expect(result.warnings()).toHaveLength(1);
-			expect(result.warnings()[0]).toHaveProperty('text', messages.rejected('.foo', 1));
-		});
-});
+it('with postcss-import and duplicates within a file, a warning strikes', () => postcss()
+	.use(postcssImport())
+	.use(
+		postcssStylelint({
+			config: {
+				rules: {[ruleName]: true},
+			},
+		}),
+	)
+	.process("@import 'fixtures/using-foo-twice.css';", {
+		from: fileURLToPath(new URL('./test.css', import.meta.url)),
+	})
+	.then(result => {
+		expect(result.warnings()).toHaveLength(1);
+		expect(result.warnings()[0]).toHaveProperty('text', messages.rejected('.foo', 1));
+	}));
 
-it('with postcss-import and duplicates across files, no warnings', () => {
-	return postcss()
-		.use(postcssImport())
-		.use(
-			postcssStylelint({
-				config: {
-					rules: { [ruleName]: true },
-				},
-			}),
-		)
-		.process("@import 'fixtures/using-foo.css'; @import 'fixtures/also-using-foo.css';", {
-			from: fileURLToPath(new URL('./test.css', import.meta.url)),
-		})
-		.then((result) => {
-			expect(result.warnings()).toHaveLength(0);
-		});
-});
+it('with postcss-import and duplicates across files, no warnings', () => postcss()
+	.use(postcssImport())
+	.use(
+		postcssStylelint({
+			config: {
+				rules: {[ruleName]: true},
+			},
+		}),
+	)
+	.process("@import 'fixtures/using-foo.css'; @import 'fixtures/also-using-foo.css';", {
+		from: fileURLToPath(new URL('./test.css', import.meta.url)),
+	})
+	.then(result => {
+		expect(result.warnings()).toHaveLength(0);
+	}));
 
 testRule({
 	ruleName,

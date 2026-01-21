@@ -1,7 +1,7 @@
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -180,8 +180,8 @@ testRule({
 				}
 			`,
 			warnings: [
-				{ message: messages.rejected('--bar'), line: 7, column: 9, endLine: 7, endColumn: 14 },
-				{ message: messages.rejected('--baz'), line: 8, column: 9, endLine: 8, endColumn: 14 },
+				{message: messages.rejected('--bar'), line: 7, column: 9, endLine: 7, endColumn: 14},
+				{message: messages.rejected('--baz'), line: 8, column: 9, endLine: 8, endColumn: 14},
 			],
 			description: 'two declared custom properties',
 		},
@@ -196,8 +196,8 @@ testRule({
 				}
 			`,
 			warnings: [
-				{ message: messages.rejected('--bar'), line: 5, column: 9, endLine: 5, endColumn: 14 },
-				{ message: messages.rejected('--baz'), line: 6, column: 9, endLine: 6, endColumn: 14 },
+				{message: messages.rejected('--bar'), line: 5, column: 9, endLine: 5, endColumn: 14},
+				{message: messages.rejected('--baz'), line: 6, column: 9, endLine: 6, endColumn: 14},
 			],
 			description: 'two declared via at-property custom properties',
 		},
@@ -243,9 +243,7 @@ testRule({
 					color: var(--foo, var(--bar, --baz));
 				}
 			`,
-			warnings: [
-				{ message: messages.rejected('--baz'), line: 6, column: 31, endLine: 6, endColumn: 36 },
-			],
+			warnings: [{message: messages.rejected('--baz'), line: 6, column: 31, endLine: 6, endColumn: 36}],
 			description: 'nested var() with second-level fallback missing var() syntax',
 		},
 		{

@@ -1,6 +1,6 @@
 import rule from '../index.mjs';
-import { stripIndent } from 'common-tags';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+import {stripIndent} from 'common-tags';
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -125,7 +125,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [{ a: 'color' }, { message: 'foo' }],
+	config: [{a: 'color'}, {message: 'foo'}],
 
 	reject: [
 		{
@@ -184,7 +184,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [{ '/^[a-z]+$/': ['opacity'] }, { ignore: ['keyframe-selectors'] }],
+	config: [{'/^[a-z]+$/': ['opacity']}, {ignore: ['keyframe-selectors']}],
 
 	accept: [
 		{

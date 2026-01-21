@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -425,7 +425,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { ignoreProperties: ['composes', '/^my-/'] }],
+	config: ['never', {ignoreProperties: ['composes', '/^my-/']}],
 
 	accept: [
 		{
@@ -464,7 +464,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { ignoreProperties: [/^my-/] }],
+	config: ['never', {ignoreProperties: [/^my-/]}],
 
 	accept: [
 		{
@@ -486,7 +486,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: ['never', { ignore: ['inside-function'] }],
+	config: ['never', {ignore: ['inside-function']}],
 
 	accept: [
 		{

@@ -1,7 +1,7 @@
 import rule from '../index.mjs';
-import { stripIndent } from 'common-tags';
+import {stripIndent} from 'common-tags';
 
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -67,7 +67,7 @@ testRule({
 			warnings: [
 				{
 					message: messages.expected('-moz-box-flex', 'flex-grow'),
-					fix: { range: [5, 18] },
+					fix: {range: [5, 18]},
 					column: 2,
 					endColumn: 15,
 					line: 2,

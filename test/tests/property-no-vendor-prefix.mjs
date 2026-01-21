@@ -1,5 +1,5 @@
 import rule from '../index.mjs';
-const { messages, ruleName } = {...rule, ruleName: filename(import.meta.url)};
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 testRule({
 	ruleName,
@@ -254,7 +254,7 @@ testRule({
 	ruleName,
 	config: [
 		true,
-		{ ignoreProperties: ['-webkit-transform', '-moz-columns', '/^-webkit-animation-/i'] },
+		{ignoreProperties: ['-webkit-transform', '-moz-columns', '/^-webkit-animation-/i']},
 	],
 	fix: true,
 	computeEditInfo: true,
@@ -321,7 +321,7 @@ testRule({
 
 testRule({
 	ruleName,
-	config: [true, { ignoreProperties: [/^-webkit-animation-/i] }],
+	config: [true, {ignoreProperties: [/^-webkit-animation-/i]}],
 	fix: true,
 	computeEditInfo: true,
 
