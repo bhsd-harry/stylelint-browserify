@@ -5,7 +5,10 @@ export default extend(
 	jsDoc,
 	...node,
 	{
-		ignores: ['bundle/'],
+		ignores: [
+			'bundle/',
+			'coverage/',
+		],
 	},
 	{
 		files: ['test/**/*.mjs'],

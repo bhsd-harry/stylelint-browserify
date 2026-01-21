@@ -6,7 +6,7 @@ const path = require('path'),
 	esbuild = require('esbuild');
 
 const shim = [
-		'augmentConfig',
+		// 'augmentConfig', // implicitly shimmed by getConfigForFile
 		'createStylelint',
 		'descriptionlessDisables',
 		'dynamicImport',
@@ -45,7 +45,8 @@ const shim = [
 	toSorted = ['declaration-block-no-redundant-longhand-properties'],
 	shimSet = new Set(shim),
 	resolvePath = path.join('build', 'resolve'),
-	loadPath = path.join('build', 'load');
+	loadPath = path.join('build', 'load'),
+	shimPath = path.resolve('shim');
 
 if (!fs.existsSync(resolvePath)) {
 	fs.mkdirSync(resolvePath, {recursive: true});
@@ -62,10 +63,12 @@ const /** @type {esbuild.Plugin} */ plugin = {
 			({path: p, resolveDir}) => {
 				const {name, ext} = path.parse(p),
 					file = name + (ext || '.js');
-				shimSet.delete(name);
-				fs.copyFileSync(require.resolve(path.join(resolveDir, p)), path.resolve(resolvePath, file));
+				if (resolveDir !== shimPath) {
+					shimSet.delete(name);
+					fs.copyFileSync(require.resolve(path.join(resolveDir, p)), path.resolve(resolvePath, file));
+				}
 				return {
-					path: path.resolve('shim', file),
+					path: path.join(shimPath, file),
 				};
 			},
 		);
@@ -174,10 +177,13 @@ const /** @type {esbuild.Plugin} */ plugin = {
 const stylelint = require.resolve('stylelint');
 const /** @type {esbuild.BuildOptions} */ config = {
 	entryPoints: [path.join(stylelint, '..', 'standalone.mjs')],
+	outfile: 'build/stylelint.js',
 	charset: 'utf8',
+	target: 'es2019',
 	bundle: true,
 	format: 'esm',
 	logLevel: 'info',
+	plugins: [plugin],
 	alias: {
 		debug: './shim/debug.mjs',
 		'fast-glob': './shim/fast-glob.mjs',
@@ -201,13 +207,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 };
 
 (async () => {
-	const /** @type {esbuild.BuildOptions} */ options = {
-		...config,
-		target: 'es2019',
-		outfile: 'build/stylelint.js',
-		plugins: [plugin],
-	};
-	await esbuild.build(options);
+	await esbuild.build(config);
 	if (shimSet.size > 0) {
 		console.error(
 			`The following shims were not used in the bundle: ${[...shimSet].join(', ')}`,
