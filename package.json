@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "17.1.0",
+	"version": "17.1.1",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
@@ -17,9 +17,9 @@
 	"author": "Bhsd",
 	"files": [
 		"bundle/*.min.js",
-		"bundle/*.LEGAL.txt",
-		"!bundle/.eslintrc.cjs"
+		"bundle/*.LEGAL.txt"
 	],
+	"main": "./bundle/stylelint.min.js",
 	"browser": "bundle/stylelint.min.js",
 	"repository": {
 		"type": "git",
@@ -27,7 +27,7 @@
 	},
 	"scripts": {
 		"lint:ts": "tsc && eslint --cache . && eslint --no-ignore --no-config-lookup -c eslint.build.mjs --report-unused-disable-directives-severity 0 build/stylelint*.js",
-		"lint:bundle": "eslint --no-ignore --no-config-lookup --rule 'no-unused-vars: 2' build/stylelint.js",
+		"lint:bundle": "eslint --no-ignore --no-config-lookup --rule 'no-unused-vars: [2, {args: \"none\"}]' build/stylelint.js",
 		"lint:md": "markdownlint-cli2 '**/*.md'",
 		"lint": "npm run lint:ts && npm run lint:md",
 		"build": "npm run bundle && npm run minify",
@@ -44,28 +44,31 @@
 		]
 	},
 	"devDependencies": {
-		"@bhsd/code-standard": "^1.4.0",
-		"@stylistic/eslint-plugin": "^5.5.0",
+		"@bhsd/code-standard": "^2.0.0",
+		"@stylistic/eslint-plugin": "^5.7.1",
 		"@types/mocha": "^10.0.10",
-		"@types/node": "^24.10.1",
-		"@typescript-eslint/eslint-plugin": "^8.46.4",
-		"@typescript-eslint/parser": "^8.46.4",
+		"@types/node": "^24.10.9",
+		"@typescript-eslint/eslint-plugin": "^8.54.0",
+		"@typescript-eslint/parser": "^8.54.0",
 		"c8": "^10.1.3",
 		"common-tags": "^1.8.2",
-		"esbuild": "^0.25.12",
-		"eslint": "^9.39.1",
-		"eslint-plugin-es-x": "^9.1.2",
+		"esbuild": "^0.27.2",
+		"eslint": "^9.39.2",
+		"eslint-plugin-es-x": "^9.3.0",
 		"eslint-plugin-eslint-comments": "^3.2.0",
-		"eslint-plugin-jsdoc": "^61.2.1",
+		"eslint-plugin-jsdoc": "^62.5.0",
 		"eslint-plugin-jsonc": "^2.21.0",
-		"eslint-plugin-n": "^17.23.1",
+		"eslint-plugin-n": "^17.23.2",
 		"eslint-plugin-promise": "^7.2.1",
-		"eslint-plugin-regexp": "^2.10.0",
+		"eslint-plugin-regexp": "^3.0.0",
 		"eslint-plugin-unicorn": "^62.0.0",
-		"globals": "^16.5.0",
-		"markdownlint-cli2": "^0.19.0",
+		"globals": "^17.2.0",
+		"markdownlint-cli2": "^0.20.0",
 		"mocha": "^11.7.5",
-		"stylelint": "^17.1.0",
+		"stylelint": "^17.1.1",
 		"typescript": "^5.9.3"
+	},
+	"engines": {
+		"node": "^24.11.0"
 	}
 }

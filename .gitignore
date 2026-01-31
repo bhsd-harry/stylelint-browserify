@@ -1,6 +1,5 @@
 /.vscode/
-/bundle/stylelint*
-/bundle/.gitignore
-/.eslintcache
-/build
+/bundle/
 /coverage/
+/build
+/.eslintcache
