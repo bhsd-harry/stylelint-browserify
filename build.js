@@ -64,6 +64,8 @@ if (!fs.existsSync(loadPath)) {
 	fs.mkdirSync(loadPath, {recursive: true});
 }
 
+let min = false;
+
 const /** @type {esbuild.Plugin} */ plugin = {
 	name: 'alias',
 	setup(build) {
@@ -84,7 +86,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 				const {name, ext} = path.parse(p),
 					file = name + (ext || '.js'),
 					fullPath = path.join(resolveDir, p);
-				if (resolveDir !== shimPath) {
+				if (min && resolveDir !== shimPath) {
 					if (!shimSet.has(name) && !originalSet.has(fullPath)) {
 						throw new Error(`Ambiguous shim name: ${name}`);
 					}
@@ -288,12 +290,14 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						' = $1.length - 1 - $1.slice().reverse().findIndex(',
 					);
 				}
-				if (basename === 'index.mjs') {
-					fs.copyFileSync(p, path.resolve(loadPath, `${base}.mjs`));
-				} else if (basename === 'processor.js') {
-					fs.copyFileSync(p, path.resolve(loadPath, `${base}-processor.js`));
-				} else {
-					fs.copyFileSync(p, path.resolve(loadPath, basename));
+				if (min) {
+					if (basename === 'index.mjs') {
+						fs.copyFileSync(p, path.resolve(loadPath, `${base}.mjs`));
+					} else if (basename === 'processor.js') {
+						fs.copyFileSync(p, path.resolve(loadPath, `${base}-processor.js`));
+					} else {
+						fs.copyFileSync(p, path.resolve(loadPath, basename));
+					}
 				}
 				return {contents};
 			},
@@ -306,7 +310,6 @@ const /** @type {esbuild.BuildOptions} */ config = {
 	entryPoints: [path.join(stylelint, '..', 'standalone.mjs')],
 	outfile: 'build/stylelint.js',
 	charset: 'utf8',
-	target: 'es2019',
 	bundle: true,
 	format: 'esm',
 	logLevel: 'info',
@@ -336,6 +339,13 @@ const /** @type {esbuild.BuildOptions} */ config = {
 
 (async () => {
 	await esbuild.build(config);
+	min = true;
+	await esbuild.build({
+		...config,
+		minify: true,
+		outfile: 'bundle/standalone.min.js',
+		legalComments: 'external',
+	});
 	if (shimSet.size > 0) {
 		console.error(
 			`The following shims were not used in the bundle: ${[...shimSet].join(', ')}`,

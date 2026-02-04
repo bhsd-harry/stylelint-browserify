@@ -1,6 +1,6 @@
-import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
+import {NoFilesFoundError} from '../utils/errors.mjs';
 import replaceBackslashes from '../replaceBackslashes.mjs';
 import standalone from '../standalone.mjs';
 
@@ -10,9 +10,9 @@ const configBlockNoEmpty = {
 	},
 };
 
-const fixturesPath = replaceBackslashes(new URL('./fixtures', import.meta.url));
+const dirname = import.meta.dirname;
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const fixturesPath = replaceBackslashes(new URL('./fixtures', import.meta.url));
 
 describe.skip('standalone with one input file', () => {
 	let report;
@@ -22,7 +22,7 @@ describe.skip('standalone with one input file', () => {
 		const data = await standalone({
 			files: `${fixturesPath}/empty-block.css`,
 			// Path to config file
-			configFile: path.join(__dirname, 'fixtures/config-block-no-empty.json'),
+			configFile: path.join(dirname, 'fixtures/config-block-no-empty.json'),
 		});
 
 		report = data.report;
@@ -88,7 +88,7 @@ describe.skip('standalone with files and globbyOptions', () => {
 			files: 'empty-block.css',
 			globbyOptions: {cwd: fixturesPath},
 			// Path to config file
-			configFile: path.join(__dirname, 'fixtures/config-block-no-empty.json'),
+			configFile: path.join(dirname, 'fixtures/config-block-no-empty.json'),
 		});
 
 		report = data.report;
@@ -112,7 +112,7 @@ describe.skip('standalone with files and cwd', () => {
 			files: 'empty-block.css',
 			cwd: fixturesPath,
 			// Path to config file
-			configFile: path.join(__dirname, 'fixtures/config-block-no-empty.json'),
+			configFile: path.join(dirname, 'fixtures/config-block-no-empty.json'),
 		});
 
 		report = data.report;
@@ -166,6 +166,18 @@ it('standalone without input css and file(s) should throw error', async () => {
 });
 
 describe.skip('standalone with nonexistent-file', () => {
+	it('throws an error', async () => {
+		const files = `${fixturesPath}/nonexistent-file.css`;
+		const expectedError = new NoFilesFoundError(files);
+
+		await expect(
+			standalone({
+				files,
+				config: configBlockNoEmpty,
+			}),
+		).rejects.toThrow(expectedError);
+	});
+
 	it('allowEmptyInput enabled quietly exits', async () => {
 		const {results, errored, report} = await standalone({
 			files: `${fixturesPath}/nonexistent-file.css`,
@@ -198,6 +210,26 @@ describe.skip('standalone with nonexistent-file', () => {
 		expect(results).toHaveLength(0);
 		expect(errored).toBe(false);
 		expect(report).toBe('[]');
+	});
+
+	it('allowEmptyInput disabled in options, regardless that it is enabled in config', async () => {
+		await expect(
+			standalone({
+				files: `${fixturesPath}/nonexistent-file.css`,
+				config: {...configBlockNoEmpty, allowEmptyInput: true},
+				allowEmptyInput: false,
+			}),
+		).rejects.toThrow(NoFilesFoundError);
+	});
+
+	it('allowEmptyInput disabled in options, regardless that it is enabled in config file', async () => {
+		await expect(
+			standalone({
+				files: `${fixturesPath}/nonexistent-file.css`,
+				configFile: `${fixturesPath}/config-allow-empty-input.json`,
+				allowEmptyInput: false,
+			}),
+		).rejects.toThrow(NoFilesFoundError);
 	});
 });
 
@@ -341,7 +373,7 @@ describe.skip('standalone with config locatable from process.cwd not file', () =
 
 	beforeEach(async () => {
 		const data = await standalone({
-			files: [replaceBackslashes(path.join(__dirname, './fixtures/empty-block.css'))],
+			files: [replaceBackslashes(path.join(dirname, './fixtures/empty-block.css'))],
 		});
 
 		results = data.results;
@@ -365,8 +397,8 @@ describe.skip('standalone with config locatable from options.cwd not file', () =
 
 	beforeEach(async () => {
 		const data = await standalone({
-			cwd: path.join(__dirname, './fixtures/getConfigForFile/a/b'),
-			files: [replaceBackslashes(path.join(__dirname, './fixtures/empty-block.css'))],
+			cwd: path.join(dirname, './fixtures/getConfigForFile/a/b'),
+			files: [replaceBackslashes(path.join(dirname, './fixtures/empty-block.css'))],
 		});
 
 		results = data.results;
@@ -410,7 +442,7 @@ describe('nonexistent codeFilename with loaded config and options.cwd', () => {
 			standalone({
 				code: 'a {}',
 
-				cwd: path.join(__dirname, './fixtures/getConfigForFile/a/b'),
+				cwd: path.join(dirname, './fixtures/getConfigForFile/a/b'),
 			})).not.toThrow();
 	});
 
@@ -418,7 +450,7 @@ describe('nonexistent codeFilename with loaded config and options.cwd', () => {
 		const {results} = await standalone({
 			code: 'a {}',
 
-			cwd: path.join(__dirname, './fixtures/getConfigForFile/a/b'),
+			cwd: path.join(dirname, './fixtures/getConfigForFile/a/b'),
 		});
 
 		expect(results[0].warnings).toHaveLength(1);

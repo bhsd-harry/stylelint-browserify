@@ -1,7 +1,6 @@
 {
 	"reporter": "progress",
 	"require": [
-		"bundle/stylelint.min.js",
 		"test/mocha.mjs"
 	],
 	"spec": "test/tests/*.mjs"

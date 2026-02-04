@@ -27,6 +27,7 @@ export default extend(
 		},
 		rules: {
 			'no-irregular-whitespace': 0,
+			'no-param-reassign': 0,
 			'no-shadow': 0,
 			'no-template-curly-in-string': 0,
 			'no-underscore-dangle': 0,
@@ -42,6 +43,7 @@ export default extend(
 			'unicorn/no-unused-properties': 0,
 			'unicorn/prefer-code-point': 0,
 			'jsdoc/check-indentation': 0,
+			'jsdoc/require-param-description': 0,
 		},
 	},
 	{
