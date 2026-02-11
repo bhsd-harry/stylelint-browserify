@@ -47,6 +47,7 @@ const shim = [
 	],
 	findLastIndex = ['getStrippedSelectorSource'],
 	toSorted = ['declaration-block-no-redundant-longhand-properties'],
+	lookBehind = ['value-keyword-case', 'declaration-property-value-keyword-no-deprecated'],
 	shimSet = new Set([
 		...shim,
 		'create',
@@ -107,6 +108,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							...at,
 							...replaceAll,
 							...toSorted,
+							...lookBehind,
 						].join('|')
 					})/index|${
 						[
@@ -193,6 +195,12 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							contents = contents.replaceAll(
 								'.toSorted(',
 								'.slice().sort(',
+							);
+						}
+						if (lookBehind.includes(base)) {
+							contents = contents.replaceAll(
+								'(?<![0-9])',
+								String.raw`(?:^|\D)`,
 							);
 						}
 						break;
