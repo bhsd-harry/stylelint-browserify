@@ -34,20 +34,7 @@ const shim = [
 		'unscopedDisables',
 		'warn-once',
 	],
-	at = [
-		'display-notation',
-		'function-calc-no-unspaced-operator',
-		'selector-no-qualifying-type',
-	],
-	replaceAll = [
-		'lightness-notation',
-		'no-descending-specificity',
-		'selector-pseudo-element-colon-notation',
-		'unit-allowed-list',
-	],
-	findLastIndex = ['getStrippedSelectorSource'],
-	toSorted = ['declaration-block-no-redundant-longhand-properties'],
-	lookBehind = ['value-keyword-case', 'declaration-property-value-keyword-no-deprecated'],
+	toSorted = 'declaration-block-no-redundant-longhand-properties',
 	shimSet = new Set([
 		...shim,
 		'create',
@@ -103,21 +90,13 @@ const /** @type {esbuild.Plugin} */ plugin = {
 		build.onLoad(
 			{
 				filter: new RegExp(
-					String.raw`/(?:(?:${
-						[
-							...at,
-							...replaceAll,
-							...toSorted,
-							...lookBehind,
-						].join('|')
-					})/index|${
+					String.raw`/(?:${toSorted}/index|${
 						[
 							'getPostcssResult',
 							'lintSource',
 							'reportUnknownRuleNames',
 							'postcss',
 							'standalone',
-							...findLastIndex,
 						].join('|')
 					})\.mjs$|/(?:${
 						[
@@ -176,31 +155,10 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						break;
 					case 'index':
 						base = path.basename(p.slice(0, p.lastIndexOf('/')));
-						if (at.includes(base)) {
-							contents = contents.replaceAll(
-								'.at(-1)',
-								'.slice(-1)[0]',
-							).replaceAll(
-								'.at(0)',
-								'[0]',
-							);
-						}
-						if (replaceAll.includes(base)) {
-							contents = contents.replace(
-								/\.replaceAll\('(.)'/gu,
-								String.raw`.replace(/\$1/g`,
-							);
-						}
-						if (toSorted.includes(base)) {
+						if (base === toSorted) {
 							contents = contents.replaceAll(
 								'.toSorted(',
 								'.slice().sort(',
-							);
-						}
-						if (lookBehind.includes(base)) {
-							contents = contents.replaceAll(
-								'(?<![0-9])',
-								String.raw`(?:^|\D)`,
 							);
 						}
 						break;
@@ -291,12 +249,6 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							') {}',
 						);
 					// no default
-				}
-				if (findLastIndex.includes(base)) {
-					contents = contents.replace(
-						/ = (\S+)\.findLastIndex\(/gu,
-						' = $1.length - 1 - $1.slice().reverse().findIndex(',
-					);
 				}
 				if (min) {
 					if (basename === 'index.mjs') {
