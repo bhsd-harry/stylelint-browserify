@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "17.3.0",
+	"version": "17.4.0",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
@@ -65,7 +65,7 @@
 		"globals": "^17.3.0",
 		"markdownlint-cli2": "^0.21.0",
 		"mocha": "^11.7.5",
-		"stylelint": "^17.3.0",
+		"stylelint": "^17.4.0",
 		"typescript": "^5.9.3"
 	},
 	"engines": {

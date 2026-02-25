@@ -9,7 +9,6 @@ const shim = [
 		// 'augmentConfig', // implicitly shimmed by getConfigForFile
 		'createStylelint',
 		'descriptionlessDisables',
-		'dynamicImport',
 		'emitWarning',
 		'filterFilePaths',
 		'fromJSON',
@@ -278,7 +277,6 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		debug: './shim/debug.mjs',
 		'fast-glob': './shim/fast-glob.mjs',
 		'fastest-levenshtein': './shim/fastest-levenshtein.mjs',
-		'node:fs': './shim/fs.mjs',
 		'node:fs/promises': './shim/fs-promises.mjs',
 		globby: './shim/globby.mjs',
 		'mathml-tag-names': './shim/mathml-tag-names.mjs',
