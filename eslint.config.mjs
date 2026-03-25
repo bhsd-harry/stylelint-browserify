@@ -45,6 +45,11 @@ export default extend(
 			'jsdoc/check-indentation': 0,
 			'jsdoc/require-param-description': 0,
 		},
+		settings: {
+			node: {
+				version: '>=24.0.0',
+			},
+		},
 	},
 	{
 		files: [
