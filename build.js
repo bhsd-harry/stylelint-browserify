@@ -162,31 +162,35 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						}
 						break;
 					case 'lazy-result':
-						contents = contents.replace(
-							/^([ \t]+)(?:catch|finally|then|runOnRoot|handleError|visitTick|(?:visit|walk)Sync)\(.+?^\1\}$/gmsu,
-							'',
-						).replace(
-							/(?<=^([ \t]+)prepareVisitors\().+?^\1\}$/msu,
-							') {}',
-						).replace(
-							/(?<=^([ \t]+)async runAsync\().+?^\1\}$/msu,
-							`) {
-								this.plugin = 0;
-								this.prepareVisitors();
-								this.processed = true;
-								return this.stringify();
-							}`,
-						).replace(
-							/(?<=^([ \t]+)sync\().+?^\1\}$/msu,
-							`) {
-								if (this.error) throw this.error;
-								if (this.processed) return this.result;
-								this.processed = true;
-								if (this.processing) throw this.getAsyncError();
-								this.prepareVisitors();
-								return this.result;
-							}`,
-						);
+						contents = contents
+							.replace(
+								/^([ \t]+)(?:catch|finally|then|runOnRoot|handleError|visitTick|(?:visit|walk)Sync)\(.+?^\1\}$/gmsu,
+								'',
+							)
+							.replace(
+								/(?<=^([ \t]+)prepareVisitors\().+?^\1\}$/msu,
+								') {}',
+							)
+							.replace(
+								/(?<=^([ \t]+)async runAsync\().+?^\1\}$/msu,
+								`) {
+									this.plugin = 0;
+									this.prepareVisitors();
+									this.processed = true;
+									return this.stringify();
+								}`,
+							)
+							.replace(
+								/(?<=^([ \t]+)sync\().+?^\1\}$/msu,
+								`) {
+									if (this.error) throw this.error;
+									if (this.processed) return this.result;
+									this.processed = true;
+									if (this.processing) throw this.getAsyncError();
+									this.prepareVisitors();
+									return this.result;
+								}`,
+							);
 						break;
 					case 'Lexer':
 						contents = contents.replace(
@@ -221,13 +225,15 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					case 'processor':
 						base = path.basename(p.slice(0, p.lastIndexOf('/')));
 						contents = base === 'lib'
-							? contents.replace(
-								/(?<=^([ \t]+)normalize\().+?^\1\}$/msu,
-								') { return []; }',
-							).replace(
-								/^([ \t]+)use\(.+?^\1\}$/msu,
-								'',
-							)
+							? contents
+								.replace(
+									/(?<=^([ \t]+)normalize\().+?^\1\}$/msu,
+									') { return []; }',
+								)
+								.replace(
+									/^([ \t]+)use\(.+?^\1\}$/msu,
+									'',
+								)
 							: contents.replace(
 								/^([ \t]+)_proto\.(_shouldUpdateSelector|_run|ast|process|transform(?:Sync)?) = function \2\d*\(.+?^\1\};?$/gmsu,
 								'',
@@ -240,13 +246,15 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						);
 						break;
 					case 'standalone':
-						contents = contents.replace(
-							/let fileList = .+?return result;\n\}/su,
-							'}',
-						).replace(
-							/(?<=function postProcessStylelintResult\().+^\}$/msu,
-							') {}',
-						);
+						contents = contents
+							.replace(
+								/let fileList = .+?return result;\n\}/su,
+								'}',
+							)
+							.replace(
+								/(?<=function postProcessStylelintResult\().+^\}$/msu,
+								') {}',
+							);
 					// no default
 				}
 				if (min) {
