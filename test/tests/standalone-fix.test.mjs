@@ -1,6 +1,7 @@
 import {copyFile, readFile, rm} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
+import process from 'node:process';
 
 import {stripIndent} from 'common-tags';
 
@@ -156,7 +157,7 @@ describe('fix callback', () => {
 		});
 	});
 
-	it.skip('plugin', () => {
+	describe.skip('plugin', () => {
 		test('scoped + unscoped', async () => {
 			const result = await standalone({
 				code: stripIndent`
@@ -411,6 +412,27 @@ describe('stylelint commands', () => {
 			'/* stylelint-disable declaration-block-no-duplicate-properties */ a { color: #fff; color: orange; }',
 		);
 	});
+
+	it.skip('deprecated context.fix', async () => {
+		const result = await standalone({
+			code: stripIndent`
+				/* stylelint-disable */
+				.foo {}
+				.foo {}
+			`,
+			config: {
+				plugins: [fixturesPath('./plugin-selector-no-foo.mjs')],
+				rules: {'plugin/selector-no-foo': true},
+				fix: true,
+			},
+		});
+
+		expect(result.code).toBe(stripIndent`
+				/* stylelint-disable */
+				.foo {}
+				.foo {}
+		`);
+	});
 });
 
 describe.skip('writing fixes to files', () => {
@@ -554,9 +576,7 @@ it('two rules being disabled', async () => {
 	).toBe(true);
 	expect(
 		warnings.some(
-			w =>
-				w.text
-				=== 'Unexpected duplicate selector "a", first used at line 2 (no-duplicate-selectors)',
+			w => w.text === 'Duplicate selector "a", first used at line 2 (no-duplicate-selectors)',
 		),
 	).toBe(true);
 	expect(result.code).toBe(code);
@@ -593,9 +613,7 @@ it('one rule being disabled and another still autofixing', async () => {
 	).toBe(false);
 	expect(
 		warnings.some(
-			w =>
-				w.text
-				=== 'Unexpected duplicate selector "a", first used at line 2 (no-duplicate-selectors)',
+			w => w.text === 'Duplicate selector "a", first used at line 2 (no-duplicate-selectors)',
 		),
 	).toBe(true);
 
@@ -639,7 +657,7 @@ it('returns the original code if the fix option is true but the code is not fixa
 	expect(result.code).toBe(code);
 });
 
-describe.skip("doesn't return any fixed code if the fix option is false, regardless of plugin implementation", async () => {
+it.skip("doesn't return any fixed code if the fix option is false, regardless of plugin implementation", async () => {
 	const code = `
 		a {
 			always: 1;
@@ -665,7 +683,7 @@ describe.skip("doesn't return any fixed code if the fix option is false, regardl
  * @see stylelint/stylelint#7735
  * @see stylelint/stylelint#2643
  */
-describe.skip('returns partially fixed code if the fix option is true, depending on the plugin implementation', async () => {
+it.skip('returns partially fixed code if the fix option is true, depending on the plugin implementation', async () => {
 	const code = stripIndent`
 		a {
 			always: 1;
@@ -725,7 +743,7 @@ describe.skip('returns partially fixed code if the fix option is true, depending
 		/* stylelint-enable plugin/fixes */`);
 });
 
-describe.skip("doesn't return any fixed code if fixing is disabled for the rule, regardless of plugin implementation", async () => {
+it.skip("doesn't return any fixed code if fixing is disabled for the rule, regardless of plugin implementation", async () => {
 	const code = `
 		a {
 			always: 1;
