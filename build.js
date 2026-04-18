@@ -16,6 +16,7 @@ const shim = [
 		'getFileIgnorer',
 		'getFormatter',
 		'getModulePath',
+		'getReferenceRoots',
 		'ident',
 		'invalidScopeDisables',
 		'isPathIgnored',
@@ -91,7 +92,6 @@ const /** @type {esbuild.Plugin} */ plugin = {
 				filter: new RegExp(
 					String.raw`/(?:${toSorted}/index|${
 						[
-							'getPostcssResult',
 							'lintSource',
 							'reportUnknownRuleNames',
 							'postcss',
@@ -138,12 +138,6 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						contents = contents.replace(
 							/(?<=^([ \t]+)showSourceCode\().+?^\1\}$/msu,
 							') { return ""; }',
-						);
-						break;
-					case 'getPostcssResult':
-						contents = contents.replace(
-							/(?<=^async function getCustomSyntax\().+?^\}$/msu,
-							') {}',
 						);
 						break;
 					case 'import':

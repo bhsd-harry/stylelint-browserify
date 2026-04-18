@@ -3,3 +3,4 @@
 /coverage/
 /build
 /.eslintcache
+/package-lock.json

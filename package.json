@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "17.8.0",
+	"version": "17.9.0",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
@@ -26,6 +26,7 @@
 		"url": "git+https://github.com/bhsd-harry/stylelint-browserify.git"
 	},
 	"scripts": {
+		"ls": "npm i --package-lock-only && npm ls --package-lock-only --all --omit=dev",
 		"lint:ts": "tsc && eslint --cache . && eslint --no-ignore --no-config-lookup -c eslint.build.mjs --report-unused-disable-directives-severity 0 build/stylelint*.js",
 		"lint:bundle": "eslint --no-ignore --no-config-lookup --rule 'no-unused-vars: [2, {args: \"none\"}]' build/stylelint.js",
 		"lint:md": "markdownlint-cli2 '**/*.md'",
@@ -49,12 +50,12 @@
 		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/mocha": "^10.0.10",
 		"@types/node": "^24.11.0",
-		"@typescript-eslint/eslint-plugin": "^8.58.1",
-		"@typescript-eslint/parser": "^8.58.1",
+		"@typescript-eslint/eslint-plugin": "^8.58.2",
+		"@typescript-eslint/parser": "^8.58.2",
 		"c8": "^11.0.0",
 		"common-tags": "^1.8.2",
 		"esbuild": "^0.28.0",
-		"eslint": "^10.2.0",
+		"eslint": "^10.2.1",
 		"eslint-plugin-es-x": "^9.6.0",
 		"eslint-plugin-jsdoc": "^62.9.0",
 		"eslint-plugin-jsonc": "^3.1.2",
@@ -63,12 +64,12 @@
 		"eslint-plugin-regexp": "^3.1.0",
 		"eslint-plugin-unicorn": "^64.0.0",
 		"globals": "^17.5.0",
-		"markdownlint-cli2": "~0.21.0",
+		"markdownlint-cli2": "^0.22.1",
 		"mocha": "^11.7.5",
-		"stylelint": "^17.8.0",
-		"typescript": "^6.0.2"
+		"stylelint": "^17.9.0",
+		"typescript": "^6.0.3"
 	},
 	"overrides": {
-		"eslint": "^10.2.0"
+		"eslint": "^10.2.1"
 	}
 }
