@@ -50,8 +50,8 @@
 		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/mocha": "^10.0.10",
 		"@types/node": "^24.11.0",
-		"@typescript-eslint/eslint-plugin": "^8.59.0",
-		"@typescript-eslint/parser": "^8.59.0",
+		"@typescript-eslint/eslint-plugin": "^8.59.1",
+		"@typescript-eslint/parser": "^8.59.1",
 		"c8": "^11.0.0",
 		"common-tags": "^1.8.2",
 		"esbuild": "^0.28.0",
@@ -60,16 +60,14 @@
 		"eslint-plugin-jsdoc": "^62.9.0",
 		"eslint-plugin-jsonc": "^3.1.2",
 		"eslint-plugin-n": "^17.24.0",
-		"eslint-plugin-promise": "^7.2.1",
+		"eslint-plugin-promise": "^7.3.0",
 		"eslint-plugin-regexp": "^3.1.0",
 		"eslint-plugin-unicorn": "^64.0.0",
+		"eslint-plugin-yml": "^3.3.2",
 		"globals": "^17.5.0",
 		"markdownlint-cli2": "^0.22.1",
 		"mocha": "^11.7.5",
 		"stylelint": "^17.9.1",
 		"typescript": "^6.0.3"
-	},
-	"overrides": {
-		"eslint": "^10.2.1"
 	}
 }
