@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "17.9.1",
+	"version": "17.10.0",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
@@ -45,7 +45,7 @@
 		]
 	},
 	"devDependencies": {
-		"@bhsd/code-standard": "^2.3.0",
+		"@bhsd/code-standard": "^2.4.0",
 		"@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",
 		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/mocha": "^10.0.10",
@@ -55,7 +55,7 @@
 		"c8": "^11.0.0",
 		"common-tags": "^1.8.2",
 		"esbuild": "^0.28.0",
-		"eslint": "^10.2.1",
+		"eslint": "^10.3.0",
 		"eslint-plugin-es-x": "^9.6.0",
 		"eslint-plugin-jsdoc": "^62.9.0",
 		"eslint-plugin-jsonc": "^3.1.2",
@@ -67,7 +67,7 @@
 		"globals": "^17.5.0",
 		"markdownlint-cli2": "^0.22.1",
 		"mocha": "^11.7.5",
-		"stylelint": "^17.9.1",
+		"stylelint": "^17.10.0",
 		"typescript": "^6.0.3"
 	}
 }
