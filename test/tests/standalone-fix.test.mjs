@@ -24,6 +24,8 @@ it('outputs fixed code when input is code string', async () => {
 	});
 
 	expect(result.code).toBe('a { color: #fff; }');
+
+	expect(result.results[0].autofixed).toBe(true);
 });
 
 it('fixes when enabled in config', async () => {
@@ -39,6 +41,24 @@ it('fixes when enabled in config', async () => {
 	});
 
 	expect(result.code).toBe('a { color: #fff; }');
+
+	expect(result.results[0].autofixed).toBe(true);
+});
+
+it.skip("doesn't report autofixed when code input is ignored by config", async () => {
+	const result = await standalone({
+		code: 'a { color: #ffffff; }',
+
+		config: {
+			ignoreFiles: fixturesPath('fix.css'),
+			rules: {
+				'color-hex-length': 'short',
+			},
+		},
+		fix: true,
+	});
+
+	expect(result.results[0].autofixed).toBeUndefined();
 });
 
 describe('fix callback', () => {
@@ -469,6 +489,7 @@ describe.skip('writing fixes to files', () => {
 		expect(fileContent).toBe(postcssResult.root.toString(postcssResult.opts.syntax));
 
 		expect(result.code).toBeUndefined();
+		expect(result.results[0].autofixed).toBe(true);
 	});
 
 	it("doesn't write to ignored file", async () => {
@@ -492,6 +513,7 @@ describe.skip('writing fixes to files', () => {
 		expect(newFile).toBe(oldFile);
 
 		expect(result.code).toBeUndefined();
+		expect(result.results[0].autofixed).toBeUndefined();
 	});
 
 	it.skip("doesn't strip BOM", async () => {
@@ -637,6 +659,7 @@ it("doesn't return the fixed code if the fix option is false", async () => {
 	});
 
 	expect(result.code).toBeUndefined();
+	expect(result.results[0].autofixed).toBeUndefined();
 });
 
 it('returns the original code if the fix option is true but the code is not fixable', async () => {
@@ -655,6 +678,7 @@ it('returns the original code if the fix option is true but the code is not fixa
 	});
 
 	expect(result.code).toBe(code);
+	expect(result.results[0].autofixed).toBeUndefined();
 });
 
 it.skip("doesn't return any fixed code if the fix option is false, regardless of plugin implementation", async () => {
@@ -677,6 +701,7 @@ it.skip("doesn't return any fixed code if the fix option is false, regardless of
 	});
 
 	expect(result.code).toBeUndefined();
+	expect(result.results[0].autofixed).toBeUndefined();
 });
 
 /**
@@ -741,6 +766,8 @@ it.skip('returns partially fixed code if the fix option is true, depending on th
 			when-fixer: 3;
 		}
 		/* stylelint-enable plugin/fixes */`);
+
+	expect(result.results[0].autofixed).toBe(true);
 });
 
 it.skip("doesn't return any fixed code if fixing is disabled for the rule, regardless of plugin implementation", async () => {
@@ -763,6 +790,7 @@ it.skip("doesn't return any fixed code if fixing is disabled for the rule, regar
 	});
 
 	expect(result.code).toBeUndefined();
+	expect(result.results[0].autofixed).toBeUndefined();
 });
 
 suite('standalone with fix options for CSS syntax errors', () => {
@@ -792,6 +820,7 @@ suite('standalone with fix options for CSS syntax errors', () => {
 			expect(result.errored).toBe(false);
 			expect(result.results[0].warnings).toHaveLength(0);
 			expect(result.code).toBe(cssWithSyntaxError);
+			expect(result.results[0].autofixed).toBeUndefined();
 		});
 
 		it('should fix incomplete rule', async () => {
@@ -804,6 +833,7 @@ suite('standalone with fix options for CSS syntax errors', () => {
 			expect(result.errored).toBe(false);
 			expect(result.results[0].warnings).toHaveLength(0);
 			expect(result.code).toBe(expectedFixedIncompleteRule);
+			expect(result.results[0].autofixed).toBe(true);
 		});
 
 		it('should fix non-syntax errors', async () => {
@@ -816,6 +846,7 @@ suite('standalone with fix options for CSS syntax errors', () => {
 			expect(result.errored).toBe(false);
 			expect(result.results[0].warnings).toHaveLength(0);
 			expect(result.code).toBe(expectedFixedCode);
+			expect(result.results[0].autofixed).toBe(true);
 		});
 	});
 
@@ -830,6 +861,8 @@ suite('standalone with fix options for CSS syntax errors', () => {
 			expect(result.errored).toBe(true);
 			expect(result.results[0].warnings).toHaveLength(1);
 			expect(result.results[0].warnings[0].rule).toBe('CssSyntaxError');
+			expect(result.results[0].autofixed).toBeUndefined();
+			expect(result.code).toBeUndefined();
 		});
 
 		it('should throw error for incomplete rule', async () => {
@@ -842,6 +875,8 @@ suite('standalone with fix options for CSS syntax errors', () => {
 			expect(result.errored).toBe(true);
 			expect(result.results[0].warnings).toHaveLength(1);
 			expect(result.results[0].warnings[0].rule).toBe('CssSyntaxError');
+			expect(result.results[0].autofixed).toBeUndefined();
+			expect(result.code).toBeUndefined();
 		});
 
 		it('should fix non-syntax errors', async () => {
@@ -854,6 +889,7 @@ suite('standalone with fix options for CSS syntax errors', () => {
 			expect(result.errored).toBe(false);
 			expect(result.results[0].warnings).toHaveLength(0);
 			expect(result.code).toBe(expectedFixedCode);
+			expect(result.results[0].autofixed).toBe(true);
 		});
 	});
 });
