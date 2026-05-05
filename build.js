@@ -122,14 +122,14 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					base = path.basename(basename, extname);
 				switch (base) {
 					case 'attribute':
-						contents = contents.replace(
+						contents = contents.replaceAll(
 							/^([ \t]+)_proto\.(getQuotedValue|_determineQuoteMark|setValue|(?:smart|preferred)QuoteMark) = function \2\(.+?^\1\};?$/gmsu,
 							'',
 						);
 						break;
 					case 'container':
 					case 'node':
-						contents = contents.replace(
+						contents = contents.replaceAll(
 							/^([ \t]+)(?:getProxyProcessor|toProxy|cleanRaws|replaceValues)\(.+?^\1\}$/gmsu,
 							'',
 						);
@@ -157,7 +157,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						break;
 					case 'lazy-result':
 						contents = contents
-							.replace(
+							.replaceAll(
 								/^([ \t]+)(?:catch|finally|then|runOnRoot|handleError|visitTick|(?:visit|walk)Sync)\(.+?^\1\}$/gmsu,
 								'',
 							)
@@ -187,7 +187,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							);
 						break;
 					case 'Lexer':
-						contents = contents.replace(
+						contents = contents.replaceAll(
 							/^([ \t]+)(?:find\w+Fragments|match|dump|toString|validate|checkStructure|match(?:Declaration|Type)|get(?:Atrule\w+|Type))\(.+?^\1\}$/gmsu,
 							'',
 						);
@@ -199,13 +199,13 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						);
 						break;
 					case 'List':
-						contents = contents.replace(
+						contents = contents.replaceAll(
 							/^([ \t]+)(?:fromArray|forEachRight|copy|(?:next|prev)Until|(?:prepend|insert)Data|(?:pre|ap)pendList)\(.+?^\1\}$/gmsu,
 							'',
 						);
 						break;
 					case 'map-generator':
-						contents = contents.replace(
+						contents = contents.replaceAll(
 							/^([ \t]+)(?!constructor|clearAnnotation|generate\b)\w+\(.+?^\1\}$/gmsu,
 							'',
 						);
@@ -228,7 +228,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 									/^([ \t]+)use\(.+?^\1\}$/msu,
 									'',
 								)
-							: contents.replace(
+							: contents.replaceAll(
 								/^([ \t]+)_proto\.(_shouldUpdateSelector|_run|ast|process|transform(?:Sync)?) = function \2\d*\(.+?^\1\};?$/gmsu,
 								'',
 							);

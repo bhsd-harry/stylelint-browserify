@@ -1,6 +1,7 @@
 /.vscode/
 /bundle/
-/coverage/
+/coverage/*
+!/coverage/badge.svg
 /build
 /.eslintcache
 /package-lock.json

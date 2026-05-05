@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-structured-clone */
 import assert from 'assert';
 import {fileURLToPath} from 'url';
 import {basename} from 'path';
@@ -37,7 +38,7 @@ Object.assign(globalThis, {
 					}
 					assert.partialDeepStrictEqual(
 						(await stylelint.lint({code, config: cfg})).results[0].warnings,
-						(warnings ?? [{fix, line, column, endLine, endColumn}]).map(partial),
+						(warnings ?? [{fix, line, column, endLine, endColumn}]).map(warning => partial(warning)),
 					);
 				});
 			}
