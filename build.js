@@ -142,7 +142,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						break;
 					case 'import':
 						contents = contents.replace(
-							/(?<=^const parseFunctions = \{).+?^(?=\};$)/msu,
+							/(?<=^const parseFunctions = \{).+?(?=^\};$)/msu,
 							'',
 						);
 						break;
@@ -283,6 +283,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		globby: './shim/globby.mjs',
 		'mathml-tag-names': './shim/mathml-tag-names.mjs',
 		micromatch: './shim/micromatch.mjs',
+		'nanoid/non-secure': './shim/nanoid.js',
 		'normalize-path': './shim/normalize-path.mjs',
 		'node:os': './shim/os.mjs',
 		path: './shim/path.mjs',

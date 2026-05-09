@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import {updateBadge} from '@bhsd/test-util';
 import coverageData from '../coverage/coverage-final.json' with {type: 'json'};
 
 const filePath = fs.realpathSync(path.join('build', 'stylelint.js')),
@@ -31,3 +32,4 @@ fs.writeFileSync(
 	path.join('coverage', 'uncovered-lines.txt'),
 	uncoveredLineSummary.map(({start, end}) => `${start}-${end}`).join('\n'),
 );
+updateBadge();
