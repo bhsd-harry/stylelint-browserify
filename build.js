@@ -3,7 +3,8 @@
 
 const path = require('path'),
 	fs = require('fs'),
-	esbuild = require('esbuild');
+	esbuild = require('esbuild'),
+	{red} = require('@bhsd/nodejs');
 
 const shim = [
 		// 'augmentConfig', // implicitly shimmed by getConfigForFile
@@ -15,7 +16,6 @@ const shim = [
 		'getConfigForFile',
 		'getFileIgnorer',
 		'getFormatter',
-		'getModulePath',
 		'getReferenceRoots',
 		'ident',
 		'invalidScopeDisables',
@@ -31,6 +31,7 @@ const shim = [
 		'stripComments',
 		'suppressionsService',
 		'timing',
+		'trace',
 		'unscopedDisables',
 		'warn-once',
 	],
@@ -111,14 +112,16 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							'postcss',
 							'dist/processor',
 							'lib/processor',
+							'structure',
 						].join('|')
 					})\.js$`,
 				),
 			},
 			({path: p}) => {
 				const basename = path.basename(p),
-					extname = path.extname(basename);
-				let contents = fs.readFileSync(p, 'utf8'),
+					extname = path.extname(basename),
+					original = fs.readFileSync(p, 'utf8');
+				let contents = original,
 					base = path.basename(basename, extname);
 				switch (base) {
 					case 'attribute':
@@ -249,6 +252,12 @@ const /** @type {esbuild.Plugin} */ plugin = {
 								/(?<=function postProcessStylelintResult\().+^\}$/msu,
 								') {}',
 							);
+						break;
+					case 'structure':
+						contents = contents.replace(
+							/(?<= = )processStructure\(.+(?=;$)/mu,
+							'{}',
+						);
 					// no default
 				}
 				if (min) {
@@ -259,6 +268,9 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					} else {
 						fs.copyFileSync(p, path.resolve(loadPath, basename));
 					}
+				}
+				if (contents === original) {
+					console.error(red(`No changes were made to ${p}`));
 				}
 				return {contents};
 			},
@@ -311,7 +323,7 @@ const /** @type {esbuild.BuildOptions} */ config = {
 	});
 	if (shimSet.size > 0) {
 		console.error(
-			`The following shims were not used in the bundle: ${[...shimSet].join(', ')}`,
+			red('The following shims were not used in the bundle: ') + [...shimSet].join(', '),
 		);
 	}
 })();
