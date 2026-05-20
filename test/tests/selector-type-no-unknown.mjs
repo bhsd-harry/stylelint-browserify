@@ -96,7 +96,7 @@ testRule({
 			description: 'obsolete tag',
 		},
 		{
-			code: 'fencedframe, listbox, model, portal, selectlist, selectedcontent, geolocation, usermedia {}',
+			code: 'fencedframe, listbox, model, portal, selectlist, selectedcontent, geolocation, usermedia, install {}',
 			description: 'experimental tags',
 		},
 		{
