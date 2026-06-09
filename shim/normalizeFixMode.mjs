@@ -1,2 +1,2 @@
 export default fix =>
-	fix === true || fix === 'true' || fix === '' || fix === 'strict' || fix === 'lax' ? 'strict' : undefined;
+	[true, 'true', '', 'strict', 'lax'].includes(fix) ? 'strict' : undefined;
