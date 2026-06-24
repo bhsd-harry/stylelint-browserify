@@ -42,7 +42,7 @@ testRule({
 			endColumn: 2,
 		},
 		{
-			code: '   ',
+			code: ' '.repeat(3),
 			description: 'source with spaces',
 			message: messages.rejected,
 			line: 1,
@@ -78,7 +78,7 @@ testRule({
 			endColumn: 2,
 		},
 		{
-			code: '\n\n\n',
+			code: '\n'.repeat(3),
 			description: 'source with multiple newline',
 			message: messages.rejected,
 			line: 1,

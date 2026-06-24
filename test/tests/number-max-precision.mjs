@@ -113,7 +113,7 @@ testRule({
 	reject: [
 		{
 			code: 'a { top: 3.12345%; }',
-			message: messages.expected(3.123_45, 3.1235),
+			message: messages.expected(3.12345, 3.1235),
 			line: 1,
 			column: 10,
 			endLine: 1,
@@ -121,7 +121,7 @@ testRule({
 		},
 		{
 			code: 'a { padding: 6.12345% 3.1234%; }',
-			message: messages.expected(6.123_45, 6.1235),
+			message: messages.expected(6.12345, 6.1235),
 			line: 1,
 			column: 14,
 			endLine: 1,
@@ -129,7 +129,7 @@ testRule({
 		},
 		{
 			code: '@media (min-width: 5.12345em) {}',
-			message: messages.expected(5.123_45, 5.1235),
+			message: messages.expected(5.12345, 5.1235),
 			line: 1,
 			column: 20,
 			endLine: 1,
@@ -415,7 +415,7 @@ testRule({
 	reject: [
 		{
 			code: 'a { color: oklch(0.12345 0.1234 0.1234); }',
-			message: messages.expected(0.123_45, 0.1235),
+			message: messages.expected(0.12345, 0.1235),
 			line: 1,
 			column: 18,
 			endLine: 1,

@@ -4,7 +4,7 @@
 const path = require('path'),
 	fs = require('fs'),
 	esbuild = require('esbuild'),
-	{red} = require('@bhsd/nodejs');
+	{red, ReplacableString} = require('@bhsd/nodejs');
 
 const shim = [
 		// 'augmentConfig', // implicitly shimmed by getConfigForFile
@@ -120,31 +120,38 @@ const /** @type {esbuild.Plugin} */ plugin = {
 			({path: p}) => {
 				const basename = path.basename(p),
 					extname = path.extname(basename),
-					original = fs.readFileSync(p, 'utf8');
-				let contents = original,
-					base = path.basename(basename, extname);
+					contents = new ReplacableString(fs.readFileSync(p, 'utf8'));
+				let base = path.basename(basename, extname);
 				switch (base) {
 					case 'attribute':
-						contents = contents.replaceAll(
-							/^([ \t]+)_proto\.(getQuotedValue|_determineQuoteMark|setValue|(?:smart|preferred)QuoteMark) = function \2\(.+?^\1\};?$/gmsu,
+						contents.replaceAll(
+							/^([ \t]+)Attribute\.prototype\.(getQuotedValue|_determineQuoteMark|setValue|(?:smart|preferred)QuoteMark) = function\s*\(.+?^\1\};?$/gmsu,
 							'',
+							5,
 						);
 						break;
 					case 'container':
-					case 'node':
-						contents = contents.replaceAll(
-							/^([ \t]+)(?:getProxyProcessor|toProxy|cleanRaws|replaceValues)\(.+?^\1\}$/gmsu,
+						contents.replaceAll(
+							/^([ \t]+)(?:getProxyProcessor|cleanRaws|replaceValues)\(.+?^\1\}$/gmsu,
 							'',
+							3,
+						);
+						break;
+					case 'node':
+						contents.replaceAll(
+							/^([ \t]+)(?:getProxyProcessor|toProxy|cleanRaws)\(.+?^\1\}$/gmsu,
+							'',
+							3,
 						);
 						break;
 					case 'css-syntax-error':
-						contents = contents.replace(
+						contents.replace(
 							/(?<=^([ \t]+)showSourceCode\().+?^\1\}$/msu,
 							') { return ""; }',
 						);
 						break;
 					case 'import':
-						contents = contents.replace(
+						contents.replace(
 							/(?<=^const parseFunctions = \{).+?(?=^\};$)/msu,
 							'',
 						);
@@ -152,17 +159,19 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					case 'index':
 						base = path.basename(p.slice(0, p.lastIndexOf('/')));
 						if (base === toSorted) {
-							contents = contents.replaceAll(
-								'.toSorted(',
+							contents.replace(
+								/\.toSorted\(/gu,
 								'.slice().sort(',
+								true,
 							);
 						}
 						break;
 					case 'lazy-result':
-						contents = contents
+						contents
 							.replaceAll(
 								/^([ \t]+)(?:catch|finally|then|runOnRoot|handleError|visitTick|(?:visit|walk)Sync)\(.+?^\1\}$/gmsu,
 								'',
+								8,
 							)
 							.replace(
 								/(?<=^([ \t]+)prepareVisitors\().+?^\1\}$/msu,
@@ -190,39 +199,43 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							);
 						break;
 					case 'Lexer':
-						contents = contents.replaceAll(
-							/^([ \t]+)(?:find\w+Fragments|match|dump|toString|validate|checkStructure|match(?:Declaration|Type)|get(?:Atrule\w+|Type))\(.+?^\1\}$/gmsu,
+						contents.replaceAll(
+							/^([ \t]+)(?:find(?:(?:Declaration)?Value|All)Fragments|match|dump|toString|validate|checkStructure|match(?:Declaration|Type)|get(?:Atrule(?:Prelude|Descriptor)|Type))\(.+?^\1\}$/gmsu,
 							'',
+							13,
 						);
 						break;
 					case 'lintSource':
-						contents = contents.replace(
+						contents.replace(
 							/(?<=^function createEmptyPostcssResult\().+?^\}/msu,
 							') {}',
 						);
 						break;
 					case 'List':
-						contents = contents.replaceAll(
+						contents.replaceAll(
 							/^([ \t]+)(?:fromArray|forEachRight|copy|(?:next|prev)Until|(?:prepend|insert)Data|(?:pre|ap)pendList)\(.+?^\1\}$/gmsu,
 							'',
+							9,
 						);
 						break;
 					case 'map-generator':
-						contents = contents.replaceAll(
+						contents.replace(
 							/^([ \t]+)(?!constructor|clearAnnotation|generate\b)\w+\(.+?^\1\}$/gmsu,
 							'',
+							true,
 						);
 						break;
 					case 'postcss':
-						contents = contents.replace(
+						contents.replace(
 							extname === '.mjs' ? /^export const (?!Node ).+$/gmu : /^postcss\.plugin = .+?^\}$/msu,
 							'',
+							true,
 						);
 						break;
 					case 'processor':
 						base = path.basename(p.slice(0, p.lastIndexOf('/')));
-						contents = base === 'lib'
-							? contents
+						if (base === 'lib') {
+							contents
 								.replace(
 									/(?<=^([ \t]+)normalize\().+?^\1\}$/msu,
 									') { return []; }',
@@ -230,20 +243,23 @@ const /** @type {esbuild.Plugin} */ plugin = {
 								.replace(
 									/^([ \t]+)use\(.+?^\1\}$/msu,
 									'',
-								)
-							: contents.replaceAll(
-								/^([ \t]+)_proto\.(_shouldUpdateSelector|_run|ast|process|transform(?:Sync)?) = function \2\d*\(.+?^\1\};?$/gmsu,
+								);
+						} else {
+							contents.replaceAll(
+								/^([ \t]+)Processor\.prototype\.(_shouldUpdateSelector|_run|ast|process|transform(?:Sync)?) = function\s*\(.+?^\1\};?$/gmsu,
 								'',
+								6,
 							);
+						}
 						break;
 					case 'reportUnknownRuleNames':
-						contents = contents.replace(
+						contents.replace(
 							/(?<=^function extractSuggestions\().+?^\}$/msu,
 							') { return []; }',
 						);
 						break;
 					case 'standalone':
-						contents = contents
+						contents
 							.replace(
 								/let fileList = .+?return result;\n\}/su,
 								'}',
@@ -254,7 +270,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							);
 						break;
 					case 'structure':
-						contents = contents.replace(
+						contents.replace(
 							/(?<= = )processStructure\(.+(?=;$)/mu,
 							'{}',
 						);
@@ -269,10 +285,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						fs.copyFileSync(p, path.resolve(loadPath, basename));
 					}
 				}
-				if (contents === original) {
-					console.error(red(`No changes were made to ${p}`));
-				}
-				return {contents};
+				return {contents: contents.input};
 			},
 		);
 	},

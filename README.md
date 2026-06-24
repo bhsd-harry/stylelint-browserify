@@ -1,7 +1,6 @@
 # Stylelint-browserify
 
 [![npm version](https://badge.fury.io/js/@bhsd%2Fstylelint-browserify.svg)](https://www.npmjs.com/package/@bhsd/stylelint-browserify)
-[![NPM downloads](https://img.shields.io/npm/dm/%40bhsd%2Fstylelint-browserify)](https://www.npmjs.com/package/@bhsd/stylelint-browserify)
 [![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/%40bhsd/stylelint-browserify)](https://www.npmjs.com/package/@bhsd/stylelint-browserify)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/144196256274430b871abc36e9aa7d86)](https://app.codacy.com/gh/bhsd-harry/stylelint-browserify/dashboard)
 ![Coverage](./coverage/badge.svg)
