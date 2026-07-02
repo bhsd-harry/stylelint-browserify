@@ -2,11 +2,15 @@
 import assert from 'assert';
 import {fileURLToPath} from 'url';
 import {basename} from 'path';
+import {describe, it, beforeEach} from '@bhsd/test-util/mocha';
 
 const partial = ({line, column, endLine, endColumn, fix}) =>
 	JSON.parse(JSON.stringify({line, column, endLine, endColumn, fix}));
 
 Object.assign(globalThis, {
+	describe,
+	it,
+	beforeEach,
 	filename(importMetaUrl) {
 		return basename(fileURLToPath(importMetaUrl), '.mjs');
 	},

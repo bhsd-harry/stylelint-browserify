@@ -1,7 +1,0 @@
-{
-	"reporter": "progress",
-	"require": [
-		"test/mocha.mjs"
-	],
-	"spec": "test/tests/*.mjs"
-}
