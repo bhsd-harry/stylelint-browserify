@@ -1,5 +1,4 @@
 import {jsDoc, node, extend} from '@bhsd/code-standard';
-import globals from 'globals';
 
 export default extend(
 	jsDoc,
@@ -8,15 +7,18 @@ export default extend(
 		ignores: [
 			'bundle/',
 			'coverage/',
+			'index-coverage.mjs',
 		],
 	},
 	{
 		files: ['test/**/*.mjs'],
 		languageOptions: {
 			globals: {
-				...globals.mocha,
+				beforeEach: 'readonly',
+				describe: 'readonly',
 				expect: 'readonly',
 				filename: 'readonly',
+				it: 'readonly',
 				stylelint: 'readonly',
 				testRule: 'readonly',
 				testRuleConfigs: 'readonly',

@@ -1,21 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import {updateBadge} from '@bhsd/test-util';
-import coverageData from '../coverage/coverage-final.json' with {type: 'json'};
+import coverageData from '../coverage/coverage.json' with {type: 'json'};
 
 const filePath = fs.realpathSync(path.join('build', 'stylelint.js')),
-	fileCoverage = coverageData[filePath],
-	{s, statementMap} = fileCoverage,
-	fileUncoveredLines = new Set();
-for (const statementId in s) {
-	if (s[statementId] === 0) {
-		const {line} = statementMap[statementId].start;
-		if (!fileUncoveredLines.has(line)) {
-			fileUncoveredLines.add(line);
-		}
-	}
-}
-const uncoveredLines = [...fileUncoveredLines].toSorted((a, b) => a - b),
+	fileCoverage = coverageData.files.find(({path}) => path === filePath),
+	uncoveredLines = fileCoverage.lines.filter(({count}) => count === 0).map(({line}) => line),
 	uncoveredLineSummary = [];
 for (let i = 0; i < uncoveredLines.length;) {
 	const start = uncoveredLines[i];
