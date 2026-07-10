@@ -103,6 +103,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							'attribute',
 							'lib/container',
 							'css-syntax-error',
+							'generic',
 							'import',
 							'lazy-result',
 							'Lexer',
@@ -137,17 +138,16 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							3,
 						);
 						break;
-					case 'node':
-						contents.replaceAll(
-							/^([ \t]+)(?:getProxyProcessor|toProxy|cleanRaws)\(.+?^\1\}$/gmsu,
-							'',
-							3,
-						);
-						break;
 					case 'css-syntax-error':
 						contents.replace(
 							/(?<=^([ \t]+)showSourceCode\().+?^\1\}$/msu,
 							') { return ""; }',
+						);
+						break;
+					case 'generic':
+						contents.replace(
+							/^[ \t]*'an-plus-b': .+$/mu,
+							'',
 						);
 						break;
 					case 'import':
@@ -223,6 +223,13 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							/^([ \t]+)(?!constructor|clearAnnotation|generate\b)\w+\(.+?^\1\}$/gmsu,
 							'',
 							true,
+						);
+						break;
+					case 'node':
+						contents.replaceAll(
+							/^([ \t]+)(?:getProxyProcessor|toProxy|cleanRaws)\(.+?^\1\}$/gmsu,
+							'',
+							3,
 						);
 						break;
 					case 'postcss':
