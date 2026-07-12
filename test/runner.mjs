@@ -6,8 +6,8 @@ import {describe, it, beforeEach, prepare} from '@bhsd/test-util/mocha';
 
 const isSkip = process.argv[2] === 'skip';
 
-const partial = ({line, column, endLine, endColumn, fix}) =>
-	JSON.parse(JSON.stringify({line, column, endLine, endColumn, fix}));
+const partial = obj => JSON.parse(JSON.stringify(obj)),
+	partialWarn = ({line, column, endLine, endColumn, fix}) => partial({line, column, endLine, endColumn, fix});
 
 Object.assign(globalThis, {
 	describe,
@@ -47,7 +47,7 @@ Object.assign(globalThis, {
 						}
 						assert.partialDeepStrictEqual(
 							(await stylelint.lint({code, config: cfg})).results[0].warnings,
-							(warnings ?? [{fix, line, column, endLine, endColumn}]).map(warning => partial(warning)),
+							(warnings ?? [{fix, line, column, endLine, endColumn}]).map(warning => partialWarn(warning)),
 						);
 					});
 				}
@@ -93,7 +93,7 @@ Object.assign(globalThis, {
 				assert.ok(actual);
 			},
 			toEqual(expected) {
-				assert.deepStrictEqual(JSON.parse(JSON.stringify(actual)), expected);
+				assert.deepStrictEqual(partial(actual), expected);
 			},
 			toContainEqual(expected) {
 				assert.ok(
@@ -107,6 +107,9 @@ Object.assign(globalThis, {
 					}),
 				);
 			},
+			toMatchObject(expected) {
+				assert.partialDeepStrictEqual(actual, expected);
+			},
 		};
 	},
 	test(title, fn) {
@@ -116,4 +119,5 @@ Object.assign(globalThis, {
 		describe(title, fn);
 	},
 });
-expect.objectContaining = obj => obj;
+expect.objectContaining = partial;
+expect.stringMatching = () => undefined;

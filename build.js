@@ -21,6 +21,7 @@ const shim = [
 		'invalidScopeDisables',
 		'isPathIgnored',
 		'isPathNotFoundError',
+		'map-generator',
 		'needlessDisables',
 		'normalizeFilePath',
 		'normalizeFixMode',
@@ -105,10 +106,10 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							'css-syntax-error',
 							'generic',
 							'import',
+							'input',
 							'lazy-result',
 							'Lexer',
 							'List',
-							'map-generator',
 							'lib/node',
 							'postcss',
 							'dist/processor',
@@ -121,7 +122,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 			({path: p}) => {
 				const basename = path.basename(p),
 					extname = path.extname(basename),
-					contents = new ReplacableString(fs.readFileSync(p, 'utf8'));
+					contents = new ReplacableString(fs.readFileSync(p, 'utf8'), p);
 				let base = path.basename(basename, extname);
 				switch (base) {
 					case 'attribute':
@@ -165,6 +166,18 @@ const /** @type {esbuild.Plugin} */ plugin = {
 								true,
 							);
 						}
+						break;
+					case 'input':
+						contents
+							.replaceAll(
+								/^([ \t]+)(?:mapResolve\(|if \(pathAvailable && sourceMapAvailable\)).+?^\1\}$/gmsu,
+								'',
+								2,
+							)
+							.replace(
+								/(?<=^([ \t]+)origin\().+?^\1\}$/msu,
+								') { return false; }',
+							);
 						break;
 					case 'lazy-result':
 						contents
@@ -216,13 +229,6 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							/^([ \t]+)(?:fromArray|forEachRight|copy|(?:next|prev)Until|(?:prepend|insert)Data|(?:pre|ap)pendList)\(.+?^\1\}$/gmsu,
 							'',
 							9,
-						);
-						break;
-					case 'map-generator':
-						contents.replace(
-							/^([ \t]+)(?!constructor|clearAnnotation|generate\b)\w+\(.+?^\1\}$/gmsu,
-							'',
-							true,
 						);
 						break;
 					case 'node':
