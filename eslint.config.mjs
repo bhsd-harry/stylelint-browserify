@@ -14,12 +14,15 @@ export default extend(
 		files: ['test/**/*.mjs'],
 		languageOptions: {
 			globals: {
+				afterEach: 'readonly',
 				beforeEach: 'readonly',
 				describe: 'readonly',
 				expect: 'readonly',
 				filename: 'readonly',
 				it: 'readonly',
 				stylelint: 'readonly',
+				suite: 'readonly',
+				test: 'readonly',
 				testRule: 'readonly',
 				testRuleConfigs: 'readonly',
 			},
@@ -43,6 +46,7 @@ export default extend(
 			'promise/always-return': 0,
 			'promise/prefer-await-to-then': 0,
 			'unicorn/no-unused-properties': 0,
+			'unicorn/prefer-await': 0,
 			'unicorn/prefer-code-point': 0,
 			'jsdoc/check-indentation': 0,
 			'jsdoc/require-param-description': 0,
