@@ -40,9 +40,10 @@
 		"@bhsd/code-standard": "^4.1.0",
 		"@bhsd/nodejs": "^1.2.1",
 		"@bhsd/test-util": "^3.1.2",
+		"colord": "^2.10.0",
 		"common-tags": "^1.8.2",
 		"esbuild": "^0.28.2",
-		"eslint": "^10.9.1",
+		"eslint": "^10.10.0",
 		"markdownlint-cli2": "^0.23.2",
 		"stylelint": "^17.15.0",
 		"typescript": "^6.0.3"

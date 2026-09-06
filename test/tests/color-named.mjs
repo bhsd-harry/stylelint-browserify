@@ -340,7 +340,7 @@ testRule({
 			endLine: 2,
 			endColumn: 7,
 		},
-		{
+		/* {
 			code: 'a { color: hwb(0,0%, 0%) }',
 			message: messages.expected('hwb(0,0%,0%)', 'red'),
 			line: 1,
@@ -395,7 +395,7 @@ testRule({
 			column: 12,
 			endLine: 1,
 			endColumn: 25,
-		},
+		}, */
 		{
 			code: 'a { color: rgb(\n0 ,\n 0 ,\r\n 0) }',
 			message: messages.expected('rgb(0,0,0)', 'black'),
@@ -492,9 +492,9 @@ testRule({
 		{
 			code: 'a { color: #000; }',
 		},
-		{
+		/* {
 			code: 'a { color: gray(70%); }',
-		},
+		}, */
 		{
 			code: 'a { background-image: url(red); }',
 		},

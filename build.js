@@ -8,6 +8,7 @@ const path = require('path'),
 
 const shim = [
 		// 'augmentConfig', // implicitly shimmed by getConfigForFile
+		'colordUtils',
 		'createStylelint',
 		'descriptionlessDisables',
 		'emitWarning',
