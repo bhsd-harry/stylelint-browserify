@@ -3,6 +3,7 @@ import assert from 'assert';
 import {fileURLToPath} from 'url';
 import {basename} from 'path';
 import {describe, it, beforeEach, prepare} from '@bhsd/test-util/mocha';
+import '@bhsd/test-util/color';
 
 const isSkip = process.argv[2] === 'skip';
 

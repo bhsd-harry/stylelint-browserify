@@ -25,16 +25,19 @@ A string to lint.
 
 ## The returned promise
 
-`stylelint.lint()` returns a `Promise` that resolves with an object containing the following properties:
+`stylelint.lint()` returns a `Promise` that resolves with an object containing
+the following properties:
 
 <!-- markdownlint-disable-next-line no-duplicate-heading -->
 ### `code`
 
-A string that contains the autofixed code, if the `fix` option is set to `true`. Otherwise, it is `undefined`.
+A string that contains the autofixed code, if the `fix` option is set to `true`.
+Otherwise, it is `undefined`.
 
 ### `errored`
 
-Boolean. If `true`, at least one rule with an "error"-level severity registered a problem.
+Boolean. If `true`, at least one rule with an "error"-level severity registered
+a problem.
 
 ### `report`
 
@@ -42,16 +45,21 @@ A JSON string that contains the formatted problems.
 
 ### `results`
 
-An array containing all the Stylelint result objects (the objects that formatters consume).
+An array containing all the Stylelint result objects (the objects that
+formatters consume).
 
 ### Edit info
 
-When the [`computeEditInfo` option](https://stylelint.io/user-guide/options#computeeditinfo) is enabled, a warning may include a `fix` property that provides information about suggested fixes:
+When the [`computeEditInfo` option](https://stylelint.io/user-guide/options#computeeditinfo)
+is enabled, a warning may include a `fix` property that provides information
+about suggested fixes:
 
-- `range` (`[number, number]`) - the pair of 0-based indices in source code text to remove
+- `range` (`[number, number]`) - the pair of 0-based indices in source code text
+  to remove
 - `text` (`string`) - the text to add
 
-For example, to change `a { opacity: 10%; }` to `a { opacity: 0.1; }`, the edit info might look like:
+For example, to change `a { opacity: 10%; }` to `a { opacity: 0.1; }`, the edit
+info might look like:
 
 ```jsonc
 {
@@ -63,9 +71,11 @@ For example, to change `a { opacity: 10%; }` to `a { opacity: 0.1; }`, the edit 
 }
 ```
 
-Only a single edit info will be recorded for a specific region in source code. If multiple report ranges overlap, only the first will contain edit info.
+Only a single edit info will be recorded for a specific region in source code.
+If multiple report ranges overlap, only the first will contain edit info.
 
 ## Syntax errors
 
 `stylelint.lint()` does not reject the `Promise` when your CSS contains syntax errors.
-It resolves with an object (see [the returned promise](#the-returned-promise)) that contains information about the syntax error.
+It resolves with an object (see [the returned promise](#the-returned-promise))
+that contains information about the syntax error.
