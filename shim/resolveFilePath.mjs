@@ -1,3 +1,1 @@
-export default function resolveFilePath(location) {
-	return location;
-}
+export default location => location;

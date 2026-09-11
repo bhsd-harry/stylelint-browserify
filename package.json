@@ -1,6 +1,6 @@
 {
 	"name": "@bhsd/stylelint-browserify",
-	"version": "17.15.0",
+	"version": "17.16.0",
 	"description": "Stylelint in browser",
 	"keywords": [
 		"stylelint",
@@ -28,8 +28,8 @@
 	"scripts": {
 		"ls": "npm i --package-lock-only && npm ls --package-lock-only --all --omit=dev",
 		"lint:ts": "tsc && eslint --cache --ignore-pattern 'test/tests/*.mjs' . && eslint --no-ignore --no-config-lookup -c eslint.build.mjs --report-unused-disable-directives-severity 0 build/stylelint*.js",
-		"lint:bundle": "eslint --no-ignore --no-config-lookup --rule 'no-unused-vars: [2, {args: \"none\"}]' build/stylelint.js",
 		"lint:md": "markdownlint-cli2 '**/*.md'",
+		"lint:bundle": "eslint --no-config-lookup --rule 'no-unused-vars: [2, {args: none}]' build/stylelint.js",
 		"lint": "npm run lint:ts && npm run lint:md",
 		"build": "node build.js && esbuild index.ts --charset=utf8 --bundle --minify --target=es2019 --outfile=bundle/stylelint.min.js && mv bundle/standalone.min.js.LEGAL.txt bundle/stylelint.min.js.LEGAL.txt && esbuild index-coverage.ts --charset=utf8 --target=es2019 --format=esm --outfile=index-coverage.mjs",
 		"coverage": "testUtil --import=./index-coverage.mjs --import=./test/runner.mjs --test-coverage-include='**/stylelint.js' test/tests/*.mjs && node test/coverage.mjs",
@@ -40,13 +40,13 @@
 		"@bhsd/browser": "^2.1.1",
 		"@bhsd/code-standard": "^4.2.0",
 		"@bhsd/nodejs": "^1.2.1",
-		"@bhsd/test-util": "^3.2.0",
+		"@bhsd/test-util": "^3.2.1",
 		"common-tags": "^1.8.2",
 		"culori": "^4.0.2",
 		"esbuild": "^0.28.2",
-		"eslint": "^10.10.0",
-		"markdownlint-cli2": "^0.23.2",
-		"stylelint": "^17.15.0",
+		"eslint": "^10.11.0",
+		"markdownlint-cli2": "^0.23.3",
+		"stylelint": "^17.16.0",
 		"typescript": "^6.0.3"
 	}
 }

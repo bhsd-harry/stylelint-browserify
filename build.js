@@ -104,6 +104,8 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						[
 							'attribute',
 							'lib/container',
+							'syntax/create',
+							'walker/create',
 							'css-syntax-error',
 							'generic',
 							'import',
@@ -140,6 +142,22 @@ const /** @type {esbuild.Plugin} */ plugin = {
 							3,
 						);
 						break;
+					case 'create':
+						base = path.basename(p.slice(0, p.lastIndexOf('/')));
+						if (base === 'syntax') {
+							contents.replaceAll(
+								/^[ \t]+(?:tokenize|(?:from|to)PlainObject|(?:createLexer|find(?:Last|All)): .+),$/gmu,
+								'',
+								6,
+							);
+						} else {
+							contents.replaceAll(
+								/^([ \t]+)walk\.find(?:Last|All) = .+?\1\};$/gmsu,
+								'',
+								2,
+							);
+						}
+						break;
 					case 'css-syntax-error':
 						contents.replace(
 							/(?<=^([ \t]+)showSourceCode\().+?^\1\}$/msu,
@@ -161,6 +179,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					case 'index':
 						base = path.basename(p.slice(0, p.lastIndexOf('/')));
 						if (base === toSorted) {
+							/** @todo 移除Array.prototype.toSorted的polyfill */
 							contents.replace(
 								/\.toSorted\(/gu,
 								'.slice().sort(',
@@ -171,9 +190,13 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					case 'input':
 						contents
 							.replaceAll(
-								/^([ \t]+)(?:mapResolve\(|if \(pathAvailable && sourceMapAvailable\)).+?^\1\}$/gmsu,
+								/^(?:([ \t]+)(?:mapResolve\(|if \(pathAvailable && sourceMapAvailable\))[\s\S]+?^\1\}|let sourceMapAvailable = .+)$|(?<=^([ \t]+)if \(\s+!pathAvailable)\s+\|\|[\s\S]+?\2(?=\) \{$)/gmu,
 								'',
-								2,
+								4,
+							)
+							.replace(
+								/(?<=^let pathAvailable = ).+$/mu,
+								'false',
 							)
 							.replace(
 								/(?<=^([ \t]+)origin\().+?^\1\}$/msu,
@@ -240,11 +263,18 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						);
 						break;
 					case 'postcss':
-						contents.replace(
-							extname === '.mjs' ? /^export const (?!Node ).+$/gmu : /^postcss\.plugin = .+?^\}$/msu,
-							'',
-							true,
-						);
+						if (extname === '.mjs') {
+							contents.replaceAll(
+								/^export const (?!Node ).+$/gmu,
+								'',
+								23,
+							);
+						} else {
+							contents.replace(
+								/^postcss\.plugin = .+?^\}$/msu,
+								'',
+							);
+						}
 						break;
 					case 'processor':
 						base = path.basename(p.slice(0, p.lastIndexOf('/')));
@@ -274,6 +304,11 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						break;
 					case 'standalone':
 						contents
+							.replaceAll(
+								/^[ \t]*const (?:debug|startTime) = .+;$/gmu,
+								'',
+								2,
+							)
 							.replace(
 								/let fileList = .+?return result;\n\}/su,
 								'}',
@@ -293,8 +328,8 @@ const /** @type {esbuild.Plugin} */ plugin = {
 				if (min) {
 					if (basename === 'index.mjs') {
 						fs.copyFileSync(p, path.resolve(loadPath, `${base}.mjs`));
-					} else if (basename === 'processor.js') {
-						fs.copyFileSync(p, path.resolve(loadPath, `${base}-processor.js`));
+					} else if (basename === 'processor.js' || basename === 'create.js') {
+						fs.copyFileSync(p, path.resolve(loadPath, `${base}-${basename}`));
 					} else {
 						fs.copyFileSync(p, path.resolve(loadPath, basename));
 					}
