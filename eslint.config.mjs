@@ -1,6 +1,6 @@
 import {jsDoc, node, extend} from '@bhsd/code-standard';
 
-export default extend(
+const config = extend(
 	jsDoc,
 	...node,
 	{
@@ -98,3 +98,5 @@ export default extend(
 		},
 	},
 );
+
+export default config;
