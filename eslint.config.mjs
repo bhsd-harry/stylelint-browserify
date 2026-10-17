@@ -1,6 +1,6 @@
-import {jsDoc, node, extend} from '@bhsd/code-standard';
+import {jsDoc, node, extend, getOxlintConfig} from '@bhsd/code-standard';
 
-const config = extend(
+const config = getOxlintConfig(extend(
 	jsDoc,
 	...node,
 	{
@@ -97,6 +97,6 @@ const config = extend(
 			sourceType: 'module',
 		},
 	},
-);
+));
 
 export default config;

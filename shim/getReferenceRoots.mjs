@@ -1,1 +1,1 @@
-export default async () => []; // eslint-disable-line require-await
+export default async () => []; // oxlint-disable-line require-await

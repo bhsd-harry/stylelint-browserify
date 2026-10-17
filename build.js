@@ -1,4 +1,4 @@
-/* eslint-disable require-unicode-regexp */
+/* oxlint-disable require-unicode-regexp */
 'use strict';
 
 const path = require('path'),
@@ -243,10 +243,15 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						);
 						break;
 					case 'lintSource':
-						contents.replace(
-							/(?<=^function createEmptyPostcssResult\().+?^\}/msu,
-							') {}',
-						);
+						contents
+							.replace(
+								/^([ \t]+)if \(options\.cache\) \{.+?^\1\}$/msu,
+								'',
+							)
+							.replace(
+								/(?<=^function createEmptyPostcssResult\().+?^\}/msu,
+								') {}',
+							);
 						break;
 					case 'List':
 						contents.replaceAll(
@@ -305,9 +310,9 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					case 'standalone':
 						contents
 							.replaceAll(
-								/^[ \t]*const (?:debug|startTime) = .+;$/gmu,
+								/^([ \t]*)(?:const (?:debug|startTime) = .+;|if \(\n[ \t]+absoluteCodeFilename &&[\s\S]+?^\1\})$/gmu,
 								'',
-								2,
+								3,
 							)
 							.replace(
 								/let fileList = .+?return result;\n\}/su,

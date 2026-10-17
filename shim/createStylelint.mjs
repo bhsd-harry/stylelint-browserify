@@ -1,4 +1,4 @@
-import process from 'node:process'; // eslint-disable-line no-shadow
+import process from 'node:process'; // oxlint-disable-line no-shadow
 
 export default (options = {}) => {
 	const cwd = options.cwd || process.cwd();

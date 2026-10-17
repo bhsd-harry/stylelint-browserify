@@ -7,7 +7,7 @@ import '@bhsd/test-util/color';
 
 const isSkip = process.argv[2] === 'skip';
 
-const partial = obj => JSON.parse(JSON.stringify(obj)),
+const partial = obj => JSON.parse(JSON.stringify(obj)), // oxlint-disable-line unicorn/prefer-structured-clone
 	partialWarn = ({line, column, endLine, endColumn, fix}) => partial({line, column, endLine, endColumn, fix});
 
 Object.assign(globalThis, {

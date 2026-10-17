@@ -484,7 +484,7 @@ testRule({
 			code: 'a { @media (min-width: 960px) { body { font-size: 13em } } }',
 		},
 		{
-			code: '@media print and (min-resolution: 300dpi) { body { font-size: 13em } }',
+			code: '@media print and (min-resolution: 300dpi) {\u{A0}body { font-size: 13em } }',
 		},
 		{
 			code: '@media print { body { font-size: 40pt } }',

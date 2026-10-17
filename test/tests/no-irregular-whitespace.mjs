@@ -6,8 +6,8 @@ import rule from '../index.mjs';
 const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
 const IRREGULAR_WHITESPACES = [
-	'\u000B', // Line Tabulation (\v) - <VT>
-	'\u000C', // Form Feed (\f) - <FF>
+	'\v', // Line Tabulation (\v) - <VT>
+	'\f', // Form Feed (\f) - <FF>
 	'\u00A0', // No-Break Space - <NBSP>
 	'\u0085', // Next Line
 	'\u1680', // Ogham Space Mark
@@ -48,7 +48,7 @@ testRule({
 			description: 'new line',
 		},
 		{
-			code: '/* Irregular whitespace\nin multi line comments\nare allowed */',
+			code: '/* Irregular\u{A0}whitespace\nin\u{A0}multi line comments\nare\u{A0}allowed */',
 			description: 'irregular whitespace in multi line comments',
 		},
 		{
@@ -147,16 +147,16 @@ testRule({
 			code: ':nth-child(" 2n+ 1\u00A0")',
 		},
 		{
-			code: 'a/*foo bar*/[attr="test"] {}',
+			code: 'a/*foo\u{A0}bar*/[attr="test"] {}',
 		},
 		{
 			code: 'a { /* comment\u00A0*/ color: red; }',
 		},
 		{
-			code: 'a { grid-template-areas: /* "comment " */ none /* " comment " */; }',
+			code: 'a { grid-template-areas: /* "comment\u{A0}" */ none /* "\u{A0}comment " */; }',
 		},
 		{
-			code: 'a { grid-template-areas: /* comment  */ none /*  comment */; }',
+			code: 'a { grid-template-areas: /* comment\u{A0} */ none /* \u{A0}comment */; }',
 		},
 		{
 			code: 'a { cursor: url("pointer.cur\u00A0"), pointer; }',
@@ -168,7 +168,7 @@ testRule({
 
 	reject: [
 		{
-			code: '@ charset "utf-8"',
+			code: '@\u{A0}charset "utf-8"',
 			description: 'irregular whitespace in at-charset css rule',
 			message: messages.rejected,
 			line: 1,
@@ -177,7 +177,7 @@ testRule({
 			endColumn: 3,
 		},
 		{
-			code: '@charset  "utf-8"',
+			code: '@charset\u{A0} "utf-8"',
 			description: 'irregular whitespace after at-charset css rule',
 			message: messages.rejected,
 			line: 1,
@@ -186,7 +186,7 @@ testRule({
 			endColumn: 10,
 		},
 		{
-			code: '.firstClass .secondClass { color: pink; }',
+			code: '.firstClass\u{A0}.secondClass { color: pink; }',
 			description: 'irregular whitespace in selector',
 			message: messages.rejected,
 			line: 1,
@@ -195,7 +195,7 @@ testRule({
 			endColumn: 13,
 		},
 		{
-			code: '.firstClass .secondClass  { color: pink; }',
+			code: '.firstClass .secondClass \u{A0}{ color: pink; }',
 			description: 'irregular whitespace after selector',
 			message: messages.rejected,
 			line: 1,
@@ -204,7 +204,7 @@ testRule({
 			endColumn: 27,
 		},
 		{
-			code: 'margin: 1rem 2rem;',
+			code: 'margin: 1rem\u{A0}2rem;',
 			description: 'irregular whitespace in declaration value',
 			message: messages.rejected,
 			line: 1,
@@ -213,7 +213,7 @@ testRule({
 			endColumn: 14,
 		},
 		{
-			code: 'margin: 1rem 2rem ;',
+			code: 'margin: 1rem 2rem\u{A0};',
 			description: 'irregular whitespace after value',
 			message: messages.rejected,
 			line: 1,
@@ -222,7 +222,7 @@ testRule({
 			endColumn: 19,
 		},
 		{
-			code: '$variable : 5rem;',
+			code: '$variable\u{A0}: 5rem;',
 			description: 'irregular whitespace in variable name',
 			message: messages.rejected,
 			line: 1,
