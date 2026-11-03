@@ -1,6 +1,7 @@
+import assertItemsPartialDeepStrictEqual from '../testUtils/assertItemsPartialDeepStrictEqual.mjs';
 import standalone from '../standalone.mjs';
 
-it('test case (1)', async () => {
+it('test case (1)', async t => {
 	const config = {
 		rules: {
 			'color-namd': ['always-where-possible'],
@@ -13,8 +14,8 @@ it('test case (1)', async () => {
 		code: 'a {}',
 	});
 
-	expect(results).toHaveLength(1);
-	expect(results[0].warnings).toMatchObject([
+	t.assert.strictEqual(results.length, 1);
+	assertItemsPartialDeepStrictEqual(results[0].warnings, [
 		{
 			line: 1,
 			column: 1,
@@ -36,7 +37,7 @@ it('test case (1)', async () => {
 	]);
 });
 
-it('test case (2)', async () => {
+it('test case (2)', async t => {
 	const config = {
 		rules: {
 			'color-named': ['always-where-possible'],
@@ -49,21 +50,20 @@ it('test case (2)', async () => {
 		code: 'a { color: #fff; transform: scale(0.7); }',
 	});
 
-	expect(results).toHaveLength(1);
-	expect(results[0].warnings).toMatchObject([
-		{
-			line: 1,
-			column: 1,
-			endLine: 1,
-			endColumn: 2,
-			severity: 'error',
-			rule: 'function-allowed-lst',
-			text: 'Unknown rule function-allowed-lst.',
-		},
-		expect.objectContaining({
-			severity: 'error',
-			rule: 'color-named',
-			text: expect.stringMatching('#fff'),
-		}),
-	]);
+	t.assert.strictEqual(results.length, 1);
+	t.assert.strictEqual(results[0].warnings.length, 2);
+	t.assert.partialDeepStrictEqual(results[0].warnings[0], {
+		line: 1,
+		column: 1,
+		endLine: 1,
+		endColumn: 2,
+		severity: 'error',
+		rule: 'function-allowed-lst',
+		text: 'Unknown rule function-allowed-lst.',
+	});
+	t.assert.partialDeepStrictEqual(results[0].warnings[1], {
+		severity: 'error',
+		rule: 'color-named',
+	});
+	t.assert.match(results[0].warnings[1].text, /#f{3}/);
 });

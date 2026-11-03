@@ -1,4 +1,5 @@
-import {stripIndent} from 'common-tags';
+import stripIndent from '../testUtils/stripIndent.mjs';
+import testRule from '../testUtils/testRule.mjs';
 
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
 
@@ -96,8 +97,16 @@ testRule({
 			description: 'obsolete tag',
 		},
 		{
-			code: 'fencedframe, listbox, model, portal, selectlist, selectedcontent, geolocation, usermedia, install {}',
+			code: 'fencedframe, listbox, model, portal, selectlist, geolocation, usermedia, install {}',
 			description: 'experimental tags',
+		},
+		{
+			code: 'feDropShadow {}',
+			description: 'svg tags added in SVG 2',
+		},
+		{
+			code: 'animateColor, color-profile {}',
+			description: 'obsolete svg tags',
 		},
 		{
 			code: '@media keyframes { 0.0% {} 49.1% {} 100% {} }',

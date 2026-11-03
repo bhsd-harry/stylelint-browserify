@@ -1,3 +1,5 @@
+import testRule from '../testUtils/testRule.mjs';
+
 import rule from '../index.mjs';
 const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
@@ -20,6 +22,9 @@ testRule({
 		},
 		{
 			code: '@property --foo {}',
+		},
+		{
+			code: '@property --foo, --bar {}',
 		},
 		{
 			code: '@foo bar;',

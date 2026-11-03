@@ -1,11 +1,12 @@
 import {fileURLToPath} from 'node:url';
-import {stripIndent} from 'common-tags';
 
 import postcss from '../postcss.mjs';
 import postcssImport from '../postcss-import.mjs';
 import postcssStylelint from '../postcssPlugin.mjs';
 
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
+import stripIndent from '../testUtils/stripIndent.mjs';
+import testRule from '../testUtils/testRule.mjs';
 
 import rule from '../index.mjs';
 const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
@@ -690,7 +691,7 @@ testRule({
 	],
 });
 
-it('with postcss-import and duplicates within a file, a warning strikes', () => postcss()
+it('with postcss-import and duplicates within a file, a warning strikes', t => postcss()
 	.use(postcssImport())
 	.use(
 		postcssStylelint({
@@ -703,11 +704,11 @@ it('with postcss-import and duplicates within a file, a warning strikes', () => 
 		from: fileURLToPath(new URL('./test.css', import.meta.url)),
 	})
 	.then(result => {
-		expect(result.warnings()).toHaveLength(1);
-		expect(result.warnings()[0]).toHaveProperty('text', messages.rejected('.foo', 1));
+		t.assert.strictEqual(result.warnings().length, 1);
+		t.assert.strictEqual(result.warnings()[0].text, messages.rejected('.foo', 1));
 	}));
 
-it('with postcss-import and duplicates across files, no warnings', () => postcss()
+it('with postcss-import and duplicates across files, no warnings', t => postcss()
 	.use(postcssImport())
 	.use(
 		postcssStylelint({
@@ -720,7 +721,7 @@ it('with postcss-import and duplicates across files, no warnings', () => postcss
 		from: fileURLToPath(new URL('./test.css', import.meta.url)),
 	})
 	.then(result => {
-		expect(result.warnings()).toHaveLength(0);
+		t.assert.strictEqual(result.warnings().length, 0);
 	}));
 
 testRule({

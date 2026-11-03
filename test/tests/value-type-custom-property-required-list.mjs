@@ -1,0 +1,329 @@
+import stripIndent from '../testUtils/stripIndent.mjs';
+import testRule from '../testUtils/testRule.mjs';
+import testRuleConfigs from '../testUtils/testRuleConfigs.mjs';
+
+import rule from '../index.mjs';
+const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
+
+testRule({
+	ruleName,
+	config: ['color', 'length'],
+
+	accept: [
+		{
+			code: 'a { color: var(--foo); }',
+		},
+		{
+			code: 'a { color: var(); }',
+		},
+		{
+			code: 'a { --foo: red; color: var(--foo); }',
+		},
+		{
+			code: 'a { --foo: 1px; margin: var(--foo); }',
+		},
+		{
+			code: stripIndent`
+				@property --foo { syntax: "<color>"; inherits: false; initial-value: red; }
+				a { color: var(--foo); }
+			`,
+		},
+		{
+			code: 'a { --foo: 1px; --foo: red; color: var(--foo); }',
+			description: 'redeclared custom property',
+		},
+		{
+			code: 'a { --foo: 1px; width: calc(100% - var(--foo)); }',
+		},
+		{
+			code: 'a { color: inherit; }',
+		},
+		{
+			code: 'a { color: 1px; }',
+			description: 'unknown value',
+		},
+	],
+
+	reject: [
+		{
+			code: 'a { color: red; }',
+			message: messages.expected('red', 'color'),
+			line: 1,
+			column: 12,
+			endLine: 1,
+			endColumn: 15,
+		},
+		{
+			code: 'a { margin: 1px; }',
+			message: messages.expected('1px', 'length'),
+			line: 1,
+			column: 13,
+			endLine: 1,
+			endColumn: 16,
+		},
+		{
+			code: 'a { border: 1px solid red; }',
+			warnings: [
+				{
+					message: messages.expected('1px', 'length'),
+					line: 1,
+					column: 13,
+					endLine: 1,
+					endColumn: 16,
+				},
+				{
+					message: messages.expected('red', 'color'),
+					line: 1,
+					column: 23,
+					endLine: 1,
+					endColumn: 26,
+				},
+			],
+		},
+		{
+			code: 'a { --foo: red; border: 1px solid var(--foo); }',
+			message: messages.expected('1px', 'length'),
+			line: 1,
+			column: 25,
+			endLine: 1,
+			endColumn: 28,
+		},
+		{
+			code: 'a { color: rgb(0 0 0 / 50%); }',
+			message: messages.expected('rgb(0 0 0 / 50%)', 'color'),
+			line: 1,
+			column: 12,
+			endLine: 1,
+			endColumn: 28,
+		},
+		{
+			code: 'a { width: calc(1px + 2px); }',
+			warnings: [
+				{
+					message: messages.expected('1px', 'length'),
+					line: 1,
+					column: 17,
+					endLine: 1,
+					endColumn: 20,
+				},
+				{
+					message: messages.expected('2px', 'length'),
+					line: 1,
+					column: 23,
+					endLine: 1,
+					endColumn: 26,
+				},
+			],
+		},
+		{
+			code: 'a { --foo: 1px; width: calc(var(--foo) + 2rem); }',
+			message: messages.expected('2rem', 'length'),
+			line: 1,
+			column: 42,
+			endLine: 1,
+			endColumn: 46,
+			description: 'math function with a custom property argument',
+		},
+		{
+			code: 'a { background: linear-gradient(red, blue); }',
+			warnings: [
+				{
+					message: messages.expected('red', 'color'),
+					line: 1,
+					column: 33,
+					endLine: 1,
+					endColumn: 36,
+				},
+				{
+					message: messages.expected('blue', 'color'),
+					line: 1,
+					column: 38,
+					endLine: 1,
+					endColumn: 42,
+				},
+			],
+		},
+	],
+});
+
+testRule({
+	ruleName,
+	config: [['color', 'number'], {ignoreValues: ['0', 'transparent', String.raw`/^oklch\(/`]}],
+
+	accept: [
+		{
+			code: 'a { flex: 0; }',
+		},
+		{
+			code: 'a { color: transparent; }',
+		},
+		{
+			code: 'a { color: oklch(20% 0.1 0deg); }',
+		},
+	],
+
+	reject: [
+		{
+			code: 'a { color: rgb(0 0 0); }',
+			message: messages.expected('rgb(0 0 0)', 'color'),
+			line: 1,
+			column: 12,
+			endLine: 1,
+			endColumn: 22,
+		},
+		{
+			code: 'a { color: color-mix(in srgb, transparent, red); }',
+			message: messages.expected('red', 'color'),
+			line: 1,
+			column: 44,
+			endLine: 1,
+			endColumn: 47,
+		},
+	],
+});
+
+testRule({
+	ruleName,
+	config: [
+		['color', 'number', 'angle', 'percentage'],
+		{
+			ignoreFunctions: {
+				number: ['/.+/'],
+				color: ['color-mix'],
+				'/^(angle|percentage)$/': ['/-gradient$/'],
+			},
+		},
+	],
+
+	accept: [
+		{
+			code: 'a { transform: scale(1.5); }',
+		},
+		{
+			code: 'a { color: color-mix(in srgb, red, blue); }',
+		},
+		{
+			code: 'a { --foo: 0; color: rgb(var(--foo) 0 0); }',
+			description: 'color function with a custom property argument',
+		},
+		{
+			code: 'a { --foo: red; --bar: blue; background: linear-gradient(45deg, var(--foo) 0%, var(--bar) 100%); }',
+		},
+	],
+
+	reject: [
+		{
+			code: 'a { opacity: 0.5; }',
+			message: messages.expected('0.5', 'number'),
+			line: 1,
+			column: 14,
+			endLine: 1,
+			endColumn: 17,
+		},
+		{
+			code: 'a { color: rgb(0 0 0); }',
+			message: messages.expected('rgb(0 0 0)', 'color'),
+			line: 1,
+			column: 12,
+			endLine: 1,
+			endColumn: 22,
+		},
+		{
+			code: 'a { background: linear-gradient(45deg, red 0%, blue 100%); }',
+			warnings: [
+				{
+					message: messages.expected('red', 'color'),
+					line: 1,
+					column: 40,
+					endLine: 1,
+					endColumn: 43,
+				},
+				{
+					message: messages.expected('blue', 'color'),
+					line: 1,
+					column: 48,
+					endLine: 1,
+					endColumn: 52,
+				},
+			],
+		},
+	],
+});
+
+testRule({
+	ruleName,
+	config: [
+		['color', 'length'],
+		{ignoreProperties: {'/.+/': ['transform'], length: ['/^border/']}},
+	],
+
+	accept: [
+		{
+			code: 'a { transform: translateX(1px); }',
+		},
+		{
+			code: 'a { border-width: 1px; }',
+		},
+	],
+
+	reject: [
+		{
+			code: 'a { margin: 1px; }',
+			message: messages.expected('1px', 'length'),
+			line: 1,
+			column: 13,
+			endLine: 1,
+			endColumn: 16,
+		},
+		{
+			code: 'a { border: 1px solid red; }',
+			message: messages.expected('red', 'color'),
+			line: 1,
+			column: 23,
+			endLine: 1,
+			endColumn: 26,
+		},
+	],
+});
+
+testRuleConfigs({
+	ruleName,
+
+	accept: [
+		{
+			config: 'color',
+		},
+		{
+			config: [['color'], {ignoreValues: ['transparent', /^calc\(/]}],
+		},
+		{
+			config: [['color'], {ignoreFunctions: {color: ['rgb', /^color-/]}}],
+		},
+		{
+			config: [['color'], {ignoreProperties: {color: ['border', /^background/]}}],
+		},
+	],
+
+	reject: [
+		{
+			config: 'foo',
+			description: 'unknown type',
+		},
+		{
+			config: 1,
+			description: 'invalid primary option type',
+		},
+		{
+			config: [['color'], {ignoreValues: {color: ['transparent']}}],
+			description: 'invalid ignoreValues option type',
+		},
+		{
+			config: [['color'], {ignoreFunctions: ['rgb']}],
+			description: 'invalid ignoreFunctions option type',
+		},
+		{
+			config: [['color'], {ignoreProperties: ['border']}],
+			description: 'invalid ignoreProperties option type',
+		},
+	],
+});

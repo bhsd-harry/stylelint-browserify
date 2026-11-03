@@ -1,4 +1,5 @@
 import naiveCssInJs from '../postcss-naive-css-in-js.mjs';
+import testRule from '../testUtils/testRule.mjs';
 
 import rule from '../index.mjs';
 const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};

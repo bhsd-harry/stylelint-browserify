@@ -1,21 +1,22 @@
-import replaceBackslashes from '../replaceBackslashes.mjs';
+import replaceBackslashes from '../testUtils/replaceBackslashes.mjs';
 import standalone from '../standalone.mjs';
 
-test('standalone with deprecations', async () => {
+test('standalone with deprecations', async t => {
 	const data = await standalone({
 		code: 'a[=] {}',
 		config: {rules: {'selector-attribute-quotes': 'always'}},
 	});
 
-	expect(data.report).toContain('"stylelintType":"parseError"');
-	expect(data.results).toHaveLength(1);
-	expect(data.results[0].parseErrors).toHaveLength(1);
-	expect(data.results[0].parseErrors[0].text).toBe(
+	t.assert.ok(data.report.includes('"stylelintType":"parseError"'));
+	t.assert.strictEqual(data.results.length, 1);
+	t.assert.strictEqual(data.results[0].parseErrors.length, 1);
+	t.assert.strictEqual(
+		data.results[0].parseErrors[0].text,
 		'Cannot parse selector (Error: Expected an attribute.)',
 	);
 });
 
-describe.skip('file with correct syntax reported correctly', async () => {
+describe.skip('file with correct syntax reported correctly', async t => {
 	const data = await standalone({
 		files: replaceBackslashes(
 			new URL('./fixtures/broken-syntax/correct-syntax.css', import.meta.url),
@@ -23,20 +24,20 @@ describe.skip('file with correct syntax reported correctly', async () => {
 		config: {rules: {}},
 	});
 
-	expect(data.results[0]).toMatchObject({
+	t.assert.partialDeepStrictEqual(data.results[0], {
 		parseErrors: [],
 		errored: false,
 		warnings: [],
 	});
 });
 
-describe.skip('file with invalid syntax reported correctly', async () => {
+describe.skip('file with invalid syntax reported correctly', async t => {
 	const data = await standalone({
 		files: [replaceBackslashes(new URL('./fixtures/broken-syntax/broken-syntax.css', import.meta.url))],
 		config: {rules: {}},
 	});
 
-	expect(data.results[0]).toMatchObject({
+	t.assert.partialDeepStrictEqual(data.results[0], {
 		parseErrors: [],
 		errored: true,
 		warnings: [

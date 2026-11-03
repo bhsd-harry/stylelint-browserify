@@ -613,32 +613,17 @@
 				"test/**/*.mjs"
 			],
 			"rules": {
-				"no-irregular-whitespace": "off",
-				"no-param-reassign": "off",
-				"no-shadow": "off",
-				"no-template-curly-in-string": "off",
-				"no-underscore-dangle": "off",
-				"no-unused-vars": "off",
-				"prefer-destructuring": "off",
-				"require-await": "off",
-				"require-unicode-regexp": "off",
-				"promise/always-return": "off",
-				"promise/prefer-await-to-then": "off",
-				"unicorn/prefer-code-point": "off",
 				"jsdoc/require-param-description": "off"
 			},
 			"globals": {
 				"afterEach": "readonly",
 				"beforeEach": "readonly",
 				"describe": "readonly",
-				"expect": "readonly",
 				"filename": "readonly",
 				"it": "readonly",
 				"stylelint": "readonly",
 				"suite": "readonly",
-				"test": "readonly",
-				"testRule": "readonly",
-				"testRuleConfigs": "readonly"
+				"test": "readonly"
 			}
 		},
 		{

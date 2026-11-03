@@ -1,3 +1,5 @@
+import testRule from '../testUtils/testRule.mjs';
+
 import rule from '../index.mjs';
 const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
@@ -182,6 +184,10 @@ testRule({
 		{
 			code: 'a { color: var( --#{$bar} ); }',
 		},
+		{
+			code: '@property --foo, --bar {}',
+			description: 'Valid @property rule with a list of names',
+		},
 	],
 });
 
@@ -212,6 +218,15 @@ testRule({
 			endLine: 1,
 			endColumn: 17,
 			description: 'Invalid @property rule: incomplete property name',
+		},
+		{
+			code: '@property --foo, --Bar {}',
+			message: messages.expected('--Bar', /^[a-z]+(?:-[a-z]+)*$/),
+			line: 1,
+			column: 18,
+			endLine: 1,
+			endColumn: 23,
+			description: 'Invalid @property rule in a list of names',
 		},
 	],
 });

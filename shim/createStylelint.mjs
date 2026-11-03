@@ -6,5 +6,10 @@ export default (options = {}) => {
 	return {
 		_options: {...options, cwd},
 		_postcssResultCache: new Map(),
+		_referenceRootsCache: {
+			getRoots() {
+				return [];
+			},
+		},
 	};
 };

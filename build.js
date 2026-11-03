@@ -17,7 +17,6 @@ const shim = [
 		'getConfigForFile',
 		'getFileIgnorer',
 		'getFormatter',
-		'getReferenceRoots',
 		'ident',
 		'invalidScopeDisables',
 		'isPathIgnored',
@@ -38,10 +37,10 @@ const shim = [
 		'warn-once',
 	],
 	toSorted = 'declaration-block-no-redundant-longhand-properties',
+	toReversed = ['property-layout-mappings', 'declaration-property-value-no-unknown'],
 	shimSet = new Set([
 		...shim,
 		'create',
-		'walk',
 	]),
 	originalSet = new Set(),
 	resolvePath = path.join('build', 'resolve'),
@@ -65,12 +64,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 				filter: new RegExp(
 					String.raw`/(?:${
 						shim.join('|')
-					})(?:\.m?js)?$|/(?:${
-						[
-							'convertor/create',
-							'walk',
-						].join('|')
-					})\.js$`,
+					})(?:\.m?js)?$|/convertor/create\.js$`,
 				),
 			},
 			({path: p, resolveDir}) => {
@@ -93,7 +87,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 		build.onLoad(
 			{
 				filter: new RegExp(
-					String.raw`/(?:${toSorted}/index|${
+					String.raw`/(?:(?:${toSorted}|${toReversed.join('|')})/index|${
 						[
 							'lintSource',
 							'reportUnknownRuleNames',
@@ -186,6 +180,13 @@ const /** @type {esbuild.Plugin} */ plugin = {
 								true,
 							);
 						}
+						if (toReversed.includes(base)) {
+							/** @todo 移除Array.prototype.toReversed的polyfill */
+							contents.replace(
+								'.toReversed(',
+								'.slice().reverse(',
+							);
+						}
 						break;
 					case 'input':
 						contents
@@ -237,9 +238,9 @@ const /** @type {esbuild.Plugin} */ plugin = {
 						break;
 					case 'Lexer':
 						contents.replaceAll(
-							/^([ \t]+)(?:find(?:(?:Declaration)?Value|All)Fragments|match|dump|toString|validate|checkStructure|match(?:Declaration|Type)|get(?:Atrule(?:Prelude|Descriptor)|Type))\(.+?^\1\}$/gmsu,
+							/^([ \t]+)(?:find(?:DeclarationValue|All)Fragments|match|dump|toString|validate|checkStructure|matchDeclaration|getAtrule(?:Prelude|Descriptor))\(.+?^\1\}$/gmsu,
 							'',
-							13,
+							10,
 						);
 						break;
 					case 'lintSource':
@@ -249,7 +250,7 @@ const /** @type {esbuild.Plugin} */ plugin = {
 								'',
 							)
 							.replace(
-								/(?<=^function createEmptyPostcssResult\().+?^\}/msu,
+								/(?<=^async function createEmptyPostcssResult\().+?^\}/msu,
 								') {}',
 							);
 						break;
@@ -310,9 +311,9 @@ const /** @type {esbuild.Plugin} */ plugin = {
 					case 'standalone':
 						contents
 							.replaceAll(
-								/^([ \t]*)(?:const (?:debug|startTime) = .+;|if \(\n[ \t]+absoluteCodeFilename &&[\s\S]+?^\1\})$/gmu,
+								/^([ \t]*)(?:const (?:debug|startTime|isAlwaysIgnored) = .+;|if \(\n[ \t]+absoluteCodeFilename &&[\s\S]+?^\1\})$/gmu,
 								'',
-								3,
+								4,
 							)
 							.replace(
 								/let fileList = .+?return result;\n\}/su,
@@ -355,15 +356,10 @@ const /** @type {esbuild.BuildOptions} */ config = {
 	logLevel: 'info',
 	plugins: [plugin],
 	alias: {
-		debug: './shim/debug.mjs',
-		'fast-glob': './shim/fast-glob.mjs',
-		'fastest-levenshtein': './shim/fastest-levenshtein.mjs',
+		fs: './shim/fs.mjs',
 		'node:fs/promises': './shim/fs-promises.mjs',
-		globby: './shim/globby.mjs',
-		'mathml-tag-names': './shim/mathml-tag-names.mjs',
-		micromatch: './shim/micromatch.mjs',
+		module: './shim/module.mjs',
 		'nanoid/non-secure': './shim/nanoid.js',
-		'normalize-path': './shim/normalize-path.mjs',
 		'node:os': './shim/os.mjs',
 		path: './shim/path.mjs',
 		'node:path': './shim/path.mjs',
@@ -372,8 +368,8 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		'node:process': './shim/process.mjs',
 		'stylelint/lib/formatters/jsonFormatter': path.join(stylelint, '..', 'formatters', 'jsonFormatter.mjs'),
 		'stylelint/lib/normalizeAllRuleSettings': path.join(stylelint, '..', 'normalizeAllRuleSettings.mjs'),
-		'svg-tags': './shim/svg-tags.js',
-		'node:url': './shim/url.mjs',
+		'stylelint/utils/ReferenceRootsCache': path.join(stylelint, '..', 'utils', 'ReferenceRootsCache.mjs'),
+		url: './shim/url.mjs',
 		'util-deprecate': './shim/util-deprecate.js',
 		'write-file-atomic': './shim/write-file-atomic.mjs',
 	},
@@ -387,6 +383,37 @@ const /** @type {esbuild.BuildOptions} */ config = {
 		minify: true,
 		outfile: 'bundle/standalone.min.js',
 		legalComments: 'external',
+		banner: {
+			js: `const isSetLike = obj => {
+				if (
+					!obj
+					|| typeof obj !== 'object' && typeof obj !== 'function'
+					|| typeof obj.size !== 'number' || obj.size < 0 || Number.isNaN(obj.size)
+					|| typeof obj.has !== 'function'
+					|| typeof obj.keys !== 'function' || typeof obj.keys()?.[Symbol.iterator] !== 'function'
+				) {
+					throw new TypeError('Argument must be a Set-like object');
+				}
+			};
+			Set.prototype.union ??= function (other) {
+				isSetLike(other);
+				const result = new Set(this);
+				for (const item of other) {
+					result.add(item);
+				}
+				return result;
+			};
+			Set.prototype.isDisjointFrom ??= function (other) {
+				isSetLike(other);
+				const [smaller, larger] = this.size < other.size ? [this, other] : [other, this];
+				for (const item of smaller) {
+					if (larger.has(item)) {
+						return false;
+					}
+				}
+				return true;
+			};`,
+		},
 	});
 	if (shimSet.size > 0) {
 		console.error(

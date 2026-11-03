@@ -8,7 +8,7 @@ export class NoFilesFoundError extends Error {
 		super();
 
 		if (typeof fileList === 'string') {
-			fileList = [fileList];
+			fileList = [fileList]; // oxlint-disable-line no-param-reassign
 		}
 
 		const pattern = fileList.filter(i => !i.startsWith('!')).join(', ');

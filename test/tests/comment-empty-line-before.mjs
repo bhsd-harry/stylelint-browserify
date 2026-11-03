@@ -1,4 +1,6 @@
-import mergeTestDescriptions from '../mergeTestDescriptions.mjs';
+import testRule from '../testUtils/testRule.mjs';
+
+import mergeTestDescriptions from '../testUtils/mergeTestDescriptions.mjs';
 import rule from '../index.mjs';
 const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 

@@ -1,5 +1,7 @@
+import testRule from '../testUtils/testRule.mjs';
+
 import rule from '../index.mjs';
-import {stripIndent} from 'common-tags';
+import stripIndent from '../testUtils/stripIndent.mjs';
 
 const {messages, ruleName} = {...rule, ruleName: filename(import.meta.url)};
 
@@ -33,6 +35,18 @@ testRule({
 		{
 			code: '@property --foo { system: bar; }',
 			description: 'a descriptor (with an unknown value) that is unknown to the at-rule',
+		},
+		{
+			code: '@page { margin: var(--foo); }',
+			description: 'property within @page',
+		},
+		{
+			code: '@function --foo() { result: var(--bar); }',
+			description: 'result descriptor within @function',
+		},
+		{
+			code: '@font-face { font-family: "var(--foo)"; }',
+			description: 'var() within a string',
 		},
 	],
 
@@ -81,6 +95,23 @@ testRule({
 			endLine: 1,
 			endColumn: 33,
 			description: 'a value known to a descriptor of another at-rule but not @property',
+		},
+		{
+			code: '@font-face { font-weight: var(--foo); }',
+			message: messages.rejected('font-weight', 'var(--foo)'),
+			line: 1,
+			column: 27,
+			endLine: 1,
+			endColumn: 37,
+		},
+		{
+			code: '@page { size: var(--foo); }',
+			message: messages.rejected('size', 'var(--foo)'),
+			line: 1,
+			column: 15,
+			endLine: 1,
+			endColumn: 25,
+			description: 'descriptor within @page',
 		},
 		{
 			code: '@font-face { @supports (foo: 0) { ascent-override: baz } }',

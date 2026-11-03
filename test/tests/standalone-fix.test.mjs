@@ -1,17 +1,16 @@
-import {copyFile, readFile, rm} from 'node:fs/promises';
+import {copyFile, readFile, rm, writeFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import process from 'node:process';
 
-import {stripIndent} from 'common-tags';
-
-import replaceBackslashes from '../replaceBackslashes.mjs';
+import replaceBackslashes from '../testUtils/replaceBackslashes.mjs';
 import standalone from '../standalone.mjs';
+import stripIndent from '../testUtils/stripIndent.mjs';
 
 const fixturesPath = (...elems) =>
 	replaceBackslashes(path.join(fileURLToPath(new URL('./fixtures', import.meta.url)), ...elems));
 
-it('outputs fixed code when input is code string', async () => {
+it('outputs fixed code when input is code string', async t => {
 	const result = await standalone({
 		code: 'a { color: #ffffff; }',
 		config: {
@@ -23,12 +22,12 @@ it('outputs fixed code when input is code string', async () => {
 		formatter: 'string',
 	});
 
-	expect(result.code).toBe('a { color: #fff; }');
+	t.assert.strictEqual(result.code, 'a { color: #fff; }');
 
-	expect(result.results[0].autofixed).toBe(true);
+	t.assert.strictEqual(result.results[0].autofixed, true);
 });
 
-it('fixes when enabled in config', async () => {
+it('fixes when enabled in config', async t => {
 	const result = await standalone({
 		code: 'a { color: #ffffff; }',
 		config: {
@@ -40,12 +39,12 @@ it('fixes when enabled in config', async () => {
 		formatter: 'string',
 	});
 
-	expect(result.code).toBe('a { color: #fff; }');
+	t.assert.strictEqual(result.code, 'a { color: #fff; }');
 
-	expect(result.results[0].autofixed).toBe(true);
+	t.assert.strictEqual(result.results[0].autofixed, true);
 });
 
-it.skip("doesn't report autofixed when code input is ignored by config", async () => {
+it.skip("doesn't report autofixed when code input is ignored by config", async t => {
 	const result = await standalone({
 		code: 'a { color: #ffffff; }',
 
@@ -58,12 +57,12 @@ it.skip("doesn't report autofixed when code input is ignored by config", async (
 		fix: true,
 	});
 
-	expect(result.results[0].autofixed).toBeUndefined();
+	t.assert.strictEqual(result.results[0].autofixed, undefined);
 });
 
 describe('fix callback', () => {
 	suite('core rules', () => {
-		test('out of range', async () => {
+		test('out of range', async t => {
 			const code = stripIndent`
 				:not(
 					a,
@@ -89,7 +88,9 @@ describe('fix callback', () => {
 				fix: true,
 			});
 
-			expect(result.code).toBe(stripIndent`
+			t.assert.strictEqual(
+				result.code,
+				stripIndent`
 				:not(a):not(div) {}
 
 				/* stylelint-disable */
@@ -98,10 +99,11 @@ describe('fix callback', () => {
 				/* stylelint-enable */
 
 				a { color: hsla(); }
-			`);
+				`,
+			);
 		});
 
-		test('same line', async () => {
+		test('same line', async t => {
 			const code = stripIndent`
 				:not(a, div) {}
 
@@ -121,16 +123,19 @@ describe('fix callback', () => {
 				fix: true,
 			});
 
-			expect(result.code).toBe(stripIndent`
+			t.assert.strictEqual(
+				result.code,
+				stripIndent`
 				:not(A):not(DIV) {}
 
 				/* stylelint-disable */
 				:not(a, div) {}
 				/* stylelint-enable */
-			`);
+				`,
+			);
 		});
 
-		test('stylelint-disable-next-line', async () => {
+		test('stylelint-disable-next-line', async t => {
 			const code = stripIndent`
 				/* stylelint-disable-next-line */
 				a { color: HSLA(); }
@@ -147,14 +152,17 @@ describe('fix callback', () => {
 				fix: true,
 			});
 
-			expect(result.code).toBe(stripIndent`
+			t.assert.strictEqual(
+				result.code,
+				stripIndent`
 				/* stylelint-disable-next-line */
 				a { color: HSLA(); }
 				a { color: hsla(); }
-			`);
+				`,
+			);
 		});
 
-		test('stylelint-disable-line', async () => {
+		test('stylelint-disable-line', async t => {
 			const code = stripIndent`
 				a { color: HSLA(); }
 				a { color: HSLA(); } /* stylelint-disable-line */
@@ -170,15 +178,18 @@ describe('fix callback', () => {
 				fix: true,
 			});
 
-			expect(result.code).toBe(stripIndent`
+			t.assert.strictEqual(
+				result.code,
+				stripIndent`
 				a { color: hsla(); }
 				a { color: HSLA(); } /* stylelint-disable-line */
-			`);
+				`,
+			);
 		});
 	});
 
 	describe.skip('plugin', () => {
-		test('scoped + unscoped', async () => {
+		test('scoped + unscoped', async t => {
 			const result = await standalone({
 				code: stripIndent`
 					/* stylelint-disable */
@@ -195,33 +206,40 @@ describe('fix callback', () => {
 				},
 			});
 
-			expect(result.code).toBe(stripIndent`
+			t.assert.strictEqual(
+				result.code,
+				stripIndent`
 				/* stylelint-disable */
 				.foo {}
 				/* stylelint-enable */
 				.bar {}
 				/* stylelint-disable plugin/selector-no-foo */
 				.foo {}
-			`);
+				`,
+			);
 		});
 
-		test('node', async () => expect(
-			standalone({
-				code: `
-						/* stylelint-disable */
-						.qux {}
-					`,
-				config: {
-					plugins: [fixturesPath('./plugin-fixer-buggy.mjs')],
-					rules: {'plugin/selector-no-qux': true},
-					fix: true,
+		test('node', async t => {
+			await t.assert.rejects(
+				standalone({
+					code: `
+							/* stylelint-disable */
+							.qux {}
+						`,
+					config: {
+						plugins: [fixturesPath('./plugin-fixer-buggy.mjs')],
+						rules: {'plugin/selector-no-qux': true},
+						fix: true,
+					},
+				}),
+				{
+					message:
+						'The "plugin/selector-no-qux" rule provided incorrect position arguments to `utils.report()`. To fix, pass a PostCSS `node` to the function.',
 				},
-			}),
-		).rejects.toThrow(
-			'The "plugin/selector-no-qux" rule provided incorrect position arguments to `utils.report()`. To fix, pass a PostCSS `node` to the function.',
-		));
+			);
+		});
 
-		test('ignoreDisables', async () => {
+		test('ignoreDisables', async t => {
 			const result = await standalone({
 				code: '.foo {} /* stylelint-disable-line */',
 				config: {
@@ -232,10 +250,10 @@ describe('fix callback', () => {
 				},
 			});
 
-			expect(result.code).toBe('.bar {} /* stylelint-disable-line */');
+			t.assert.strictEqual(result.code, '.bar {} /* stylelint-disable-line */');
 		});
 
-		test('disableFix secondary option', async () => {
+		test('disableFix secondary option', async t => {
 			const result = await standalone({
 				code: '.foo {}',
 				config: {
@@ -245,10 +263,10 @@ describe('fix callback', () => {
 				},
 			});
 
-			expect(result.code).toBe('.foo {}');
+			t.assert.strictEqual(result.code, '.foo {}');
 		});
 
-		test('next-line: with a fixer', async () => {
+		test('next-line', async t => {
 			const result = await standalone({
 				code: stripIndent`
 					.foo {}
@@ -262,96 +280,20 @@ describe('fix callback', () => {
 				},
 			});
 
-			expect(result.code).toBe(stripIndent`
+			t.assert.strictEqual(
+				result.code,
+				stripIndent`
 					.bar {}
 					/* stylelint-disable-next-line */
 					.foo {}
-			`);
-		});
-
-		test('next-line: without a fixer', async () => {
-			const result = await standalone({
-				code: stripIndent`
-					.foo {}
-					/* stylelint-disable-next-line */
-					.foo {}
 				`,
-				config: {
-					plugins: [fixturesPath('./plugin-selector-no-foo.mjs')],
-					rules: {'plugin/selector-no-foo': true},
-					fix: true,
-				},
-			});
-
-			expect(result.code).toBe(stripIndent`
-					.foo {}
-					/* stylelint-disable-next-line */
-					.foo {}
-			`);
-		});
-
-		test('scoped: with (disabled) + without (enabled)', async () => {
-			const result = await standalone({
-				code: stripIndent`
-					.foo {}
-					.qux {}
-					/* stylelint-disable plugin/selector-no-foo */
-					.foo {}
-				`,
-				config: {
-					plugins: [
-						fixturesPath('./plugin-fixer.mjs'),
-						fixturesPath('./plugin-selector-no-qux.mjs'),
-					],
-					rules: {
-						'plugin/selector-no-foo': true,
-						'plugin/selector-no-qux': true,
-					},
-					fix: true,
-				},
-			});
-
-			expect(result.code).toBe(stripIndent`
-				.bar {}
-				.baz {}
-				/* stylelint-disable plugin/selector-no-foo */
-				.foo {}
-			`);
-		});
-
-		test('scoped: with (enabled) + without (disabled)', async () => {
-			const result = await standalone({
-				code: stripIndent`
-					.qux {}
-					.foo {}
-					/* stylelint-disable plugin/selector-no-qux */
-					.qux {}
-				`,
-				config: {
-					plugins: [
-						fixturesPath('./plugin-fixer.mjs'),
-						fixturesPath('./plugin-selector-no-qux.mjs'),
-					],
-					rules: {
-						'plugin/selector-no-foo': true,
-						'plugin/selector-no-qux': true,
-					},
-					fix: true,
-				},
-			});
-
-			expect(result.code).toBe(stripIndent`
-					.qux {}
-					.bar {}
-					/* stylelint-disable plugin/selector-no-qux */
-					.qux {}
-			`);
+			);
 		});
 	});
 });
 
 describe('stylelint commands', () => {
-	it("doesn't fix with stylelint-disable commands", async () => {
+	it("doesn't fix with stylelint-disable commands", async t => {
 		const code = `
 			/* stylelint-disable */
 			a { color: #ffffff; }`;
@@ -367,10 +309,10 @@ describe('stylelint commands', () => {
 			formatter: 'string',
 		});
 
-		expect(result.code).toBe(code);
+		t.assert.strictEqual(result.code, code);
 	});
 
-	it("doesn't fix with scoped stylelint-disable commands", async () => {
+	it("doesn't fix with scoped stylelint-disable commands", async t => {
 		const code = `
 			/* stylelint-disable color-hex-length */
 			a { color: #ffffff; }`;
@@ -386,10 +328,10 @@ describe('stylelint commands', () => {
 			formatter: 'string',
 		});
 
-		expect(result.code).toBe(code);
+		t.assert.strictEqual(result.code, code);
 	});
 
-	it("doesn't fix with multiple scoped stylelint-disable commands", async () => {
+	it("doesn't fix with multiple scoped stylelint-disable commands", async t => {
 		const code = `
 			/* stylelint-disable declaration-block-no-duplicate-properties, color-hex-length */
 			a {
@@ -409,10 +351,10 @@ describe('stylelint commands', () => {
 			formatter: 'string',
 		});
 
-		expect(result.code).toBe(code);
+		t.assert.strictEqual(result.code, code);
 	});
 
-	it("doesn't fix with a scoped stylelint-disable command, but does fix other rules", async () => {
+	it("doesn't fix with a scoped stylelint-disable command, but does fix other rules", async t => {
 		const code =
 			'/* stylelint-disable declaration-block-no-duplicate-properties */ a { color: #ffffff; color: orange; }';
 
@@ -428,30 +370,10 @@ describe('stylelint commands', () => {
 			formatter: 'string',
 		});
 
-		expect(result.code).toBe(
+		t.assert.strictEqual(
+			result.code,
 			'/* stylelint-disable declaration-block-no-duplicate-properties */ a { color: #fff; color: orange; }',
 		);
-	});
-
-	it.skip('deprecated context.fix', async () => {
-		const result = await standalone({
-			code: stripIndent`
-				/* stylelint-disable */
-				.foo {}
-				.foo {}
-			`,
-			config: {
-				plugins: [fixturesPath('./plugin-selector-no-foo.mjs')],
-				rules: {'plugin/selector-no-foo': true},
-				fix: true,
-			},
-		});
-
-		expect(result.code).toBe(stripIndent`
-				/* stylelint-disable */
-				.foo {}
-				.foo {}
-		`);
 	});
 });
 
@@ -468,7 +390,7 @@ describe.skip('writing fixes to files', () => {
 		await rm(tempFile, {force: true});
 	});
 
-	it('overwrites the original file and returns unfixable errors', async () => {
+	it('overwrites the original file and returns unfixable errors', async t => {
 		const result = await standalone({
 			files: [tempFile],
 			config: {
@@ -486,13 +408,13 @@ describe.skip('writing fixes to files', () => {
 
 		const fileContent = await readFile(tempFile, 'utf8');
 
-		expect(fileContent).toBe(postcssResult.root.toString(postcssResult.opts.syntax));
+		t.assert.strictEqual(fileContent, postcssResult.root.toString(postcssResult.opts.syntax));
 
-		expect(result.code).toBeUndefined();
-		expect(result.results[0].autofixed).toBe(true);
+		t.assert.strictEqual(result.code, undefined);
+		t.assert.strictEqual(result.results[0].autofixed, true);
 	});
 
-	it("doesn't write to ignored file", async () => {
+	it("doesn't write to ignored file", async t => {
 		const result = await standalone({
 			files: [tempFile],
 			config: {
@@ -510,13 +432,13 @@ describe.skip('writing fixes to files', () => {
 		const newFile = await readFile(tempFile, 'utf8');
 		const oldFile = await readFile(fixturesPath('fix.css'), 'utf8');
 
-		expect(newFile).toBe(oldFile);
+		t.assert.strictEqual(newFile, oldFile);
 
-		expect(result.code).toBeUndefined();
-		expect(result.results[0].autofixed).toBeUndefined();
+		t.assert.strictEqual(result.code, undefined);
+		t.assert.strictEqual(result.results[0].autofixed, undefined);
 	});
 
-	it.skip("doesn't strip BOM", async () => {
+	it.skip("doesn't strip BOM", async t => {
 		await standalone({
 			files: [tempFile],
 			config: {
@@ -531,11 +453,11 @@ describe.skip('writing fixes to files', () => {
 
 		const fileContent = await readFile(tempFile, 'utf8');
 
-		expect(fileContent.startsWith('\uFEFF')).toBe(true);
+		t.assert.strictEqual(fileContent.startsWith('\uFEFF'), true);
 	});
 });
 
-it('one rule being disabled', async () => {
+it('one rule being disabled', async t => {
 	const code = `
 		a {
 			color: #ffffff;
@@ -558,11 +480,11 @@ it('one rule being disabled', async () => {
 		formatter: 'string',
 	});
 
-	expect(result.results[0].errored).toBe(true);
-	expect(result.code).toBe(code);
+	t.assert.strictEqual(result.results[0].errored, true);
+	t.assert.strictEqual(result.code, code);
 });
 
-it('two rules being disabled', async () => {
+it('two rules being disabled', async t => {
 	const code = `
 		a, a {
 			color: #ffffff;
@@ -593,18 +515,20 @@ it('two rules being disabled', async () => {
 
 	const warnings = result.results[0].warnings;
 
-	expect(
+	t.assert.strictEqual(
 		warnings.some(w => w.text === 'Expected "#ffffff" to be "#fff" (color-hex-length)'),
-	).toBe(true);
-	expect(
+		true,
+	);
+	t.assert.strictEqual(
 		warnings.some(
 			w => w.text === 'Duplicate selector "a", first used at line 2 (no-duplicate-selectors)',
 		),
-	).toBe(true);
-	expect(result.code).toBe(code);
+		true,
+	);
+	t.assert.strictEqual(result.code, code);
 });
 
-it('one rule being disabled and another still autofixing', async () => {
+it('one rule being disabled and another still autofixing', async t => {
 	const code = `
 		a, a {
 			color: #ffffff;
@@ -630,22 +554,27 @@ it('one rule being disabled and another still autofixing', async () => {
 
 	const warnings = result.results[0].warnings;
 
-	expect(
+	t.assert.strictEqual(
 		warnings.some(w => w.text === 'Expected "#ffffff" to be "#fff" (color-hex-length)'),
-	).toBe(false);
-	expect(
+		false,
+	);
+	t.assert.strictEqual(
 		warnings.some(
 			w => w.text === 'Duplicate selector "a", first used at line 2 (no-duplicate-selectors)',
 		),
-	).toBe(true);
+		true,
+	);
 
-	expect(result.code).toBe(`
+	t.assert.strictEqual(
+		result.code,
+		`
 		a, a {
 			color: #fff;
-		}`);
+		}`,
+	);
 });
 
-it("doesn't return the fixed code if the fix option is false", async () => {
+it("doesn't return the fixed code if the fix option is false", async t => {
 	const result = await standalone({
 		code: 'a { color: #ffffff; }',
 
@@ -658,11 +587,11 @@ it("doesn't return the fixed code if the fix option is false", async () => {
 		formatter: 'string',
 	});
 
-	expect(result.code).toBeUndefined();
-	expect(result.results[0].autofixed).toBeUndefined();
+	t.assert.strictEqual(result.code, undefined);
+	t.assert.strictEqual(result.results[0].autofixed, undefined);
 });
 
-it('returns the original code if the fix option is true but the code is not fixable', async () => {
+it('returns the original code if the fix option is true but the code is not fixable', async t => {
 	const code = 'a { color: #y3 }';
 
 	const result = await standalone({
@@ -677,11 +606,11 @@ it('returns the original code if the fix option is true but the code is not fixa
 		formatter: 'string',
 	});
 
-	expect(result.code).toBe(code);
-	expect(result.results[0].autofixed).toBeUndefined();
+	t.assert.strictEqual(result.code, code);
+	t.assert.strictEqual(result.results[0].autofixed, undefined);
 });
 
-it.skip("doesn't return any fixed code if the fix option is false, regardless of plugin implementation", async () => {
+it.skip("doesn't return any fixed code if the fix option is false, regardless of plugin implementation", async t => {
 	const code = `
 		a {
 			always: 1;
@@ -700,26 +629,24 @@ it.skip("doesn't return any fixed code if the fix option is false, regardless of
 		fix: false,
 	});
 
-	expect(result.code).toBeUndefined();
-	expect(result.results[0].autofixed).toBeUndefined();
+	t.assert.strictEqual(result.code, undefined);
+	t.assert.strictEqual(result.results[0].autofixed, undefined);
 });
 
 /**
  * @see stylelint/stylelint#7735
  * @see stylelint/stylelint#2643
  */
-it.skip('returns partially fixed code if the fix option is true, depending on the plugin implementation', async () => {
+it.skip('returns partially fixed code if the fix option is true, depending on the plugin implementation', async t => {
 	const code = stripIndent`
 		a {
 			always: 1;
-			when-context: 2;
 			when-fixer: 3;
 		}
 
 		/* stylelint-disable */
 		b {
 			always: 1;
-			when-context: 2;
 			when-fixer: 3;
 		}
 		/* stylelint-enable */
@@ -727,7 +654,6 @@ it.skip('returns partially fixed code if the fix option is true, depending on th
 		/* stylelint-disable plugin/fixes */
 		c {
 			always: 1;
-			when-context: 2;
 			when-fixer: 3;
 		}
 		/* stylelint-enable plugin/fixes */`;
@@ -744,17 +670,17 @@ it.skip('returns partially fixed code if the fix option is true, depending on th
 		formatter: 'string',
 	});
 
-	expect(result.code).toBe(stripIndent`
+	t.assert.strictEqual(
+		result.code,
+		stripIndent`
 		a {
 			always: fixed;
-			when-context: 2;
 			when-fixer: fixed;
 		}
 
 		/* stylelint-disable */
 		b {
 			always: fixed;
-			when-context: 2;
 			when-fixer: 3;
 		}
 		/* stylelint-enable */
@@ -762,19 +688,18 @@ it.skip('returns partially fixed code if the fix option is true, depending on th
 		/* stylelint-disable plugin/fixes */
 		c {
 			always: fixed;
-			when-context: 2;
 			when-fixer: 3;
 		}
-		/* stylelint-enable plugin/fixes */`);
+		/* stylelint-enable plugin/fixes */`,
+	);
 
-	expect(result.results[0].autofixed).toBe(true);
+	t.assert.strictEqual(result.results[0].autofixed, true);
 });
 
-it.skip("doesn't return any fixed code if fixing is disabled for the rule, regardless of plugin implementation", async () => {
+it.skip("doesn't return any fixed code if fixing is disabled for the rule, regardless of plugin implementation", async t => {
 	const code = `
 		a {
 			always: 1;
-			when-context: 2;
 			when-fixer: 3;
 		}`;
 
@@ -789,8 +714,8 @@ it.skip("doesn't return any fixed code if fixing is disabled for the rule, regar
 		fix: false,
 	});
 
-	expect(result.code).toBeUndefined();
-	expect(result.results[0].autofixed).toBeUndefined();
+	t.assert.strictEqual(result.code, undefined);
+	t.assert.strictEqual(result.results[0].autofixed, undefined);
 });
 
 suite('standalone with fix options for CSS syntax errors', () => {
@@ -810,86 +735,86 @@ suite('standalone with fix options for CSS syntax errors', () => {
 	};
 
 	describe.skip('with fix="lax"', () => {
-		it('should not throw error and return same code for syntax error', async () => {
+		it('should not throw error and return same code for syntax error', async t => {
 			const result = await standalone({
 				code: cssWithSyntaxError,
 				config,
 				fix: 'lax',
 			});
 
-			expect(result.errored).toBe(false);
-			expect(result.results[0].warnings).toHaveLength(0);
-			expect(result.code).toBe(cssWithSyntaxError);
-			expect(result.results[0].autofixed).toBeUndefined();
+			t.assert.strictEqual(result.errored, false);
+			t.assert.strictEqual(result.results[0].warnings.length, 0);
+			t.assert.strictEqual(result.code, cssWithSyntaxError);
+			t.assert.strictEqual(result.results[0].autofixed, undefined);
 		});
 
-		it('should fix incomplete rule', async () => {
+		it('should fix incomplete rule', async t => {
 			const result = await standalone({
 				code: cssIncompleteRule,
 				config,
 				fix: 'lax',
 			});
 
-			expect(result.errored).toBe(false);
-			expect(result.results[0].warnings).toHaveLength(0);
-			expect(result.code).toBe(expectedFixedIncompleteRule);
-			expect(result.results[0].autofixed).toBe(true);
+			t.assert.strictEqual(result.errored, false);
+			t.assert.strictEqual(result.results[0].warnings.length, 0);
+			t.assert.strictEqual(result.code, expectedFixedIncompleteRule);
+			t.assert.strictEqual(result.results[0].autofixed, true);
 		});
 
-		it('should fix non-syntax errors', async () => {
+		it('should fix non-syntax errors', async t => {
 			const result = await standalone({
 				code: cssNonSyntaxError,
 				config: nonSyntaxErrorConfig,
 				fix: 'lax',
 			});
 
-			expect(result.errored).toBe(false);
-			expect(result.results[0].warnings).toHaveLength(0);
-			expect(result.code).toBe(expectedFixedCode);
-			expect(result.results[0].autofixed).toBe(true);
+			t.assert.strictEqual(result.errored, false);
+			t.assert.strictEqual(result.results[0].warnings.length, 0);
+			t.assert.strictEqual(result.code, expectedFixedCode);
+			t.assert.strictEqual(result.results[0].autofixed, true);
 		});
 	});
 
 	describe('with fix="strict"', () => {
-		it('should throw error for syntax error', async () => {
+		it('should throw error for syntax error', async t => {
 			const result = await standalone({
 				code: cssWithSyntaxError,
 				config,
 				fix: 'strict',
 			});
 
-			expect(result.errored).toBe(true);
-			expect(result.results[0].warnings).toHaveLength(1);
-			expect(result.results[0].warnings[0].rule).toBe('CssSyntaxError');
-			expect(result.results[0].autofixed).toBeUndefined();
-			expect(result.code).toBeUndefined();
+			t.assert.strictEqual(result.errored, true);
+			t.assert.strictEqual(result.results[0].warnings.length, 1);
+			t.assert.strictEqual(result.results[0].warnings[0].rule, 'CssSyntaxError');
+			t.assert.strictEqual(result.results[0].autofixed, undefined);
+			t.assert.strictEqual(result.code, undefined);
 		});
 
-		it('should throw error for incomplete rule', async () => {
+		it('should throw error for incomplete rule', async t => {
 			const result = await standalone({
 				code: cssIncompleteRule,
 				config,
 				fix: 'strict',
 			});
 
-			expect(result.errored).toBe(true);
-			expect(result.results[0].warnings).toHaveLength(1);
-			expect(result.results[0].warnings[0].rule).toBe('CssSyntaxError');
-			expect(result.results[0].autofixed).toBeUndefined();
-			expect(result.code).toBeUndefined();
+			t.assert.strictEqual(result.errored, true);
+			t.assert.strictEqual(result.results[0].warnings.length, 1);
+			t.assert.strictEqual(result.results[0].warnings[0].rule, 'CssSyntaxError');
+			t.assert.strictEqual(result.results[0].autofixed, undefined);
+			t.assert.strictEqual(result.code, undefined);
 		});
 
-		it('should fix non-syntax errors', async () => {
+		it('should fix non-syntax errors', async t => {
 			const result = await standalone({
 				code: cssNonSyntaxError,
 				config: nonSyntaxErrorConfig,
 				fix: 'strict',
 			});
 
-			expect(result.errored).toBe(false);
-			expect(result.results[0].warnings).toHaveLength(0);
-			expect(result.code).toBe(expectedFixedCode);
-			expect(result.results[0].autofixed).toBe(true);
+			t.assert.strictEqual(result.errored, false);
+			t.assert.strictEqual(result.results[0].warnings.length, 0);
+			t.assert.strictEqual(result.code, expectedFixedCode);
+			t.assert.strictEqual(result.results[0].autofixed, true);
 		});
 	});
 });
