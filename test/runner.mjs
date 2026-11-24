@@ -1,6 +1,6 @@
 import {fileURLToPath} from 'url';
 import {basename} from 'path';
-import {describe, it, afterEach, beforeEach} from '@bhsd/test-util/mocha'; // oxlint-disable-line no-shadow
+import {describe, it, afterEach, beforeEach} from '@bhsd/test-util/mocha';
 import '@bhsd/test-util/color';
 
 Object.assign(globalThis, {

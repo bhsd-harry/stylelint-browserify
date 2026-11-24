@@ -3,6 +3,7 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import process from 'node:process';
 
+import assertItemsPartialDeepStrictEqual from '../testUtils/assertItemsPartialDeepStrictEqual.mjs';
 import replaceBackslashes from '../testUtils/replaceBackslashes.mjs';
 import standalone from '../standalone.mjs';
 import stripIndent from '../testUtils/stripIndent.mjs';
@@ -23,7 +24,6 @@ it('outputs fixed code when input is code string', async t => {
 	});
 
 	t.assert.strictEqual(result.code, 'a { color: #fff; }');
-
 	t.assert.strictEqual(result.results[0].autofixed, true);
 });
 
@@ -40,7 +40,17 @@ it('fixes when enabled in config', async t => {
 	});
 
 	t.assert.strictEqual(result.code, 'a { color: #fff; }');
+	t.assert.strictEqual(result.results[0].autofixed, true);
+});
 
+it.skip('outputs fixed code when autofix is enabled in a config file', async t => {
+	const result = await standalone({
+		code: 'a { color: #ffffff; }',
+		configFile: fixturesPath('config-fix.json'),
+		formatter: 'string',
+	});
+
+	t.assert.strictEqual(result.code, 'a { color: #fff; }');
 	t.assert.strictEqual(result.results[0].autofixed, true);
 });
 
@@ -99,7 +109,7 @@ describe('fix callback', () => {
 				/* stylelint-enable */
 
 				a { color: hsla(); }
-				`,
+			`,
 			);
 		});
 
@@ -131,7 +141,7 @@ describe('fix callback', () => {
 				/* stylelint-disable */
 				:not(a, div) {}
 				/* stylelint-enable */
-				`,
+			`,
 			);
 		});
 
@@ -158,7 +168,7 @@ describe('fix callback', () => {
 				/* stylelint-disable-next-line */
 				a { color: HSLA(); }
 				a { color: hsla(); }
-				`,
+			`,
 			);
 		});
 
@@ -183,7 +193,7 @@ describe('fix callback', () => {
 				stripIndent`
 				a { color: hsla(); }
 				a { color: HSLA(); } /* stylelint-disable-line */
-				`,
+			`,
 			);
 		});
 	});
@@ -215,7 +225,7 @@ describe('fix callback', () => {
 				.bar {}
 				/* stylelint-disable plugin/selector-no-foo */
 				.foo {}
-				`,
+			`,
 			);
 		});
 
@@ -223,9 +233,9 @@ describe('fix callback', () => {
 			await t.assert.rejects(
 				standalone({
 					code: `
-							/* stylelint-disable */
-							.qux {}
-						`,
+						/* stylelint-disable */
+						.qux {}
+					`,
 					config: {
 						plugins: [fixturesPath('./plugin-fixer-buggy.mjs')],
 						rules: {'plugin/selector-no-qux': true},
@@ -286,7 +296,7 @@ describe('fix callback', () => {
 					.bar {}
 					/* stylelint-disable-next-line */
 					.foo {}
-				`,
+			`,
 			);
 		});
 	});
@@ -411,6 +421,24 @@ describe.skip('writing fixes to files', () => {
 		t.assert.strictEqual(fileContent, postcssResult.root.toString(postcssResult.opts.syntax));
 
 		t.assert.strictEqual(result.code, undefined);
+		t.assert.strictEqual(result.results[0].autofixed, true);
+	});
+
+	it.skip('writes the file when autofix is enabled in the config', async t => {
+		await writeFile(tempFile, 'a { color: #FFFFFF; }');
+
+		const result = await standalone({
+			files: [tempFile],
+			config: {
+				fix: true,
+				rules: {
+					'color-hex-length': 'short',
+				},
+			},
+			formatter: 'string',
+		});
+
+		t.assert.strictEqual(await readFile(tempFile, 'utf8'), 'a { color: #FFF; }');
 		t.assert.strictEqual(result.results[0].autofixed, true);
 	});
 
@@ -614,7 +642,6 @@ it.skip("doesn't return any fixed code if the fix option is false, regardless of
 	const code = `
 		a {
 			always: 1;
-			when-context: 2;
 			when-fixer: 3;
 		}`;
 
@@ -692,7 +719,6 @@ it.skip('returns partially fixed code if the fix option is true, depending on th
 		}
 		/* stylelint-enable plugin/fixes */`,
 	);
-
 	t.assert.strictEqual(result.results[0].autofixed, true);
 });
 
@@ -816,5 +842,271 @@ suite('standalone with fix options for CSS syntax errors', () => {
 			t.assert.strictEqual(result.code, expectedFixedCode);
 			t.assert.strictEqual(result.results[0].autofixed, true);
 		});
+	});
+});
+
+describe.skip('writing a fix of the byte order mark to a file', () => {
+	let tempFile;
+
+	beforeEach(() => {
+		tempFile = replaceBackslashes(path.join(process.cwd(), 'stylesheet.css'));
+	});
+
+	afterEach(async () => {
+		await rm(tempFile, {force: true});
+	});
+
+	const lintFile = primary =>
+		standalone({
+			files: [tempFile],
+			config: {
+				plugins: [fixturesPath('./plugin-bom.mjs')],
+				rules: {
+					'plugin/bom': primary,
+				},
+			},
+			fix: true,
+		});
+
+	it('writes the file when the fix removed the mark', async t => {
+		await writeFile(tempFile, '\uFEFFa {}\n');
+
+		const result = await lintFile('never');
+
+		t.assert.strictEqual(await readFile(tempFile, 'utf8'), 'a {}\n');
+		t.assert.strictEqual(result.results[0].autofixed, true);
+		t.assert.deepStrictEqual(result.results[0].warnings, []);
+	});
+
+	it('writes the file when the fix added the mark', async t => {
+		await writeFile(tempFile, 'a {}\n');
+
+		const result = await lintFile('always');
+
+		t.assert.strictEqual(await readFile(tempFile, 'utf8'), '\uFEFFa {}\n');
+		t.assert.strictEqual(result.results[0].autofixed, true);
+		t.assert.deepStrictEqual(result.results[0].warnings, []);
+	});
+
+	it('leaves the file alone when nothing was fixed', async t => {
+		await writeFile(tempFile, '\uFEFFa {}\n');
+
+		const result = await lintFile('always');
+
+		t.assert.strictEqual(await readFile(tempFile, 'utf8'), '\uFEFFa {}\n');
+		t.assert.strictEqual(result.results[0].autofixed, undefined);
+	});
+});
+
+describe('running the rules again after a fix', () => {
+	it('fixes a problem introduced for a rule that already ran', async t => {
+		const result = await standalone({
+			code: 'a { -webkit-transition: opacity 1s; transition: opacity 1s; }',
+			config: {
+				rules: {
+					'declaration-block-no-duplicate-properties': true,
+					'property-no-vendor-prefix': true,
+				},
+			},
+			fix: true,
+			formatter: 'string',
+		});
+
+		t.assert.strictEqual(result.code, 'a { transition: opacity 1s; }');
+	});
+
+	it('reports a problem introduced for a rule that has no fix', async t => {
+		const result = await standalone({
+			code: 'a:not(.b, .c) {}',
+			config: {
+				rules: {
+					'selector-max-pseudo-class': 1,
+					'selector-not-notation': 'simple',
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(result.code, 'a:not(.b):not(.c) {}');
+		assertItemsPartialDeepStrictEqual(result.results[0].warnings, [{rule: 'selector-max-pseudo-class'}]);
+	});
+
+	it.skip('stops when fixers undo each other and reports what remains', async t => {
+		const result = await standalone({
+			code: 'a { color: red; }',
+			config: {
+				plugins: [fixturesPath('./plugin-fixers-undo-each-other.mjs')],
+				rules: {
+					'plugin/value-a': true,
+					'plugin/value-b': true,
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(result.code, 'a { color: b; }');
+		assertItemsPartialDeepStrictEqual(result.results[0].warnings, [{rule: 'plugin/value-a', text: 'Expected "b" to be "a" (plugin/value-a)'}]);
+		t.assert.deepStrictEqual(result.results[0]._postcssResult.stylelint.fixersData, {
+			'plugin/value-a': 2,
+			'plugin/value-b': 2,
+		});
+	});
+
+	it.skip('stops when a fix changes nothing and reports what remains', async t => {
+		const result = await standalone({
+			code: 'a { color: red; }',
+			config: {
+				plugins: [fixturesPath('./plugin-fixer-changes-nothing.mjs')],
+				rules: {
+					'plugin/fixer-changes-nothing': true,
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(result.code, 'a { color: red; }');
+		assertItemsPartialDeepStrictEqual(result.results[0].warnings, [{rule: 'plugin/fixer-changes-nothing'}]);
+		t.assert.deepStrictEqual(result.results[0]._postcssResult.stylelint.fixersData, {
+			'plugin/fixer-changes-nothing': 1,
+		});
+	});
+
+	it.skip('stops after ten passes when a fixer undoes its fix and reports what remains', async t => {
+		const result = await standalone({
+			code: 'a { color: red; }',
+			config: {
+				plugins: [fixturesPath('./plugin-fixer-undoes-its-fix.mjs')],
+				rules: {
+					'plugin/fixer-undoes-its-fix': true,
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(result.code, 'a { color: b; }');
+		assertItemsPartialDeepStrictEqual(result.results[0].warnings, [{rule: 'plugin/fixer-undoes-its-fix', text: 'Unexpected "b" (plugin/fixer-undoes-its-fix)'}]);
+		t.assert.deepStrictEqual(result.results[0]._postcssResult.stylelint.fixersData, {
+			'plugin/fixer-undoes-its-fix': 10,
+		});
+		t.assert.strictEqual(result.results[0]._postcssResult.stylelint.config.fix, true);
+	});
+
+	it.skip('shows the fixed code to a rule that reads the source text', async t => {
+		const result = await standalone({
+			code: 'a { color: red; }',
+			config: {
+				plugins: [fixturesPath('./plugin-fixer-reads-source-text.mjs')],
+				rules: {
+					'plugin/no-missing-end-of-source-newline': true,
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(result.code, 'a { color: red; }\n');
+		t.assert.deepStrictEqual(result.results[0].warnings, []);
+	});
+
+	it('reports remaining problems at their positions in the fixed code', async t => {
+		const result = await standalone({
+			code: 'a {}\nb { color: red; }',
+			config: {
+				rules: {
+					'color-named': 'never',
+					'rule-empty-line-before': 'always',
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(result.code, 'a {}\n\nb { color: red; }');
+		assertItemsPartialDeepStrictEqual(result.results[0].warnings, [{rule: 'color-named', line: 3, column: 12, endLine: 3, endColumn: 15}]);
+	});
+
+	it.skip('reports a problem from a plugin that keys state on the result', async t => {
+		const result = await standalone({
+			code: 'a { color: #ffffff; }',
+			config: {
+				plugins: [fixturesPath('./plugin-warns-once-per-result.mjs')],
+				rules: {
+					'color-hex-length': 'short',
+					'plugin/warn-once-per-result': true,
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(result.code, 'a { color: #fff; }');
+		assertItemsPartialDeepStrictEqual(result.results[0].warnings, [{rule: 'plugin/warn-once-per-result'}]);
+	});
+
+	it('applies disable comments to their lines in the fixed code', async t => {
+		const result = await standalone({
+			code: 'a {}\n/* stylelint-disable-next-line color-named */\nb { color: red; }\nc { color: red; }',
+			config: {
+				rules: {
+					'color-named': 'never',
+					'comment-empty-line-before': 'always',
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(
+			result.code,
+			'a {}\n\n/* stylelint-disable-next-line color-named */\nb { color: red; }\nc { color: red; }',
+		);
+		assertItemsPartialDeepStrictEqual(result.results[0].warnings, [{rule: 'color-named', line: 5, column: 12}]);
+	});
+});
+
+describe("running a rule after another rule's fix", () => {
+	it('shows a fixed value to a later rule that reads `decl.value`', async t => {
+		const result = await standalone({
+			code: 'a { color: #ffffff/* foo */; }',
+			config: {
+				rules: {
+					'color-hex-length': 'short',
+					'declaration-property-value-disallowed-list': {color: ['#ffffff']},
+				},
+			},
+			fix: true,
+			formatter: 'string',
+		});
+
+		t.assert.strictEqual(result.code, 'a { color: #fff/* foo */; }');
+	});
+
+	it.skip('shows a new value assigned over its raw to a later rule that reads the raw', async t => {
+		const result = await standalone({
+			code: 'a { color: red/* foo */; }',
+			config: {
+				plugins: [fixturesPath('./plugin-fixer-assigns-value.mjs')],
+				rules: {
+					'plugin/fixer-assigns-value': true,
+					'color-no-hex': true,
+				},
+			},
+			fix: true,
+		});
+
+		t.assert.strictEqual(result.code, 'a { color: #ffffff; }');
+		assertItemsPartialDeepStrictEqual(result.results[0].warnings, [{rule: 'color-no-hex'}]);
+	});
+
+	it('shows a fixed selector to a rule that read the block in an earlier pass', async t => {
+		const result = await standalone({
+			code: 'a::-moz-placeholder,\nb { color: red; }',
+			config: {
+				rules: {
+					'declaration-empty-line-before': ['always', {ignore: ['inside-single-line-block']}],
+					'selector-no-vendor-prefix': true,
+				},
+			},
+			fix: true,
+			formatter: 'string',
+		});
+
+		t.assert.strictEqual(result.code, 'a::placeholder,\nb { color: red; }');
 	});
 });

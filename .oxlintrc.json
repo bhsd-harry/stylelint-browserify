@@ -613,6 +613,16 @@
 				"test/**/*.mjs"
 			],
 			"rules": {
+				"no-shadow": "off",
+				"no-template-curly-in-string": "off",
+				"no-underscore-dangle": "off",
+				"no-unused-vars": "off",
+				"prefer-destructuring": "off",
+				"require-unicode-regexp": "off",
+				"promise/always-return": "off",
+				"promise/prefer-await-to-then": "off",
+				"unicorn/no-array-sort": "off",
+				"unicorn/prefer-code-point": "off",
 				"jsdoc/require-param-description": "off"
 			},
 			"globals": {
@@ -650,6 +660,7 @@
 		}
 	],
 	"options": {
+		"denyWarnings": true,
 		"reportUnusedDisableDirectives": "warn",
 		"respectEslintDisableDirectives": false
 	}

@@ -295,11 +295,16 @@ const /** @type {esbuild.Plugin} */ plugin = {
 									'',
 								);
 						} else {
-							contents.replaceAll(
-								/^([ \t]+)Processor\.prototype\.(_shouldUpdateSelector|_run|ast|process|transform(?:Sync)?) = function\s*\(.+?^\1\};?$/gmsu,
-								'',
-								6,
-							);
+							contents
+								.replace(
+									/(?<=^var BOUND_METHODS = \[).+?(?=\];$)/mu,
+									'"astSync", "processSync"',
+								)
+								.replaceAll(
+									/^([ \t]+)Processor\.prototype\.(_shouldUpdateSelector|_run|ast|process|transform(?:Sync)?) = function\s*\(.+?^\1\};?$/gmsu,
+									'',
+									6,
+								);
 						}
 						break;
 					case 'reportUnknownRuleNames':
